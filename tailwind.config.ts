@@ -20,7 +20,7 @@ export default {
         "sidebar-active-bg": "#FFA5AE",
         "sidebar-hover-bg": "#FFCCD1",
         "sidebar-active-text": "#AC1927",
-        "bg-dashboard": "#F5F5F5",
+        "dashboard": "#F5F5F5",
       },
     },
   },

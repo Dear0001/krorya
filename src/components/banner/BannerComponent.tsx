@@ -2,9 +2,8 @@ import React from 'react';
 
 const BannerComponent = () => {
     return (
-        <div
-            data-layer="Rectangle 3467664"
-            className="Rectangle3467664 w-full h-[268px] bg-white rounded-[15px] grid grid-cols-2 gap-4"
+        <section
+            className="w-full h-[268px] bg-white rounded-[15px] grid grid-cols-2 gap-4"
         >
             {/* Left Column */}
             <div className="flex flex-col p-[40px] w-[600px] justify-start">
@@ -29,7 +28,7 @@ const BannerComponent = () => {
                     className="w-full h-full object-cover"
                 />
             </div>
-        </div>
+        </section>
     );
 };
 

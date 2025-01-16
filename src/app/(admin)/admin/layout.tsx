@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Kantumruy_Pro } from "next/font/google";
-import "../globals.css";
+import "../../globals.css";
 import {NavbarComponent} from "@/components/navbar/NavbarComponent";
 import React from "react";
 import {SidebarComponent} from "@/components/sidebar/SidebarComponent";
@@ -24,20 +24,17 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className={`${kantumruyPro.variable}`}>
-        <body className="bg-bg-dashboard">
+        <body className="bg-dashboard">
         {/* Main layout structure */}
         <main className="flex flex-col min-h-screen">
-            {/* Navbar at the top (sticky) */}
-            <div className="sticky top-0 z-50">
-                <NavbarComponent />
-            </div>
-
             {/* Content area with sidebar and children */}
-            <div className="flex flex-1 relative">
-                {/* Sidebar on the left */}
-                <aside className="fixed top-0 left-0 h-screen z-40">
-                    <SidebarComponent />
-                </aside>
+            <div className="fixed top-0 left-0 h-screen z-40 w-64">
+                <SidebarComponent/>
+            </div>
+            <div className="flex-col w-full h-full">
+                <div className="fixed top-0 right-0 z-10 w-full h-fit">
+                    <NavbarComponent/>
+                </div>
 
                 {/* Main content */}
                 <div className="flex-1 p-5 ml-64 rounded-2xl">

@@ -17,9 +17,11 @@ export function NavbarComponent() {
     const currentPage = MenuList.find((item) => item.path === pathname);
 
     return (
-        <Navbar fluid rounded className="shadow-sm ml-64">
+        <Navbar fluid rounded className="shadow-sm">
             <NavbarBrand as={Link} href="https://flowbite-react.com">
-                <span className="text-text-sidebar-active-text">{currentPage?.name || "Dashboard"}</span>
+              <span className="text-text-sidebar-active-text">
+                {currentPage?.name || "Dashboard"}
+              </span>
             </NavbarBrand>
             <div className="flex md:order-2">
                 <Dropdown

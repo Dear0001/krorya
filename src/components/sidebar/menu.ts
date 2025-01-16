@@ -6,18 +6,18 @@ import {
 
 export const MenuList = [
     {
-        name: "ទំព័រដើម",
-        path: "/dashboard",
+        name: "Dashboard",
+        path: "/admin/dashboard",
         icon: HiChartPie,
     },
     {
         name: "User",
-        path: "/user",
+        path: "/admin/user",
         icon: HiViewBoards,
     },
     {
         name: "Food",
-        path: "/food",
+        path: "/admin/food",
         icon: HiInbox,
     }
 ];
