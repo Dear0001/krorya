@@ -24,11 +24,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className={`${kantumruyPro.variable}`}>
-        <body className="bg-dashboard">
+        <body className={"bg-dashboard"}>
         {/* Main layout structure */}
-        <main className="flex flex-col min-h-screen">
+        <main className={"flex flex-col min-h-screen"}>
             {/* Content area with sidebar and children */}
-            <div className="fixed top-0 left-0 h-screen z-40 w-64">
+            <div className={"fixed top-0 left-0 h-screen z-40 w-64"}>
                 <SidebarComponent/>
             </div>
             <div className="flex-col w-full h-full">

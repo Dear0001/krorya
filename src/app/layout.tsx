@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className={`${kantumruyPro.variable}`}>
-        <body className="bg-dashboard mx-auto w-full h-screen flex justify-center items-center">
+        <body className={"bg-dashboard mx-auto w-full h-screen flex justify-center items-center"}>
         {/* Main layout structure */}
         {children}
         </body>
