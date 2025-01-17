@@ -1,6 +1,7 @@
 import React from 'react';
 import { getDashboardCounts } from "@/servises/dashboard.service";
 import TotalUi from "@/components/totalUI/TotalUI";
+import Image from "next/image";
 
 const TotalDataComponent = async () => {
     let getTotalCount: { id: number; title: string; count: number }[] = [];
@@ -21,14 +22,18 @@ const TotalDataComponent = async () => {
     }
 
     return (
-        <div className="my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
-            <h1 className="py-5 text-[#D7AD45] text-[26px]">Summaries of the data</h1>
+        <main className="my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
+            <div className={"flex gap-3 justify-start items-center text-center"}>
+                <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt={"image"}/>
+                <h1 className="py-5 text-[26px]">Summaries of the data</h1>
+            </div>
+
             <div className="flex gap-2">
                 {getTotalCount.map((item) => (
                     <TotalUi key={item.id} title={item.title} count={item.count} />
                 ))}
             </div>
-        </div>
+        </main>
     );
 };
 

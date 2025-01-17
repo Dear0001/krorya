@@ -1,30 +1,28 @@
 "use server";
 
 import { NEXT_API_URL } from "@/utils/definition";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface DashboardCounts {
     totalUsers: number;
     totalPosts: number;
-    totalComments: number;
+    totalCuisine: number;
+    totalCategories: number;
 }
+
+const token = 'eyJhbGciOiJIUzI1NiJ9.eyJnbWFpbCI6Im1peGFuZW02NTFAbmFsd2FuLmNvbSIsInJvbGVzIjoiUk9MRV9BRE1JTiIsInVzZXJJZCI6MSwic3ViIjoibWl4YW5lbTY1MUBuYWx3YW4uY29tIiwiaWF0IjoxNzM3MTI5NjE3LCJleHAiOjQ4OTA3Mjk2MTd9.e-8fQJS-qoAcEC0_rMApKWaNT9vT9G0CP3YnmScZ7WE';
 
 export const getDashboardCounts = async (): Promise<DashboardCounts> => {
     try {
-        // Retrieve the session
-        const session = await getServerSession(authOptions);
-
-        const access_token = session?.user?.token;
-
         // Make the API request
         const response = await fetch(`${NEXT_API_URL}/dashboard/counts`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJnbWFpbCI6Im1peGFuZW02NTFAbmFsd2FuLmNvbSIsInJvbGVzIjoiUk9MRV9BRE1JTiIsInVzZXJJZCI6MSwic3ViIjoibWl4YW5lbTY1MUBuYWx3YW4uY29tIiwiaWF0IjoxNzM3MTI2NDYyLCJleHAiOjQ4OTA3MjY0NjJ9.jmToUH14abHcXA7e_5MakLUbZszpjn8uvG3CUaCehuA`,
+                // Authorization: `Bearer ${access_token}`,
+                Authorization: `Bearer ${token}`,
             },
         });
+
 
         if (!response.ok) {
             throw new Error(`Failed to fetch dashboard counts: ${response.statusText}`);
@@ -39,3 +37,25 @@ export const getDashboardCounts = async (): Promise<DashboardCounts> => {
         throw error;
     }
 };
+
+export const getAllFoodRecipes = async () => {
+    try {
+        const response = await fetch(`${NEXT_API_URL}/food-recipe/list`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch all food recipes: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching all food recipes:", error);
+        throw error;
+    }
+}
