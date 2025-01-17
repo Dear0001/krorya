@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import {loginService} from "@/servises/auth.service";
+import {FaRegEye, FaRegEyeSlash} from "react-icons/fa";
 
 // Define the Zod schema
 const schema = z.object({
@@ -17,6 +18,8 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const Page = () => {
+    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const router = useRouter();
@@ -61,10 +64,10 @@ const Page = () => {
 
             // Check the user's role and navigate accordingly
             if (response.payload.role === "ROLE_ADMIN") {
-                console.log("Redirecting to admin dashboard...");
                 toast.success("Login successful!");
                 router.push("/admin/dashboard");
             } else {
+                document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 toast.warning("You are not authorized to access this page.");
                 router.push("/");
             }
@@ -72,6 +75,11 @@ const Page = () => {
             console.error("Login failed:", error);
             toast.error(error instanceof Error ? error.message : "Login failed");
         }
+        setLoading(false);
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
 
@@ -112,15 +120,25 @@ const Page = () => {
 
                             {/* Password Input */}
                             <div>
-                                <input
-                                    className="py-5 rounded-[25px] border-0 outline-0 focus:ring-0 w-full"
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    placeholder="បញ្ចូលពាក្យសម្ងាត់"
-                                    value={formData.password}
-                                    onChange={handleInputChange}
-                                />
+                                <div className="relative">
+                                    <input
+                                        className="py-5 rounded-[25px] border-0 outline-0 focus:ring-0 w-full"
+                                        id="password"
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="បញ្ចូលពាក្យសម្ងាត់"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                                        onClick={togglePasswordVisibility}
+                                    >
+                                        {showPassword ? <FaRegEye className={"text-2xl"}/> :
+                                            <FaRegEyeSlash className={"text-2xl"}/>}
+                                    </button>
+                                </div>
                                 {errors.password && (
                                     <p className="text-red-500 text-sm mt-1">{errors.password}</p>
                                 )}
@@ -131,9 +149,16 @@ const Page = () => {
                             </a>
 
                             {/* Submit Button */}
-                            <button type="submit" className="bg-[#D7AD45] py-5 rounded-[25px] text-white">
-                                ចូលគណនី
-                            </button>
+                            <div>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full bg-[#D7AD45] py-5 rounded-[25px] text-white"
+                                >
+                                    {loading ? 'Loading...' : 'ចូលគណនី'}
+                                </button>
+                            </div>
+
 
                             <Image src="/assets/divider_login.svg" alt="Divider" width={0} height={0}/>
                             <hr/>
@@ -146,7 +171,7 @@ const Page = () => {
                     </div>
                     <div className="flex-1 max-md:w-full relative">
                         <div className="overflow-hidden w-full h-auto rounded-3xl">
-                            <Image
+                        <Image
                                 src="/assets/image_login.png"
                                 width={537}
                                 height={674}
@@ -155,7 +180,8 @@ const Page = () => {
                             />
                         </div>
                         {/* Text Image */}
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-5">
+                        <div
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-5">
                             <div className={"bg-white/30 backdrop-blur-md rounded-2xl"}>
                                 <Image
                                     src="/assets/text_on_images_login.svg"

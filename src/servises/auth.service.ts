@@ -36,7 +36,7 @@ export const loginService = async (user: UserCredentials): Promise<LoginResponse
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
-            throw new Error(errorData.details || "Login failed");
+            throw new Error(errorData.message || "Login failed");
         }
 
         const data: LoginResponse = await res.json();

@@ -1,8 +1,9 @@
 import {
     HiChartPie,
-    HiInbox,
-    HiViewBoards,
+    HiUser
 } from "react-icons/hi";
+import { BiCategoryAlt } from "react-icons/bi";
+import { MdFastfood, MdFoodBank } from "react-icons/md";
 
 export const MenuList = [
     {
@@ -13,11 +14,21 @@ export const MenuList = [
     {
         name: "User",
         path: "/admin/user",
-        icon: HiViewBoards,
+        icon: HiUser,
+    },
+    {
+        name: "Categories",
+        path: "/admin/categories",
+        icon: BiCategoryAlt,
+    },
+    {
+        name: "Cuisine",
+        path: "/admin/cuisine",
+        icon: MdFoodBank,
     },
     {
         name: "Food",
         path: "/admin/food",
-        icon: HiInbox,
+        icon: MdFastfood,
     }
 ];

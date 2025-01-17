@@ -4,7 +4,7 @@ import { authOptions as nextAuthOptions } from "@/app/api/auth/[...nextauth]/rou
 
 export const getToken = async () => {
     const session = await getServerSession(nextAuthOptions);
-    const token = session?.user?.token;
+    const token: string = session?.user?.token;
     return {
         authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

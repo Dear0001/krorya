@@ -23,12 +23,13 @@ export const authOptions: NextAuthOptions = {
 
                 try {
                     const login = await loginService(userInfo);
-                    if (login.user) {
+                    if (login?.payload) {
                         return {
-                            id: login.user.id,
-                            email: login.user.email,
-                            name: login.user.name,
-                            role: login.user.role,
+                            id: login.payload.id,
+                            email: login.payload.email,
+                            name: login.payload.full_name || "",
+                            role: login.payload.role,
+                            access_token: login.payload.access_token,
                         };
                     } else {
                         throw new Error("Invalid credentials");
@@ -42,17 +43,27 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token = { ...token, ...user }; // Merge user data into the token
+                token.id = user.id;
+                token.email = user.email;
+                token.name = user.name;
+                token.role = user.role;
+                token.access_token = user.access_token;
             }
             return token;
         },
         async session({ session, token }) {
-            session.user = token;
+            session.user = {
+                id: token.id,
+                email: token.email,
+                name: token.name,
+                role: token.role,
+                access_token: token.access_token
+            };
             return session;
         },
     },
     pages: {
-        signIn: "/auth/login", // Custom sign-in page
+        signIn: "/", // Custom sign-in page
     },
     secret: process.env.NEXTAUTH_SECRET,
     debug: process.env.NODE_ENV === "development",
