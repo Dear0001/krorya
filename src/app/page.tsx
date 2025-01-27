@@ -1,221 +1,169 @@
 "use client"
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { z } from 'zod';
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import {loginService} from "@/servises/auth.service";
-import {FaRegEye, FaRegEyeSlash} from "react-icons/fa";
-
-// Define the Zod schema
-const schema = z.object({
-    email: z.string().email('Invalid email').min(1),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-});
-
-// Infer the type from the Zod schema
-type FormData = z.infer<typeof schema>;
+import Link from "next/link";
 
 const Page = () => {
-    const [loading, setLoading] = useState(false);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm();
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
-    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const router = useRouter();
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // Validate the form data using Zod
-        const result = schema.safeParse(formData);
-
-        if (!result.success) {
-            // Convert Zod errors to a more usable format
-            const errorMessages: { [key: string]: string } = {};
-            result.error.issues.forEach((issue) => {
-                errorMessages[issue.path[0]] = issue.message;
-            });
-            setErrors(errorMessages);
-            return;
-        }
-
-        // Call the handleLogin function
-        await handleLogin(formData);
-    };
-
-    const handleLogin = async (userInfo: { email: string; password: string }) => {
+    // Form submission handler
+    const onSubmit = async (data: any) => {
         try {
-            // Call the login service
-            const response = await loginService(userInfo);
-
-            // Store the token in cookies or localStorage
-            if (typeof window !== "undefined") {
-                document.cookie = `next-auth.session-token=${response.payload.access_token}; path=/;`;
-            }
-
-            // Log the response data on successful login
-            console.log("Login successful! Response data:", response);
-
-            // Check the user's role and navigate accordingly
-            if (response.payload.role === "ROLE_ADMIN") {
-                toast.success("Login successful!");
-                router.push("/admin/dashboard");
+            const response = await loginService(data);
+            if (response?.statusCode === "200") {
+                toast.success("ការចូលគណនីបានជោគជ័យ!");
+                router.push("/amin/dashboard");
             } else {
-                document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                toast.warning("You are not authorized to access this page.");
-                router.push("/");
+                toast.error(response?.message || "ការចូលគណនីមិនបានសម្រេច");
             }
         } catch (error) {
-            console.error("Login failed:", error);
-            toast.error(error instanceof Error ? error.message : "Login failed");
+            toast.error("មានបញ្ហាបច្ចេកទេស! សូមព្យាយាមម្តងទៀត។");
         }
-        setLoading(false);
     };
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
-
-
-
     return (
-        <main className="Login w-[1728px] h-[1117px] relative bg-[#F5F5F5] overflow-hidden shadow-2xl flex justify-center items-center">
-            <ToastContainer />
-            {/* Centered Box */}
-            <section className="Login w-[1340px] z-20 rounded-2xl h-[828px] bg-neutral-100 overflow-hidden shadow-2xl mx-auto flex justify-center items-center">
-                <div
-                    className="flex flex-row gap-28 justify-between items-center w-full max-w-[1200px] max-md:flex-col max-md:gap-16">
-                    <div className="flex flex-col flex-1 gap-8 items-center">
-                        <div
-                            className="text-5xl text-center text-red-700 leading-[56px] max-sm:text-4xl max-sm:leading-10">
-                            គ្រាន់តែស្វាគមន៍!
-                        </div>
-                        <div className="w-full h-6 bg-center bg-no-repeat bg-[url(/assets/divider_login.svg)]"/>
-                        <div className="text-xl leading-7 text-center text-zinc-800">
-                            សូមវាយបញ្ចូលអុីម៉ែលនិង ពាក្យសម្ងាត់ដើម្បីចូលគណនី
-                        </div>
-                        <form onSubmit={handleSubmit}
-                              className="flex flex-col gap-3 w-full max-w-[430px] max-sm:max-w-full">
-                            {/* Email Input */}
-                            <div>
-                                <input
-                                    className="py-5 rounded-[25px] border-0 outline-0 focus:ring-0 w-full"
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    placeholder="បញ្ចូលអ៊ីមែល"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                />
-                                {errors.email && (
-                                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                                )}
-                            </div>
-
-                            {/* Password Input */}
-                            <div>
-                                <div className="relative">
-                                    <input
-                                        className="py-5 rounded-[25px] border-0 outline-0 focus:ring-0 w-full"
-                                        id="password"
-                                        type={showPassword ? "text" : "password"}
-                                        name="password"
-                                        placeholder="បញ្ចូលពាក្យសម្ងាត់"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                                        onClick={togglePasswordVisibility}
-                                    >
-                                        {showPassword ? <FaRegEye className={"text-2xl"}/> :
-                                            <FaRegEyeSlash className={"text-2xl"}/>}
-                                    </button>
-                                </div>
-                                {errors.password && (
-                                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-                                )}
-                            </div>
-
-                            <a href="#" className="text-lg leading-6 text-right text-blue-500 no-underline">
-                                ភ្លេចពាក្យសម្ងាត់?
-                            </a>
-
-                            {/* Submit Button */}
-                            <div>
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="w-full bg-[#D7AD45] py-5 rounded-[25px] text-white"
-                                >
-                                    {loading ? 'Loading...' : 'ចូលគណនី'}
-                                </button>
-                            </div>
-
-
-                            <Image src="/assets/divider_login.svg" alt="Divider" width={0} height={0}/>
-                            <hr/>
-
-                            {/* Google Login Button */}
-                            <button type="button" className="border border-amber-300 py-5 rounded-[25px]">
-                                ចូលគណនីតាមរយៈ Google
-                            </button>
-                        </form>
-                    </div>
-                    <div className="flex-1 max-md:w-full relative">
-                        <div className="overflow-hidden w-full h-auto rounded-3xl">
-                        <Image
-                                src="/assets/image_login.png"
-                                width={537}
-                                height={674}
-                                alt="Rice bowl with rice plants"
-                                className="object-cover w-full h-auto"
+        <div className="w-10/12 z-40 h-fit flex justify-center items-center">
+            <ToastContainer/>
+            <div className="mx-auto flex flex-col-reverse sm:flex-row gap-10 max-w-[1000px] lg:w-full lg:px-16 md:px-14 md:py-16 w-full rounded-3xl bg-white p-4 space-y-8">
+                <div className="flex flex-col items-center  py-4 md:w-1/2 lg:w-1/2">
+                    <h1 className="font-moulpali text-center font-bold text-2xl md:text-[30px] sm:text-3xl text-secondary mb-8">
+                        ក្រយាសូមស្វាគមន៍!
+                    </h1>
+                    <Image
+                        src="/assets/images/signin-icon.svg"
+                        alt="kback"
+                        width={100}
+                        height={45}
+                    />
+                    <p className="text-center text-slate-800 mt-8">
+                        សូមវាយបញ្ចូលអុីម៉ែលនិង ពាក្យសម្ងាត់ដើម្បីចូលគណនី
+                    </p>
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="flex flex-col items-center gap-3 w-full mt-4"
+                    >
+                        <div className="relative w-full">
+                            <input
+                                className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                                type="email"
+                                placeholder="john@gmail.com"
+                                {...register("email", {
+                                    required: "អ៊ីមែលត្រូវបានទាមទារ",
+                                    pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: "អាសយដ្ឋានអ៊ីមែលមិនត្រឹមត្រូវ",
+                                    },
+                                })}
                             />
-                        </div>
-                        {/* Text Image */}
-                        <div
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-5">
-                            <div className={"bg-white/30 backdrop-blur-md rounded-2xl"}>
-                                <Image
-                                    src="/assets/text_on_images_login.svg"
-                                    width={482.02}
-                                    height={179.87}
-                                    alt="Text on image"
-                                />
+                            <div className="h-3 mt-2">
+                                {errors.email && (
+                                    <p className="text-red-500 text-xs pl-4">
+                                        {typeof errors.password?.message === "string" && errors.password.message}
+                                    </p>
+                                )}
                             </div>
+                        </div>
+                        <div className="relative w-full">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                {...register("password", {
+                                    required: "ពាក្យសម្ងាត់ត្រូវបានទាមទារ",
+                                    minLength: {
+                                        value: 6,
+                                        message:
+                                            "ពាក្យសម្ងាត់ត្រូវតែមានចាប់យកប្រាក់ 6 តួអក្សរឬច្រើនជាង",
+                                    },
+                                })}
+                                placeholder="បញ្ចូលពាក្យសម្ងាត់"
+                                className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                            />
+                            <Image
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                width={20}
+                                height={20}
+                                className="absolute top-1/3 right-4 -translate-y-1/2 cursor-pointer z-20 opacity-100"
+                                src={showPassword ? "/icons/eye-open.svg" : "/icons/eye.svg"}
+                                alt="toggle password visibility"
+                            />
 
+                            <div className="h-3 flex justify-between items-center mt-2">
+                                {errors.password && (
+                                    <p className="text-red-500 pl-4 text-xs">
+                                        {typeof errors.password?.message === "string" && errors.password.message}
+                                    </p>
+                                )}
+                                <p className="ml-auto pr-4">
+                                    <Link
+                                        href="/auth/forgetpassword"
+                                        className="text-primary text-xs"
+                                    >
+                                        ភ្លេចពាក្យសម្ងាត់?
+                                    </Link>
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full text-white px-4 py-3 border-black rounded-3xl bg-primary hover:bg-opacity-70 mt-2"
+                        >
+                            ចូលគណនី
+                        </button>
+                    </form>
+                    <div className="text-center flex gap-2 my-4">
+                        <Image
+                            src="/icons/group-1.svg"
+                            alt="line"
+                            width={100}
+                            height={70}
+                        />
+                        <span>ឬភ្ជាប់ជាមួយ</span>
+                        <Image
+                            src="/icons/group-2.svg"
+                            alt="line"
+                            width={100}
+                            height={70}
+                        />
+                    </div>
+                    {/* <GoogleSignInButton type="button" /> */}
+                    <div className="mt-4">
+                        <span>តើអ្នកមានគណនីឬនៅ?</span>
+                        <Link className="text-primary" href="/auth/signup">
+                            {" "}
+                            បង្កើតគណនី
+                        </Link>
+                    </div>
+                </div>
+                <div
+                    className="md:h-[600px] rounded-lg overflow-hidden lg:w-1/2 mt-0"
+                    style={{ margin: 0 }}
+                >
+                    <div
+                        className="relative w-full h-full bg-cover bg-center"
+                        style={{
+                            backgroundImage: "url('/assets/images/signin-image.png')",
+                        }}
+                    >
+                        <div className="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center p-4">
+                            <p className="text-white text-base t font-moulpali leading-8 p-4 text-center bg-white bg-opacity-30 rounded-lg">
+                                ម្ហូបខ្មែរមានភាពសម្បូរបែបអស្ចារ្យ ដែលបង្ហាញពីប្រណីតភាពនៃ រសជាតិ
+                                ព្រមទាំងគំនិតច្នៃប្រឌិត ។
+                            </p>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            {/* Top-Left Image */}
-            <div className="absolute top-0 left-0">
-                <Image src="/assets/left_top_login.svg" alt="Top-Left Image" width={359} height={358}/>
             </div>
-
-            {/* Top-Right Image */}
-            <div className="absolute top-0 right-0">
-                <Image src="/assets/right_top_login.svg" alt="Top-Right Image" width={359} height={358}/>
-            </div>
-
-            {/* Bottom-Left Image */}
-            <div className="absolute bottom-0 left-0">
-                <Image src="/assets/left_bottom_login.svg" alt="Bottom-Left Image" width={359} height={358} />
-            </div>
-
-            {/* Bottom-Right Image */}
-            <div className="absolute bottom-0 right-0">
-                <Image src="/assets/right_bottom_login.svg" alt="Bottom-Right Image" width={359} height={358} />
-            </div>
-        </main>
+        </div>
     );
 };
 

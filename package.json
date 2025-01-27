@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@reduxjs/toolkit": "^2.5.1",
     "admin_dashboard": "file:",
+    "cookie": "^1.0.2",
     "flowbite-react": "^0.10.2",
     "jsonwebtoken": "^9.0.2",
     "next": "15.1.4",

@@ -8,7 +8,8 @@ import {SidebarComponent} from "@/components/sidebar/SidebarComponent";
 
 const kantumruyPro = Kantumruy_Pro({
     subsets: ["latin"],
-    variable: "--font-kantumruy-pro",
+    weight: ["400", "700"],
+    style: ["normal"],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className={`${kantumruyPro.variable}`}>
+        <html lang="en" className={`${kantumruyPro.className}`}>
         <body className={"bg-dashboard"}>
         {/* Main layout structure */}
         <main className={"flex flex-col min-h-screen"}>
