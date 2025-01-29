@@ -18,34 +18,18 @@ export const metadata: Metadata = {
 };
 
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
+export default function RootLayout({  children,  }: Readonly<{ children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en" className={`${kantumruyPro.className}`}>
-        <body className={"bg-dashboard"}>
-        {/* Main layout structure */}
-        <main className={"flex flex-col min-h-screen"}>
-            {/* Content area with sidebar and children */}
-            <div className={"fixed top-0 left-0 h-screen z-40 w-64"}>
-                <SidebarComponent/>
-            </div>
-            <div className="flex-col w-full h-full">
-                <div className="fixed top-0 right-0 z-10 w-full h-fit">
-                    <NavbarComponent/>
-                </div>
-
-                {/* Main content */}
-                <div className="flex-1 p-5 ml-64 rounded-2xl">
-                    <div className="w-full h-screen rounded-2xl">
-                        {children}
-                    </div>
-                </div>
-            </div>
-        </main>
-        </body>
-        </html>
-    );
+    return <body
+        className={`${kantumruyPro.className} bg-gray-100 grid grid-rows-[auto_1fr] md:grid-cols-12 min-h-screen h-full    `}>
+    <aside className="hidden md:block sm:block row-span-2 col-span-2 bg-white shadow-lg">
+        <SidebarComponent/>
+    </aside>
+    <div className="col-span-12 md:col-span-10">
+        <NavbarComponent/>
+    </div>
+    <main className="col-span-12 md:col-span-10 bg-gray-100   overflow-y-auto h-full pt-4 pl-4  hide-scrollbar  rounded-md ">
+        {children}
+    </main>
+    </body>;
 }

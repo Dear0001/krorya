@@ -1,25 +1,25 @@
 import React from 'react';
-import { getDashboardCounts } from "@/servises/dashboard.service";
 import TotalUi from "@/components/totalUI/TotalUI";
 import Image from "next/image";
 
 const TotalDataComponent = async () => {
+    // Define the state for the total count
     let getTotalCount: { id: number; title: string; count: number }[] = [];
 
-    try {
-        // Fetch data from the API
-        const data = await getDashboardCounts();
-
-        // Transform the API response
-        getTotalCount = [
-            { id: 1, title: "Recipes", count: data.recipes },
-            { id: 2, title: "Categories", count: data.categories },
-            { id: 3, title: "Users", count: data.users },
-            { id: 4, title: "Cuisines", count: data.cuisines }, // Added cuisines
-        ];
-    } catch (error) {
-        console.error("Failed to fetch dashboard counts:", error);
-    }
+    // try {
+    //     // Fetch data from the API
+    //     const data = await getDashboardCounts();
+    //
+    //     // Transform the API response
+    //     getTotalCount = [
+    //         { id: 1, title: "Recipes", count: data.recipes },
+    //         { id: 2, title: "Categories", count: data.categories },
+    //         { id: 3, title: "Users", count: data.users },
+    //         { id: 4, title: "Cuisines", count: data.cuisines }, // Added cuisines
+    //     ];
+    // } catch (error) {
+    //     console.error("Failed to fetch dashboard counts:", error);
+    // }
 
     return (
         <main className="my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">

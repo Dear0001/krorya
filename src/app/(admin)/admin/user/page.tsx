@@ -1,11 +1,8 @@
-import React from 'react';
+import AdminUsersPage from "@/app/(admin)/admin/user/components/ui/AdminUsersPage";
 
-function User() {
+export default async function Page() {
+    let userData: any = [];
     return (
-        <main className={"w-full"}>
-       <h1>dalen</h1>
-        </main>
+        <AdminUsersPage initialUsers={userData} />
     );
 }
-
-export default User;

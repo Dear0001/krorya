@@ -1,34 +1,18 @@
-import {
-    HiChartPie,
-    HiUser
-} from "react-icons/hi";
-import { BiCategoryAlt } from "react-icons/bi";
-import { MdFastfood, MdFoodBank } from "react-icons/md";
-
 export const MenuList = [
+    { href: "/admin/dashboard", label: "ផ្ទាំងបង្ហាញ", icon: "home.svg" },
     {
-        name: "Dashboard",
-        path: "/admin/dashboard",
-        icon: HiChartPie,
+        href: "/admin/dashboard/food",
+        label: "ផ្ទាំងរីផតរូបមន្តម្ហូប",
+        icon: "explore-recipe.svg",
     },
     {
-        name: "User",
-        path: "/admin/user",
-        icon: HiUser,
+        href: "/admin/recipes",
+        label: "រូបមន្តម្ហូបទាំងអស់",
+        icon: "order.svg",
     },
     {
-        name: "Categories",
-        path: "/admin/categories",
-        icon: BiCategoryAlt,
+        href: "/admin/user",
+        label: "អ្នកប្រើប្រាស់ទាំងអស់",
+        icon: "group.svg",
     },
-    {
-        name: "Cuisine",
-        path: "/admin/cuisine",
-        icon: MdFoodBank,
-    },
-    {
-        name: "Food",
-        path: "/admin/food",
-        icon: MdFastfood,
-    }
 ];

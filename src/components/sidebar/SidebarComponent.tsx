@@ -1,51 +1,50 @@
 "use client";
-import { Sidebar } from "flowbite-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { MenuList } from "./menu";
 import Image from "next/image";
+import {MenuList} from "@/components/sidebar/menu";
 
 type MenuItem = {
-    name: string;
-    path: string;
-    icon: React.ElementType;
+    href: string;
+    label: string;
+    icon: string;
 };
+
 
 export function SidebarComponent() {
     const pathname = usePathname();
     const [menuList, setMenuList] = useState<MenuItem[]>(MenuList);
 
     return (
-        <Sidebar aria-label="sidebar" className="bg-[FFFFFF]">
-            {/* Logo */}
-            <Image
-                src="/assets/logo.svg"
-                alt="krorya"
-                width={170}
-                height={109}
-                className="pb-4"
-            />
-            {/* Sidebar Items */}
-            <Sidebar.Items>
-                <Sidebar.ItemGroup>
-                    {menuList?.map((item, index) => (
-                        <Sidebar.Item
-                            key={index}
-                            as={Link}
-                            href={item.path}
-                            icon={item.icon}
-                            className={
-                                pathname === item.path || (pathname === "/" && item.path === "/dashboard")
-                                    ? "bg-sidebar-hover-bg text-sidebar-active-text" // Active state
-                                    : "text-gray-900 hover:bg-sidebar-hover-bg" // Default state
-                            }
-                        >
-                            {item.name}
-                        </Sidebar.Item>
+        <aside className="h-screen w-full bg-white">
+            <div className="flex justify-center pb-4">
+                <Image width={200} height={71} src="/assets/logo.svg" alt="logo-krorya" />
+            </div>
+            <div>
+                <ul>
+                    {menuList.map((item) => (
+                        <li key={item.href}>
+                            <Link
+                                href={item.href}
+                                className={`flex items-center gap-4 text-[18px] font-medium px-7 py-4 transition-all duration-100 ${
+                                    pathname === item.href
+                                        ? "active bg-custom-gradient"
+                                        : ""
+                                }`}
+                            >
+                                <Image
+                                    src={`/icons/${item.icon}`}
+                                    alt={`${item.label}-icon`}
+                                    width={25}
+                                    height={25}
+                                />
+                                <span className="text-normal">{item.label}</span>
+                            </Link>
+                        </li>
                     ))}
-                </Sidebar.ItemGroup>
-            </Sidebar.Items>
-        </Sidebar>
+                </ul>
+            </div>
+        </aside>
     );
 }

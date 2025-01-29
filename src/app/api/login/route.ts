@@ -12,14 +12,15 @@ export async function POST(req: NextRequest) {
     console.log("Password: ", password);
 
     // Make a POST request to the Our API
-    const response = await fetch(
-        `${process.env.SPRING_API_URL}/api/auth/login/`,
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/auth/login`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
+            credentials: "include",
         }
     );
+
 
     // If the request fails, return an error message to the client-side
     if (!response.ok) {
@@ -35,9 +36,10 @@ export async function POST(req: NextRequest) {
 
     // If the request is successful, parse the response body to get the data
     const data = await response.json();
+    console.log("Data response from spring api: ", data);
     const user = data?.user || null;
-    const accessToken = data?.access_token || null;
-    const refreshToken = data?.refresh_token || null;
+    const accessToken = data?.payload?.access_token || null;
+    const refreshToken = data?.payload?.refresh_token || null;
 
     // Serialize the refresh token and set it as a cookie with
     // (httpOnly, secure, path, and sameSite options) in the response headers to the client-side

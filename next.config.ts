@@ -1,7 +1,16 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'fakestoreapi.com',
 
-const nextConfig: NextConfig = {
-  /* config options here */
+                pathname: '/img/*',
+            },
+        ],
+        domains: ["avatars.githubusercontent.com", "lh3.googleusercontent.com", "scontent.fpnh11-2.fna.fbcdn.net"],
+    },
 };
 
 export default nextConfig;

@@ -1,49 +1,25 @@
-"use client";
-import Image from "next/image";
-import { ReactNode } from "react";
-import './globals.css'
+import { Kantumruy_Pro } from "next/font/google";
+import "./globals.css";
+import React from "react";
 
-interface LayoutProps {
-    children: ReactNode;
-}
+const kantumruyPro = Kantumruy_Pro({
+    subsets: ["latin"],
+    weight: ["400", "700"],
+    style: ["normal"],
+});
 
-export default function Layout({ children }: LayoutProps) {
+export const metadata = {
+    title: "",
+    description: "Your App Description",
+};
+
+export default function RootLayout({  children,  }: Readonly<{ children: React.ReactNode;
+}>) {
     return (
-        <html>
+        <html lang="en" className={`${kantumruyPro.className} h-full`}>
         <body>
-        <main
-            className="layout min-h-screen w-screen flex flex-row justify-center items-center p-4 bg-[#F6EEE3] relative">
-            <Image
-                src={"/icons/kbach-1.svg"}
-                alt={"kbach"}
-                width={250}
-                height={300}
-                className={"absolute top-0 right-0"}
-            />
-            <Image
-                src={"/icons/Asset 1 8.svg"}
-                alt={"kbach"}
-                width={250}
-                height={300}
-                className={"absolute top-0 left-0"}
-            />
-            <Image
-                src={"/icons/left-dragon.svg"}
-                alt={"kbach"}
-                width={250}
-                height={300}
-                className={"absolute bottom-0 left-0"}
-            />
-            <Image
-                src={"/icons/right-dragon.svg"}
-                alt={"kbach"}
-                width={250}
-                height={300}
-                className={"absolute bottom-0 right-0"}
-            />
             {children}
-        </main>
         </body>
-    </html>
+        </html>
     );
 }
