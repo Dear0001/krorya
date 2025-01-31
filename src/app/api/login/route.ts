@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     console.log("Password: ", password);
 
     // Make a POST request to the Our API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/auth/login`,
+    const response = await fetch(`${process.env.SPRING_API_URL}/auth/login`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
 
     // If the request is successful, parse the response body to get the data
     const data = await response.json();
-    console.log("Data response from spring api: ", data);
     const user = data?.user || null;
     const accessToken = data?.payload?.access_token || null;
     const refreshToken = data?.payload?.refresh_token || null;

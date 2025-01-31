@@ -2,155 +2,35 @@
 
 import { useEffect, useState } from 'react';
 import Table from '../Table';
+import { useGetUsersQuery } from "@/redux/services/user";
 
 type User = {
-    userId: number;
-    createdDate: string;
+    id: number;
+    fullName: string;
     profileImage: string;
-    username: string;
-    email: string;
-    followersCount: number;
-    followingsCount: number;
-    isDeactivated: boolean;
-}
-// Static user data
-const initialUsers: User[] = [
-    {
-        userId: 1,
-        createdDate: '2024-01-01',
-        profileImage: '',
-        username: 'johndoe',
-        email: 'john@example.com',
-        followersCount: 100,
-        followingsCount: 50,
-        isDeactivated: false
-    },
-    {
-        userId: 2,
-        createdDate: '2023-12-15',
-        profileImage: '',
-        username: 'janesmith',
-        email: 'jane@example.com',
-        followersCount: 200,
-        followingsCount: 80,
-        isDeactivated: false
-    },
-    {
-        userId: 3,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },{
-        userId: 4,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },
-    {
-        userId: 5,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },
-    {
-        userId: 6,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },
-    {
-        userId: 7,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    }
-    ,{
-        userId: 8,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },
-    {
-        userId: 9,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },
-    {
-        userId: 10,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },
-    {
-        userId: 11,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    },{
-        userId: 12,
-        createdDate: '2023-11-20',
-        profileImage: '',
-        username: 'alicejohnson',
-        email: 'alice@example.com',
-        followersCount: 300,
-        followingsCount: 150,
-        isDeactivated: true
-    }
-];
+    role: string;
+    deleted: boolean;
+};
 
 export default function AdminUsersPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setUsers(initialUsers);
-            setLoading(false);
-        }, 1000);
+    const { data, error, isLoading } = useGetUsersQuery({
+        page: 0,
+        pageSize: 10,
+    });
 
-        return () => clearTimeout(timer);
-    }, []);
+    useEffect(() => {
+        if (data) {
+            setUsers(data.payload.users);
+            setLoading(false);
+        }
+    }, [data]);
 
     const filteredUsers = users.filter((user) =>
-        user.username.toLowerCase().includes(searchTerm.toLowerCase())
+        user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (

@@ -8,6 +8,7 @@ import { setAccessToken } from "./features/auth/authSlice";
 const baseQuery = fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_SPRING_API_URL,
     prepareHeaders: (headers, { getState }) => {
+
         const token = (getState() as RootState).auth.token;
         // if we have a token, let's set the authorization header
         if (token) {
@@ -22,22 +23,24 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
     // check result of each query. if it's a 401, we'll try to re-authenticate
     let result = await baseQuery(args, api, extraOptions);
     if (result.error?.status === 401) {
-        const res = await fetch("http://localhost:3000/api/refresh", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/refresh`, {
             method: "POST",
             credentials: "include",
         });
         if (res.ok) {
             const data = await res.json();
-            api.dispatch(setAccessToken(data.accessToken));
+            api.dispatch(setAccessToken(data.payload?.access_token));
+            console.log("ww", data.payload?.access_token);
             // re-run the query with the new token
             result = await baseQuery(args, api, extraOptions);
         } else {
-            const res = await fetch("http://localhost:3000/api/logout", {
-                method: "POST",
-                credentials: "include",
-            });
-            const data = await res.json();
-            console.log(data);
+            // const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, {
+            //     method: "POST",
+            //     credentials: "include",
+            // });
+            // const data = await res.json();
+            // console.log(data);
+            console.log("Failed to refresh token");
         }
     }
     return result;

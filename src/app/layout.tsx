@@ -1,6 +1,8 @@
 import { Kantumruy_Pro } from "next/font/google";
 import "./globals.css";
 import React from "react";
+import SessionProvider from "@/app/SessionProvider";
+import StoreProvider from "@/app/StoreProvider";
 
 const kantumruyPro = Kantumruy_Pro({
     subsets: ["latin"],
@@ -18,7 +20,12 @@ export default function RootLayout({  children,  }: Readonly<{ children: React.R
     return (
         <html lang="en" className={`${kantumruyPro.className} h-full`}>
         <body>
-            {children}
+
+        <SessionProvider>
+           <StoreProvider>
+               {children}
+           </StoreProvider>
+        </SessionProvider>
         </body>
         </html>
     );

@@ -1,36 +1,26 @@
-'use client';
-
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { formatDateToKhmer } from '@/components/ConvertDateToKhmer';
 import Pagination from "@/app/(admin)/admin/user/components/Pagination";
 
 type User = {
-    userId: number;
-    createdDate: string | Date;
+    id: number;
+    fullName: string;
     profileImage?: string;
-    username: string;
-    followersCount: number;
-    followingsCount: number;
-    isDeactivated: boolean;
+    role: string;
+    deleted: boolean;
 };
 
-type TableProps = {
-    users: User[]   ;
-};
-
-export default function Table({ users }: TableProps) {
+export default function Table({ users }: { users: User[] }) {
     const pageSize = 8;
     const [currentPage, setCurrentPage] = useState(1);
 
-    const handlePageChange = (page: React.SetStateAction<number>) => {
+    const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
 
-    // Calculate pagination offsets
-    const startIndex = (currentPage - 1) * pageSize + 1;
-    const endIndex = Math.min(startIndex + pageSize - 1, users.length);
-    const paginatedUsers = users.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const startIndex = (currentPage - 1) * pageSize;
+    const paginatedUsers = users.slice(startIndex, startIndex + pageSize);
 
     return (
         <div className="overflow-x-auto">
@@ -40,39 +30,31 @@ export default function Table({ users }: TableProps) {
                     <th className="font-light">លេខរៀង</th>
                     <th className="font-light">កាលបរិច្ឆេទបង្កើតគណនី</th>
                     <th className="font-light">ឈ្មោះអ្នកប្រើប្រាស់</th>
-                    <th className="font-light">ចំនួនអ្នកតាមដាន</th>
-                    <th className="font-light">ចំនួនអ្នកកំពុងតាមដាន</th>
                     <th className="font-light">ស្ថានភាពអ្នកប្រើប្រាស់</th>
                 </tr>
                 </thead>
                 <tbody>
                 {paginatedUsers.map((user, index) => (
-                    <tr key={user.userId} className="text-center">
-                        <td className="text-color-2">{startIndex + index}</td>
+                    <tr key={user.id} className="text-center">
+                        <td className="text-color-2">{startIndex + index + 1}</td>
                         <td className="text-color-2">
-                            <div className="text-sm opacity-50">{formatDateToKhmer(user.createdDate)}</div>
+                            <div className="text-sm opacity-50">{formatDateToKhmer(new Date().toISOString())}</div>
                         </td>
                         <td className="text-color-2">
                             <div className="flex items-center">
                                 <div className="avatar mr-2">
                                     <div className="mask mask-squircle w-12 h-12">
-                                        <img src={user.profileImage} alt="Avatar" />
+                                        <img src={user.profileImage || '/default-avatar.jpg'} alt="Avatar" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-start">
-                                    <div className="text-sm opacity-50">{user.username}</div>
+                                    <div className="text-sm opacity-50">{user.fullName}</div>
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            <div className="flex items-center justify-center gap-3">
-                                <div className="text-sm opacity-50 text-black">{user.followersCount}</div>
-                            </div>
-                        </td>
-                        <td className="text-color-2">{user.followingsCount}</td>
                         <td className="text-color-2">
-                            <Link href="#" className="flex-1 px-4 bg-[#D1FAE5] border border-[#6EE7B7] text-green-800 py-2 rounded text-center">
-                                {user.isDeactivated ? 'មិនធម្មតា' : 'ធម្មតា'}
+                            <Link href="#" className={`flex-1 px-4 py-2 rounded text-center ${user.deleted ? 'bg-red-500 border-red-600 text-white' : 'bg-green-500 border-green-600 text-white'}`}>
+                                {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
                             </Link>
                         </td>
                     </tr>
@@ -87,6 +69,5 @@ export default function Table({ users }: TableProps) {
                 currentPage={currentPage}
             />
         </div>
-
     );
 }

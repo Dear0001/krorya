@@ -1,15 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "@/redux/store";
 
-const initialState = {
-    token: null as string | null,
+interface AuthState {
+    token: string | null;
+}
+
+const initialState: AuthState = {
+    token: null,
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setAccessToken(state, action: PayloadAction<string> ) {
+        setAccessToken(state, action: PayloadAction<string | null>) {
+            console.log("Token being set in Redux:", action.payload);
             state.token = action.payload;
         },
     },
@@ -17,6 +21,3 @@ const authSlice = createSlice({
 
 export const { setAccessToken } = authSlice.actions;
 export default authSlice.reducer;
-
-// customize selector for easy component access
-export const selectToken = (state: RootState) => state.auth.token;

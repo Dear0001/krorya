@@ -9,7 +9,8 @@ export async function POST() {
     const cookieName = process.env.COOKIE_REFRESH_TOKEN_NAME || "refresh";
     const credential = cookieStore.get(cookieName);
 
-    console.log("Credential", credential);
+    console.log("Retrieved Cookie:", credential);
+
     // If the refresh token is not found, return an error message to the client-side
     if (!credential) {
         return NextResponse.json(
@@ -24,16 +25,18 @@ export async function POST() {
 
     // get the refresh token value
     const refreshToken = credential.value;
+    console.log("Refresh Token: ", refreshToken);
 
     // if the refresh token is found, make a POST request to the Our API
     const response = await fetch(
-        `${process.env.SPRING_API_URL}/api/auth/refresh-token/`,
+        `${process.env.SPRING_API_URL}/auth/refresh-token`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refresh: refreshToken }),
+            body: JSON.stringify({ refreshToken: refreshToken }),
         }
     );
+    // const dataUsers = await response.json();
 
     // If the request fails, return an error message to the client-side
     if (!response.ok) {
@@ -49,8 +52,24 @@ export async function POST() {
 
     // Parse the response body to get the data
     const data = await response.json();
-    const refresh = data?.refresh || null;
-    const access = data?.access || null;
+    console.log("aaa: ", data);
+    const refresh = data?.payload?.refresh_token || null;
+    const access = data?.payload?.access_token || null;
+
+    console.log("RR: ", refresh);
+    console.log("TT: ", access);
+
+    // If the tokens are missing in the response, return an error
+    if (!refresh || !access) {
+        return NextResponse.json(
+            {
+                message: "Invalid token response from server",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
 
     // Serialize the refresh token and set it as a cookie with
     // (httpOnly, secure, path, and sameSite options) in the response headers to the client-side
