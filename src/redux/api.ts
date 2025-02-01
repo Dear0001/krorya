@@ -1,16 +1,12 @@
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+// services/api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "./store";
-import { setAccessToken } from "./features/auth/authSlice";
-// initialize an empty api service that we'll inject endpoints into later as needed
+import {RootState} from "@/redux/store";
+import {clearAccessToken, setAccessToken} from "@/redux/features/auth/authSlice";
 
-// Setting up prepareHeaders to include the token in the headers
 const baseQuery = fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_SPRING_API_URL,
     prepareHeaders: (headers, { getState }) => {
-
         const token = (getState() as RootState).auth.token;
-        // if we have a token, let's set the authorization header
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
@@ -18,31 +14,51 @@ const baseQuery = fetchBaseQuery({
     },
 });
 
-// args: for the request details // api: for Redux api object // extraOptions: for additional
 const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
-    // check result of each query. if it's a 401, we'll try to re-authenticate
     let result = await baseQuery(args, api, extraOptions);
+
     if (result.error?.status === 401) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/refresh`, {
-            method: "POST",
-            credentials: "include",
-        });
-        if (res.ok) {
-            const data = await res.json();
-            api.dispatch(setAccessToken(data.payload?.access_token));
-            console.log("ww", data.payload?.access_token);
-            // re-run the query with the new token
-            result = await baseQuery(args, api, extraOptions);
-        } else {
-            // const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, {
-            //     method: "POST",
-            //     credentials: "include",
-            // });
-            // const data = await res.json();
-            // console.log(data);
-            console.log("Failed to refresh token");
+        console.warn("Access token expired, attempting refresh...");
+
+        try {
+            const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/refresh`, {
+                method: "POST",
+                credentials: "include",
+            });
+
+            // Log the response status and headers to inspect any issues
+            console.log("Refresh Response Status:", refreshResponse.status);
+            console.log("Refresh Response Headers:", refreshResponse.headers);
+
+            if (refreshResponse.ok) {
+                const refreshData = await refreshResponse.json();
+
+                // Log the full response to verify the structure
+                console.log("Full Refresh API Response:", JSON.stringify(refreshData, null, 2));
+
+                const newAccessToken = refreshData.accessToken;
+                console.log("New Access Token:", newAccessToken); // Explicitly log the token
+
+                if (newAccessToken) {
+                    api.dispatch(setAccessToken(newAccessToken));
+                    console.log("Updated Access Token in Redux:", (api.getState() as RootState).auth.token);
+
+                    // Retry the original request with the new token
+                    result = await baseQuery(args, api, extraOptions);
+                    console.log("Retry Result:", result);
+                } else {
+                    console.error("Refresh API did not return a new access token");
+                }
+            } else {
+                console.error("Failed to refresh token, logging out...");
+                api.dispatch(clearAccessToken());
+            }
+
+        } catch (error) {
+            console.error("Token refresh error:", error);
         }
     }
+
     return result;
 };
 

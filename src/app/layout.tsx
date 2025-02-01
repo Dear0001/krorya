@@ -15,16 +15,14 @@ export const metadata = {
     description: "Your App Description",
 };
 
-export default function RootLayout({  children,  }: Readonly<{ children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en" className={`${kantumruyPro.className} h-full`}>
         <body>
-
         <SessionProvider>
-           <StoreProvider>
-               {children}
-           </StoreProvider>
+            <StoreProvider>
+                {children}
+            </StoreProvider>
         </SessionProvider>
         </body>
         </html>

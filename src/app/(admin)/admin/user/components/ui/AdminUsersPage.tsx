@@ -1,3 +1,4 @@
+// AdminUsersPage.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -38,8 +39,8 @@ export default function AdminUsersPage() {
             <div>
                 <h1 className="font-semibold mb-2">ព័ត៌មានការរាយការណ៍រូបមន្តម្ហូបទាំងអស់</h1>
                 <span className="mt-2">
-                    មានរូបមន្ត <span className="text-secondary">{users.length}+ </span> បន្ថែមទៀត
-                </span>
+          មានរូបមន្ត <span className="text-secondary">{users.length}+ </span> បន្ថែមទៀត
+        </span>
                 <label className="input input-bordered flex items-center gap-2 mt-4 w-fit dark:bg-white text-black">
                     <input
                         type="text"
@@ -53,7 +54,7 @@ export default function AdminUsersPage() {
 
             <div className="mt-4">
                 {loading ? (
-                    <p className="text-center font-moulpali text-secondary">កំពុងទាញអ្នកប្រើប្រាស់...</p>
+                    <p className="h-screen grid grid-place-center text-center font-moulpali text-secondary">កំពុងទាញអ្នកប្រើប្រាស់...</p>
                 ) : filteredUsers.length > 0 ? (
                     <Table users={filteredUsers} />
                 ) : (

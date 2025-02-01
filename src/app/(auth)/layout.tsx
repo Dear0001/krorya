@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { ReactNode } from "react";
-import '../globals.css'
+import "../globals.css";
 
 interface LayoutProps {
     children: ReactNode;
@@ -9,11 +9,9 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
     return (
-        <html>
-        <body>
-            <main
-            className="layout min-h-screen w-screen flex flex-row justify-center items-center p-4 bg-[#F6EEE3] relative">
-
+        <main
+            className="layout min-h-screen w-screen flex flex-row justify-center items-center p-4 bg-[#F6EEE3] relative"
+        >
             <Image
                 src={"/icons/kbach-1.svg"}
                 alt={"kbach"}
@@ -43,8 +41,6 @@ export default function Layout({ children }: LayoutProps) {
                 className={"absolute bottom-0 right-0"}
             />
             {children}
-            </main>
-        </body>
-    </html>
+        </main>
     );
 }

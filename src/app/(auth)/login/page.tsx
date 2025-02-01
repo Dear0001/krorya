@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {useAppDispatch} from "@/redux/hooks";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import { setAccessToken} from "@/redux/features/auth/authSlice";
 
 type ValueTypes = { email: string; password: string };
@@ -21,7 +21,9 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
+    // const accessToken = useAppSelector(selectToken);
     const router = useRouter();
+    // console.log("Access token: from Redux stores in page login", accessToken);
 
     const onSubmit: SubmitHandler<ValueTypes> = async (values) => {
         setLoading(true);
@@ -35,8 +37,8 @@ const Login = () => {
             const data = await response.json();
             if (response.ok) {
                 toast.success("ការចូលគណនីបានជោគជ័យ!");
-                console.log("Token received:", data?.accessToken);
                 dispatch(setAccessToken(data?.accessToken));
+                console.log("Token from login page:", data?.accessToken);
                 router.push("/admin/dashboard");
             }
             else {
