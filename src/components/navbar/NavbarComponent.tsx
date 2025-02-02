@@ -1,36 +1,99 @@
 "use client";
 import Image from "next/image";
-
-import { usePathname, useRouter } from "next/navigation";
-import { MenuList } from "@/components/sidebar/menu";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useGetUserProfileQuery } from "@/redux/services/user";
+import {toast, ToastContainer} from "react-toastify";
 
 export function NavbarComponent() {
-    const pathname = usePathname();
+    // getUserProfile from redux RTK Query
+    const { data: userProfile } = useGetUserProfileQuery();
+    console.log("User profile from Navbar:", userProfile);
+
     const router = useRouter();
 
-    // Find the current page title based on the pathname
-    const currentPage = MenuList.find((menu) => menu.href === pathname);
-    const handleSignOut = () => {
-        // Remove the cookie by setting its expiration date to a past date
-        document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        router.push("/");
+    // State to manage dropdown visibility
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    // Toggle dropdown visibility
+    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+    // Sign out function
+    const handleSignOut = async () => {
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, { method: "POST" });
+            toast.success("ការចេញពីគណនីបានជោគជ័យ!");
+            router.push("/login");
+        } catch (error) {
+            toast.error("ការចេញពីគណនីបានបរាជ័យ!");
+            console.error("Logout failed:", error);
+        }
     };
+
     return (
-        <div className="w-full h-20 relative bg-white flex  items-center px-4">
+        <main className="w-full h-20 relative bg-white flex items-center px-4">
+            <ToastContainer/>
+            {/* Left Section */}
             <div>
-                <div className=" text-neutral-700 text-sm sm:text-base font-normal leading-snug">
-                    <h1>សួរស្តី <span>សីហា</span></h1>
+                <div className="text-neutral-700 text-sm sm:text-base font-normal leading-snug">
+                    <h1>
+                        សួរស្តី    {userProfile?.payload?.fullName ? `${userProfile.payload.fullName}` : "Admin"}
+                    </h1>
                 </div>
             </div>
-            <div className="ml-auto flex items-center space-x-4">
+
+            {/* Right Section */}
+            <div className="ml-auto flex items-center space-x-4 relative">
+                {/* Notification Icon */}
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 rounded-full flex items-center justify-center">
                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#F7F9FB] rounded-full relative">
-                        <Image src="/icons/notification.svg" alt="notification" fill/>
+                        <Image src="/icons/notification.svg" alt="notification" fill />
                     </div>
                 </div>
-                <Image width={10} height={10} className="sm:w-12 sm:h-12 rounded-full" src="https://scontent.fpnh11-2.fna.fbcdn.net/v/t39.30808-1/340292502_538413028484986_443063108382547189_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeH7wRLrJAlGVHv0DhLebuuPcbnkOj5TsxtxueQ6PlOzG9CpmahoVDGBWfCHoIKTJq_0K60s7k5Im98JYTS9HZey&_nc_ohc=GPekbCPGbQMQ7kNvgHDSaBH&_nc_zt=24&_nc_ht=scontent.fpnh11-2.fna&_nc_gid=ATweuGMrn-i4V-MvoKkWKrV&oh=00_AYAfK-7GGfSAM0LYQ8q9F9UcI7TtRwG5kILUhrWdiKlYBA&oe=679FEB05"
-                     alt="User avatar"/>
+
+                {/* User Avatar with Dropdown */}
+                <div className="relative">
+                    <button onClick={toggleDropdown} className="focus:outline-none">
+
+                        <Image
+                            width={40}
+                            height={40}
+                            className="sm:w-12 sm:h-12 rounded-full"
+                            src={
+                                userProfile?.payload?.profileImage && userProfile.payload.profileImage.startsWith("http")
+                                    ? userProfile.payload.profileImage
+                                    : "/assets/images/profile.png"
+                            }
+                            alt="User avatar"
+                        />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                            <ul className="py-1">
+                                {/* Profile Option */}
+                                <li
+                                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => {
+                                        setIsDropdownOpen(false);
+                                        router.push("/admin/profile");
+                                    }}
+                                >
+                                    Profile
+                                </li>
+
+                                {/* Sign Out Option */}
+                                <li
+                                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    onClick={handleSignOut}
+                                >
+                                    Sign Out
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </main>
     );
 }

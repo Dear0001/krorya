@@ -12,10 +12,10 @@ export const userApi = kroryaApi.injectEndpoints({
             query: (id) => `/api/v1/user/${id}`,
         }),
         // Update user data
-        updateUser: builder.mutation<any, { id: number; updatedUser: object }>({
+        updateUserProfile: builder.mutation<any, { id: number; updatedUser: object }>({
             query: ({ id, updatedUser }) => ({
-                url: `/api/v1/user/${id}/update`,
-                method: "PATCH",
+                url: `/api/v1/user/edit-profile`,
+                method: "PUT",
                 body: updatedUser,
             }),
         }),
@@ -26,12 +26,20 @@ export const userApi = kroryaApi.injectEndpoints({
                 method: "DELETE",
             }),
         }),
+    //     get user progile
+        getUserProfile: builder.query<any, void>({
+            query: () =>
+                `/api/v1/user/profile`,
+        }),
+
+
     }),
 });
 
 export const {
     useGetUsersQuery,
     useGetUserByIdQuery,
-    useUpdateUserMutation,
+    useUpdateUserProfileMutation,
     useDeleteUserMutation,
+    useGetUserProfileQuery,
 } = userApi;

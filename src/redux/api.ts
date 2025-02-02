@@ -26,32 +26,25 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
                 credentials: "include",
             });
 
-            // Log the response status and headers to inspect any issues
-            console.log("Refresh Response Status:", refreshResponse.status);
-            console.log("Refresh Response Headers:", refreshResponse.headers);
-
             if (refreshResponse.ok) {
                 const refreshData = await refreshResponse.json();
 
-                // Log the full response to verify the structure
-                console.log("Full Refresh API Response:", JSON.stringify(refreshData, null, 2));
-
                 const newAccessToken = refreshData.accessToken;
-                console.log("New Access Token:", newAccessToken); // Explicitly log the token
+                // Explicitly log the token
 
                 if (newAccessToken) {
                     api.dispatch(setAccessToken(newAccessToken));
-                    console.log("Updated Access Token in Redux:", (api.getState() as RootState).auth.token);
 
                     // Retry the original request with the new token
                     result = await baseQuery(args, api, extraOptions);
-                    console.log("Retry Result:", result);
                 } else {
                     console.error("Refresh API did not return a new access token");
                 }
             } else {
-                console.error("Failed to refresh token, logging out...");
-                api.dispatch(clearAccessToken());
+                const logout = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, {
+                    method: "POST",
+                    credentials: "include",
+                });
             }
 
         } catch (error) {

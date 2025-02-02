@@ -1,45 +1,45 @@
+// src/features/userProfile/userProfileSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type UserState = {
-    accessToken: string | null;
-    refreshToken: string | null;
-    email: string | null;
-    role: string | null;
-    fullName: string | null;
-    profileImage: string | null;
+interface UserProfileState {
+    id: number | null;
+    fullName: string;
+    email: string;
+    profileImage: string;
+    phoneNumber: string;
+    role: string;
+    createdAt: string;
+    emailVerifiedAt: string;
+    emailVerified: boolean;
+    deleted: boolean;
 }
 
-const initialState: UserState = {
-    accessToken: null,
-    refreshToken: null,
-    email: null,
-    role: null,
-    fullName: null,
-    profileImage: null,
+const initialState: UserProfileState = {
+    id: null,
+    fullName: "",
+    email: "",
+    profileImage: "",
+    phoneNumber: "",
+    role: "",
+    createdAt: "",
+    emailVerifiedAt: "",
+    emailVerified: false,
+    deleted: false,
 };
 
-const userSlice = createSlice({
-    name: "user",
+export const userProfileSlice = createSlice({
+    name: "userProfile",
     initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<UserState>) => {
-            state.accessToken = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
-            state.email = action.payload.email;
-            state.role = action.payload.role;
-            state.fullName = action.payload.fullName;
-            state.profileImage = action.payload.profileImage;
+        setUserProfile: (state, action: PayloadAction<UserProfileState>) => {
+            return { ...state, ...action.payload };
         },
-        clearUser: (state) => {
-            state.accessToken = null;
-            state.refreshToken = null;
-            state.email = null;
-            state.role = null;
-            state.fullName = null;
-            state.profileImage = null;
+        clearUserProfile: (state) => {
+            return initialState;
         },
     },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { setUserProfile, clearUserProfile } = userProfileSlice.actions;
+
+export default userProfileSlice.reducer;
