@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {useAppDispatch} from "@/redux/hooks";
 import { setAccessToken} from "@/redux/features/auth/authSlice";
 
 type ValueTypes = { email: string; password: string };

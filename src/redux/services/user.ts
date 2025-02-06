@@ -20,9 +20,9 @@ export const userApi = kroryaApi.injectEndpoints({
             }),
         }),
         // Delete user by ID
-        deleteUser: builder.mutation<any, number>({
+        deleteUserById: builder.mutation<any, number>({
             query: (id) => ({
-                url: `/api/v1/user/${id}`,
+                url: `/api/v1/user/deleteUserById/${id}`,
                 method: "DELETE",
             }),
         }),
@@ -40,6 +40,6 @@ export const {
     useGetUsersQuery,
     useGetUserByIdQuery,
     useUpdateUserProfileMutation,
-    useDeleteUserMutation,
+    useDeleteUserByIdMutation,
     useGetUserProfileQuery,
 } = userApi;

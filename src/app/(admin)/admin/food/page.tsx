@@ -1,11 +1,12 @@
 import React from 'react';
+import DisplayTable from "./components/DisplayTable";
 
-function Food() {
+const Page = () => {
     return (
-        <main className={"w-full"}>
-            food
-        </main>
+        <div>
+            <DisplayTable/>
+        </div>
     );
-}
+};
 
-export default Food;
+export default Page;

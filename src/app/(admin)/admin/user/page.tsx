@@ -4,7 +4,9 @@ import AdminUsersPage from "@/app/(admin)/admin/user/components/ui/AdminUsersPag
 export default async function Page() {
 
     return (
-        <AdminUsersPage
-        />
+        <main className={"overflow-auto scrollbar-hide"}>
+            <AdminUsersPage/>
+        </main>
+
     );
 }

@@ -2,7 +2,9 @@ import { kroryaApi } from "../api";
 
 export const fileApi = kroryaApi.injectEndpoints({
     endpoints: (builder) => ({
-        uploadFile: builder.mutation<{ fileName: string }, FormData>({
+        uploadFile: builder.mutation<{
+            payload: any; fileName: string
+        }, FormData>({
             query: (formData) => ({
                 url: '/api/v1/fileView/file',
                 method: 'POST',
