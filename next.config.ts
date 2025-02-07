@@ -3,13 +3,18 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'fakestoreapi.com',
-
-                pathname: '/img/*',
+                protocol: "https",
+                hostname: "fakestoreapi.com",
+                pathname: "/img/*",
             },
         ],
-        domains: ["avatars.githubusercontent.com", "lh3.googleusercontent.com", "scontent.fpnh11-2.fna.fbcdn.net"],
+        domains: [
+            "localhost", // Allow images from local API
+            "127.0.0.1", // Include if using IP-based access
+            "avatars.githubusercontent.com",
+            "lh3.googleusercontent.com",
+            "scontent.fpnh11-2.fna.fbcdn.net",
+        ],
     },
 };
 

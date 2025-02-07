@@ -37,7 +37,12 @@ export const RecipeApi = kroryaApi.injectEndpoints({
                     body: newRecipe, // Send entire recipe object
                 }),
             }),
+        // fetch count of dashboard
+        getDashboardCount: builder.query<any, void>({
+            query: () => `/api/v1/dashboard/counts`,
         }),
+    }),
+
 });
 
-export const { useGetAllRecipesQuery, usePostRecipeMutation } = RecipeApi;
+export const { useGetAllRecipesQuery, useGetDashboardCountQuery , usePostRecipeMutation } = RecipeApi;

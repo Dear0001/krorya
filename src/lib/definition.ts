@@ -15,3 +15,14 @@ export type CartProductType = {
     id: number;
     onClick?: () => void;
 };
+
+
+// Define the type for recipe data
+export type RecipeType = {
+    id: number;
+    photo: { photo: string; photoId: number }[];
+    name: string;
+    description: string;
+    level: string;
+    durationInMinutes?: string;
+}

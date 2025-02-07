@@ -16,7 +16,6 @@ function Dashboard() {
                 <div className={"pl-5"}>
                     <RecipeComponent/>
                 </div>
-
             </section>
         </main>
     );

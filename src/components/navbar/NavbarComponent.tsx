@@ -29,6 +29,10 @@ export function NavbarComponent() {
         }
     };
 
+    const photoFileName = userProfile?.payload?.profileImage;
+    // If the API returns only the filename, construct the full image URL manually
+    const imageUrl = photoFileName ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}` : "/assets/image_login.png";
+
     return (
         <main className="w-full h-20 relative bg-white flex items-center px-4">
             <ToastContainer/>
@@ -55,12 +59,12 @@ export function NavbarComponent() {
                     <button onClick={toggleDropdown} className="focus:outline-none">
 
                         <Image
-                            width={40}
-                            height={40}
-                            className="sm:w-12 sm:h-12 rounded-full"
+                            width={50}
+                            height={50}
+                            className="w-[50px] h-[50px] rounded-full object-cover border-2"
                             src={
-                                userProfile?.payload?.profileImage && userProfile.payload.profileImage.startsWith("http")
-                                    ? userProfile.payload.profileImage
+                                imageUrl && imageUrl.startsWith("http")
+                                    ? imageUrl
                                     : "/assets/images/profile.png"
                             }
                             alt="User avatar"

@@ -1,36 +1,47 @@
-import React from 'react';
+"use client";
 import TotalUi from "@/components/totalUI/TotalUI";
 import Image from "next/image";
+import { useGetDashboardCountQuery } from "@/redux/services/recipe";
+import Skeleton from "@/components/Skeleton";
 
-const TotalDataComponent = async () => {
-    // Define the state for the total count
-    let getTotalCount: { id: number; title: string; count: number }[] = [];
+const TotalDataComponent = () => {
+    // Fetch dashboard count data
+    const { data, isLoading, error } = useGetDashboardCountQuery();
+    console.log("data", data);
 
-    // try {
-    //     // Fetch data from the API
-    //     const data = await getDashboardCounts();
-    //
-    //     // Transform the API response
-    //     getTotalCount = [
-    //         { id: 1, title: "Recipes", count: data.recipes },
-    //         { id: 2, title: "Categories", count: data.categories },
-    //         { id: 3, title: "Users", count: data.users },
-    //         { id: 4, title: "Cuisines", count: data.cuisines }, // Added cuisines
-    //     ];
-    // } catch (error) {
-    //     console.error("Failed to fetch dashboard counts:", error);
-    // }
+    if (isLoading) {
+        return (
+            <main className="my-5 my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
+                <div className="flex gap-2">
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                </div>
+            </main>
+        );
+    }
+
+    if (error) return <p>Error loading data.</p>;
+
+    // Ensure data exists before mapping
+    const dashboardItems =
+        data && typeof data === "object"
+            ? (Object.entries(data) as [string, number][]).map(([key, value]) => ({
+                title: key,
+                count: value,
+            }))
+            : [];
 
     return (
         <main className="my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
-            <div className={"flex gap-3 justify-start items-center text-center"}>
-                <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt={"image"}/>
-                <h1 className="py-5 text-[26px]">Summaries of the data</h1>
+            <div className="flex gap-3 justify-start items-center text-center">
+                <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt="Dashboard Icon" />
+                <h1 className="py-5 text-h1">តារាងសង្ខេបទិន្នន័យសរុប</h1>
             </div>
 
             <div className="flex gap-2">
-                {getTotalCount.map((item) => (
-                    <TotalUi key={item.id} title={item.title} count={item.count} />
+                {dashboardItems.map((item) => (
+                    <TotalUi key={item.title} title={item.title} count={item.count} />
                 ))}
             </div>
         </main>
