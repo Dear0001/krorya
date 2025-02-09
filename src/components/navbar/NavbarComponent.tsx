@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetUserProfileQuery } from "@/redux/services/user";
 import {toast, ToastContainer} from "react-toastify";
+import {getImageUrl} from "@/lib/constants";
 
 export function NavbarComponent() {
     // getUserProfile from redux RTK Query
     const { data: userProfile } = useGetUserProfileQuery();
-    console.log("User profile from Navbar:", userProfile);
 
     const router = useRouter();
 
@@ -30,11 +30,11 @@ export function NavbarComponent() {
     };
 
     const photoFileName = userProfile?.payload?.profileImage;
-    // If the API returns only the filename, construct the full image URL manually
-    const imageUrl = photoFileName ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}` : "/assets/image_login.png";
+    // Use the getImageUrl function to construct the full image URL
+    const imageUrl = getImageUrl(photoFileName);
 
     return (
-        <main className="w-full h-20 relative bg-white flex items-center px-4">
+        <main className="w-full h-20 relative bg-white flex items-center px-4 ">
             <ToastContainer/>
             {/* Left Section */}
             <div>
@@ -73,7 +73,7 @@ export function NavbarComponent() {
 
                     {/* Dropdown Menu */}
                     {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-20">
                             <ul className="py-1">
                                 {/* Profile Option */}
                                 <li

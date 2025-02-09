@@ -11,7 +11,7 @@ const TotalDataComponent = () => {
 
     if (isLoading) {
         return (
-            <main className="my-5 my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
+            <main className="my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
                 <div className="flex gap-2">
                     <Skeleton className="h-20 w-full" />
                     <Skeleton className="h-20 w-full" />

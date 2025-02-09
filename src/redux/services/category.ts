@@ -15,8 +15,10 @@ export const categoryApi = kroryaApi.injectEndpoints({
                 body: { categoryName: newCategory.categoryName },
             }),
         }),
-
+        getFoodRecipeByCategoryId: builder.query<any, { categoryId: number }>({
+            query: ({categoryId}) => `/api/v1/guest-user/foods/${categoryId}`,
+        }),
     }),
 });
 
-export const { useGetAllCategoriesQuery, usePostCategoryMutation } = categoryApi;
+export const { useGetAllCategoriesQuery, useGetFoodRecipeByCategoryIdQuery, usePostCategoryMutation } = categoryApi;

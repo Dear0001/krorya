@@ -1,7 +1,7 @@
 import React from 'react';
 // import CardFood from "@/components/card/CardFood";
 // import Test from "@/components/card/Test";
-import Test1 from "@/components/card/Test1";
+import Test1 from "@/components/card/RecipeCard";
 
 const Page = () => {
     return (

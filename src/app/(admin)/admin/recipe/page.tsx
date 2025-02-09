@@ -1,12 +1,16 @@
-import RecipeForm from "./components/CreateRecipe";
+"use client";
+import React from "react";
+import ExploreFood from "@/app/(admin)/admin/recipe/components/recipeListUi/ÊxploreFood";
 
 
-const Home = () => {
+const RecipeList = () => {
     return (
-        <main className="min-h-screen flex items-center justify-center bg-gray-50 p-6 rounded-lg">
-            <RecipeForm/>
+        <main>
+            <section className="bg-gray-50">
+                <ExploreFood />
+            </section>
         </main>
     );
 };
 
-export default Home;
+export default RecipeList;

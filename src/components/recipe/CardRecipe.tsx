@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "@/components/Skeleton";
 import React from "react";
+import {getImageUrl} from "@/lib/constants";
 
 // Define the props for the component
 type RecipeProps = {
@@ -20,11 +21,8 @@ type RecipeProps = {
 
 const CardRecipe: React.FC<RecipeProps> = ({ recipe, isLoading }) => {
     const photoFileName = recipe.photo?.[0]?.photo;
-
-    // Construct the full image URL
-    const imageUrl = photoFileName
-        ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}`
-        : "/assets/image_login.png";
+    // Use the getImageUrl function to construct the full image URL
+    const imageUrl = getImageUrl(photoFileName);
 
     // Background color mapping for levels
     const levelBgColors: { [key: string]: string } = {
@@ -51,7 +49,7 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe, isLoading }) => {
     }
     return (
         <Link
-            href={`/explore-recipe/${recipe.id}`}
+            href={`/admin/recipe/${recipe.id}`}
             className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md sha  carousel-item m-0"
             style={{ margin: 0 }}
         >

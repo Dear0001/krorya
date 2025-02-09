@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <main lang="en" className={`${kantumruyPro.className} h-full`}>
-        <div className="bg-gray-100 grid grid-rows-[auto_1fr] md:grid-cols-12 min-h-screen h-full ">
+        <main lang="en" className={`${kantumruyPro.className} h-screen`}>
+        <div className="grid grid-rows-[auto_1fr] md:grid-cols-12 min-h-screen h-full rounded-lg">
         <LayoutClient>{children}</LayoutClient>
         </div>
         </main>

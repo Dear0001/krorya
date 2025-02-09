@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import "@/app/globals.css";
 import {MenuList} from "@/components/sidebar/menu";
 
 type MenuItem = {
@@ -17,7 +18,7 @@ export function SidebarComponent() {
     const [menuList, setMenuList] = useState<MenuItem[]>(MenuList);
 
     return (
-        <aside className="h-screen w-full bg-white">
+        <aside className="h-screen w-full bg-white rounded-lg overflow-hidden">
             <div className="flex justify-center pb-4">
                 <Image width={200} height={71} src="/assets/logo.svg" alt="logo-krorya" />
             </div>
@@ -27,7 +28,7 @@ export function SidebarComponent() {
                         <li key={item.href}>
                             <Link
                                 href={item.href}
-                                className={`flex items-center gap-4 text-[18px] font-medium px-7 py-4 transition-all duration-100 ${
+                                className={`list-item items-center gap-4 text-[18px] font-medium px-7 py-4 transition-all duration-100 ${
                                     pathname === item.href
                                         ? "active bg-custom-gradient"
                                         : ""

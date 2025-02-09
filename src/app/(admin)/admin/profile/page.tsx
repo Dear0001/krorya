@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useGetUserProfileQuery } from "@/redux/services/user";
 import EditProfile from "@/components/profile/EditProfile";
 import React from "react";
+import {getImageUrl} from "@/lib/constants";
 
 const Page = () => {
     // Get user profile data using RTK Query
@@ -14,10 +15,8 @@ const Page = () => {
 
     // Check if the user profile data is loaded and if there's a profile image
     const photoFileName = userData?.profileImage;
-    // If the API returns only the filename, construct the full image URL manually
-    const imageUrl = photoFileName ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}` : "/assets/image_login.png";
-
-    console.log("Image URL:", imageUrl);
+    // Use the getImageUrl function to construct the full image URL
+    const imageUrl = getImageUrl(photoFileName);
 
     return (
         <>
