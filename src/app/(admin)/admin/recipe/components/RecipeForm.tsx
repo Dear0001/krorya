@@ -74,7 +74,6 @@ export default function RecipeForm() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [selectedCuisine, setSelectedCuisine] = useState<number | null>(null);
-    const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [selectedOption, setSelectedOption] = useState("");
 
@@ -168,7 +167,7 @@ export default function RecipeForm() {
 
             try {
                 await createRecipe(finalData).unwrap();
-                setIsOpen(false); // Reset form or close modal on success
+                // setIsOpen(false); // Reset form or close modal on success
             } catch (recipeError) {
                 console.error("Recipe creation failed:", recipeError);
                 throw new Error("Failed to create recipe, please try again.");
@@ -178,26 +177,10 @@ export default function RecipeForm() {
         }
     };
 
-
     return (
-        <main>
-            <button className="py-1.4 px-2.5 bg-blue-300 rounded" onClick={() => setIsOpen(true)}>
-                Create Recipe
-            </button>
-            {isOpen && (
-                <div className="w-[550px] mx-auto p-6 bg-white shadow-md rounded-lg">
-                    <div className="text-center mt-2 mb-5">
-                        <h3 className="mb-3 text-2xl font-semibold leading-5 font-moulpali text-secondary lg:text-2xl">កែប្រែព័ត៍មាន</h3>
-                        <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
-                            <Image
-                                src="/icons/Kbach.svg"
-                                alt="border"
-                                width={100}
-                                height={13}
-                            />
-                        </p>
-                    </div>
-
+        <>
+            {/* Scrollable Section */}
+            <div className="max-h-[700px] no-scrollbar overflow-y-auto">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         {/* Recipe Name */}
                         <div className={"mb-5"}>
@@ -349,7 +332,6 @@ export default function RecipeForm() {
                         </button>
                     </form>
                 </div>
-            )}
-        </main>
+        </>
     );
 }
