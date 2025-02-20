@@ -13,10 +13,10 @@ type CardFoodProps = {
 
 export default function CardFood({ food }: CardFoodProps) {
     const [favorite, setFavorite] = useState(false);
-    const [minus, setMinus] = useState(false); // ✅ Define `minus` state
+    const [minus, setMinus] = useState(false);
 
     // Get food image or default
-    const photoFileName = food?.photo?.[0]?.photo || "";
+    const photoFileName = food?.photo?.length > 0 ? food.photo[0].photo : "/assets/default-food.jpg";
     const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
 
     // Handle favorite toggle
@@ -38,7 +38,7 @@ export default function CardFood({ food }: CardFoodProps) {
                 <Link href={`/admin/recipe/${food.id}`}>
                     <Image
                         src={imageUrl}
-                        alt={food?.foodName || "Food Image"}
+                        alt={food?.name || "Food Image"}
                         fill
                         className="w-full h-full object-cover rounded-md"
                     />
@@ -72,12 +72,7 @@ export default function CardFood({ food }: CardFoodProps) {
             </figure>
 
             <div className="card-body p-2 bg-white md:col-span-1">
-                <h2 className="card-title text-slate-700 text-lg">{food.foodName}</h2>
-                {/*<p className="text-xs font-semibold flex items-center gap-1">*/}
-                {/*    <FaStar color="#d7ad45" />*/}
-                {/*    {food.averageRating !== null ? food.averageRating : "No Rating"}*/}
-                {/*    <span className="font-medium">({food.totalRaters || 0})</span>*/}
-                {/*</p>*/}
+                <div className="card-title text-slate-700 text-[20px] py-1">{food.name}</div>
                 <div className="flex items-center gap-2">
                     <svg
                         width="13"

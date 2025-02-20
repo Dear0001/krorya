@@ -7,21 +7,6 @@ import Skeleton from "@/components/Skeleton";
 const TotalDataComponent = () => {
     // Fetch dashboard count data
     const { data, isLoading, error } = useGetDashboardCountQuery();
-    console.log("data", data);
-
-    if (isLoading) {
-        return (
-            <main className="my-5 w-full px-5 h-[222px] bg-white rounded-[15px]">
-                <div className="flex gap-2">
-                    <Skeleton className="h-20 w-full" />
-                    <Skeleton className="h-20 w-full" />
-                    <Skeleton className="h-20 w-full" />
-                </div>
-            </main>
-        );
-    }
-
-    if (error) return <p>Error loading data.</p>;
 
     // Ensure data exists before mapping
     const dashboardItems =
@@ -39,11 +24,21 @@ const TotalDataComponent = () => {
                 <h1 className="py-5 text-h1">តារាងសង្ខេបទិន្នន័យសរុប</h1>
             </div>
 
-            <div className="flex gap-2">
-                {dashboardItems.map((item) => (
-                    <TotalUi key={item.title} title={item.title} count={item.count} />
-                ))}
-            </div>
+            {isLoading ? (
+                <div className="flex gap-2">
+                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
+                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
+                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
+                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
+                </div>
+            ) : (
+                // ✅ Show dashboard data when loaded
+                <div className="flex gap-2">
+                    {dashboardItems?.map((item) => (
+                        <TotalUi key={item.title} title={item.title} count={item.count} />
+                    ))}
+                </div>
+            )}
         </main>
     );
 };

@@ -19,7 +19,7 @@ type RecipeProps = {
     isLoading: boolean;
 };
 
-const CardRecipe: React.FC<RecipeProps> = ({ recipe, isLoading }) => {
+const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
     const photoFileName = recipe.photo?.[0]?.photo;
     // Use the getImageUrl function to construct the full image URL
     const imageUrl = getImageUrl(photoFileName);
@@ -34,19 +34,6 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe, isLoading }) => {
     // Get the corresponding background color class
     const levelClass = levelBgColors[recipe.level] || "bg-gray-100 text-gray-800"; // Default color
 
-    if (isLoading) {
-        return (
-            <main className="w-[373px] h-[90px] my-5">
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-                <Skeleton className="h-20 w-full rounded-md mb-4" />
-            </main>
-        );
-    }
     return (
         <Link
             href={`/admin/recipe/${recipe.id}`}

@@ -55,25 +55,17 @@ export default function FoodDetailPage() {
         <>
             <ToastContainer />
             <section className={"flex flex-col gap-6 relative"}>
-                <div className={"relative rounded-lg"}>
-                    <div className={"h-96 rounded-md"}></div>
+                <div className={"relative mx-20 top-0"}>
+                    <div className={"h-96 rounded-lg"}></div>
                     <Image
                         src={recipeImageUrl}
                         fill
                         alt={"image"}
-                        style={{
-                            borderRadius: "6px",
-                        }}
-                        className={"rounded-lg px-20 object-cover"}
+                        className={"rounded-lg object-cover sticky top-0"}
                     />
                 </div>
-
-                <div
-                    className={
-                        " bg-white self-center p-14 w-2/3 absolute top-3/4 rounded-md"
-                    }
-                >
-                    <div className={" flex flex-col items-center gap-4"}>
+                <div className={" bg-white self-center p-14 w-2/3 absolute top-3/4 rounded-md"}>
+                <div className={" flex flex-col items-center gap-4"}>
             <span
                 className={"font-moulpali text-5xl text-center text-secondary"}
             >
@@ -143,7 +135,7 @@ export default function FoodDetailPage() {
                                     </button>
                                     <dialog id="my_modal_1" className="modal    ">
                                         <div className="modal-box max-w-fit  flex flex-col items-center bg-white text-slate-700 p-0 w-[1000px] rounded-lg  hide-scrollbar">
-                                            <CookingStep cookingSteps={recipeData?.cookingSteps}/>
+                                            <CookingStep cookingSteps={recipeData?.cookingSteps} image={recipeData?.photo}/>
                                         </div>
                                     </dialog>
                                 </div>
@@ -304,6 +296,8 @@ export default function FoodDetailPage() {
                                 </dialog>
                             </div>
                         </div>
+
+                        {/*show author*/}
                         <div>
                             <div className={"bg-gray-50 p-4 rounded-md mt-5"}>
                                 <div className={"flex justify-between gap-4"}>
@@ -325,7 +319,7 @@ export default function FoodDetailPage() {
                                         </div>
                                         <div className="flex gap-2 text-start justify-center items-center">
                                             <Image
-                                                className="btn w-[65px] h-[65px] btn-circle btn-sm object-cover rounded-full"
+                                                className="btn w-[45px] h-[45px] btn-circle btn-sm object-cover rounded-full"
                                                 src={imageUrl}
                                                 alt="Romdol Icon"
                                                 width={100}
@@ -379,19 +373,19 @@ export default function FoodDetailPage() {
                                                     height={20}
                                                 />
                                                 <span className={"text-secondary text-lg   "}>
-                          រយះពេលចំអិន
-                        </span>
+                                              រយះពេលចំអិន
+                                            </span>
                                             </div>
                                             <div
                                                 className={
                                                     "flex flex-row justify-start pl-7 items-center gap-2 mb-2"
                                                 }
                                             >
-                        <span
-                            className={"text-slate-700 text-md font-semibold"}
-                        >
-                          {recipeData?.durationInMinutes} នាទី
-                        </span>
+                                            <span
+                                                className={"text-slate-700 text-md font-semibold"}
+                                            >
+                                              {recipeData?.durationInMinutes} នាទី
+                                            </span>
                                             </div>
                                         </div>
                                         <div>
@@ -406,26 +400,26 @@ export default function FoodDetailPage() {
                                                     width={20}
                                                     height={20}
                                                 />
-                                                <span className={"text-secondary text-lg"}>
-                          ម្ហូបសម្រាប់មនុស្ស
-                        </span>
+                                                <span className={"text-secondary text-xl"}>
+                                                    ប្រភេទ
+                                                </span>
                                             </div>
+
                                             <div
                                                 className={
                                                     "flex flex-row justify-start pl-7 items-center gap-2 mb-2"
                                                 }
                                             >
-                        <span
-                            className={"text-slate-700 text-md font-semibold"}
-                        >
-                          4 នាក់
-                        </span>
+                                                <p className={"bg-[#FFEBBB] rounded-md font-bold p-1 text-primary px-2"}>
+                                                    # {recipeData?.categoryName}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {/*listing ingredients*/}
                         <div className={" py-4"}>
                             <div>
                                 <div
@@ -441,11 +435,14 @@ export default function FoodDetailPage() {
                                          គ្រឿងផ្សំ៖
                                     </span>
                                 </div>
-                                <div className={"flex justify-between items-center gap-6 mb-2"}>
+                                <div className={"w-full mb-2 bg-gray-50 rounded-md"}>
                                     <IngredientsGroupedByType ingredients={recipeData?.ingredients} />
                                 </div>
                             </div>
                         </div>
+
+
+                        {/*Cooking step lists*/}
                         <div className={" py-4"}>
                             <div>
                                 <div
@@ -460,42 +457,23 @@ export default function FoodDetailPage() {
                                         height={20}
                                     />
                                     <span className={"text-secondary text-xl font-semibold   "}>
-                    វិធីសាស្រ្តក្នុងការធ្វើ
-                  </span>
+                                    វិធីសាស្រ្តក្នុងការធ្វើ
+                                  </span>
                                 </div>
                                 <div className={"flex flex-col gap-4 mt-4 text-slate-700"}>
                                     {recipeData?.cookingSteps?.map((step: { id: number; description: string }, index: number) => (
-                                        <div className={"flex gap-2"} key={step.id}>
-        <span className="btn btn-circle btn-xs bg-primary text-slate-700">
-            {index + 1}
-        </span>
-                                            <div className={"w-fit shadow px-2 py-2 rounded-lg bg-gray-100"}>
+                                        <div className="flex gap-4 items-center" key={step.id}>
+                                            {/* Circular Index */}
+                                            <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white font-bold">
+                                                {index + 1}
+                                            </div>
+
+                                            {/* Description Box */}
+                                            <div className="w-fit shadow px-3 py-2 rounded-lg bg-gray-100">
                                                 <p>{step.description}</p>
                                             </div>
                                         </div>
                                     ))}
-                                </div>
-                            </div>
-                        </div>
-                        <div className={" py-4"}>
-                            <div>
-                                <div
-                                    className={"flex flex-row justify- items-center gap-2 mb-2"}
-                                >
-                                    <Image
-                                        src={"/icons/Romdol.svg"}
-                                        alt="Romdol Icon"
-                                        width={25}
-                                        height={25}
-                                    />
-                                    <span className={"text-secondary text-xl font-semibold   "}>
-                    ប្រភេទ
-                  </span>
-                                </div>
-                                <div className={"flex  gap-4 mt-4"}>
-                                        <p className={"bg-[#FFEBBB] rounded-md p-1 text-primary px-2"}>
-                                            # {recipeData?.categoryName}
-                                        </p>
                                 </div>
                             </div>
                         </div>

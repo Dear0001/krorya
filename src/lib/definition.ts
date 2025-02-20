@@ -28,9 +28,10 @@ export type RecipeType = {
 }
 
 export type IngredientType = {
-    ingredientId: number;
-    ingredientName: string;
+    id: number;
+    name: string;
     quantity: string;
+    price: number;
     ingredientType: string;
 };
 
@@ -59,7 +60,7 @@ export type User = {
 
 export type FoodRecipe = {
     id: number;
-    foodName: string; // ✅ Added missing field
+    name: string; // ✅ Added missing field
     categoryId: number; // ✅ Added missing field
     photo: Photo[]; // Array of images
     description: string;

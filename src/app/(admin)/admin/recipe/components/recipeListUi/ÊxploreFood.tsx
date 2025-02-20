@@ -6,6 +6,8 @@ import FoodList from "@/app/(admin)/admin/recipe/components/recipeListUi/FoodLis
 import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/CategoryList";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm  from "../RecipeForm";
+import {ToastContainer} from "react-toastify";
+
 
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
@@ -30,13 +32,14 @@ const ExploreFood: React.FC = () => {
     };
 
     return (
-        <div className="bg-gray-50 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
+            <ToastContainer />
             {/* Category Section */}
             <div className="bg-white md:p-6 lg:p-8 p-5 flex flex-col gap-4 rounded-md">
                 <ul className="grid gap-2 list-none">
                     <li className="flex items-center">
                         <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
-                        <span className="font-moulpali text-lg px-5 text-color-2">បញ្ជីមុខម្ហូប</span>
+                        <span className="font-moulpali text-lg px-5 text-color-2">របបអាហារ</span>
                     </li>
                 </ul>
 
@@ -112,7 +115,7 @@ const ExploreFood: React.FC = () => {
                         >
                             &times;
                         </button>
-                        <RecipeForm />
+                        <RecipeForm onSuccess={closeModal} />
                     </div>
                 </div>
             )}

@@ -6,7 +6,7 @@ import ExploreFood from "@/app/(admin)/admin/recipe/components/recipeListUi/Êxp
 const RecipeList = () => {
     return (
         <main>
-            <section className="bg-gray-50">
+            <section className="bg-gray-50 ">
                 <ExploreFood />
             </section>
         </main>
