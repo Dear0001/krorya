@@ -12,6 +12,7 @@ type CardFoodProps = {
 };
 
 export default function CardFood({ food }: CardFoodProps) {
+    console.log("food card: ", food);
     const [favorite, setFavorite] = useState(false);
     const [minus, setMinus] = useState(false);
 

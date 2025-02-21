@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { kroryaApi } from './api'
 import authSlice from './features/auth/authSlice'
 import userSlice from './features/userProfileSlice'
+import RecipesDateSlice from "@/redux/features/recipe/recipesDateSlice";
 // create store
 export const makeStore = () => {
     return configureStore({
@@ -9,7 +10,8 @@ export const makeStore = () => {
             user: userSlice,
             // Add the generated reducer as a specific top-level slice
             [kroryaApi.reducerPath]: kroryaApi.reducer,
-            auth: authSlice
+            auth: authSlice,
+            recipe: RecipesDateSlice
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(kroryaApi.middleware),
     })

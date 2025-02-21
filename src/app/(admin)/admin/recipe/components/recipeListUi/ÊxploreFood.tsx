@@ -6,7 +6,6 @@ import FoodList from "@/app/(admin)/admin/recipe/components/recipeListUi/FoodLis
 import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/CategoryList";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm  from "../RecipeForm";
-import {ToastContainer} from "react-toastify";
 
 
 const ExploreFood: React.FC = () => {
@@ -33,7 +32,6 @@ const ExploreFood: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-4">
-            <ToastContainer />
             {/* Category Section */}
             <div className="bg-white md:p-6 lg:p-8 p-5 flex flex-col gap-4 rounded-md">
                 <ul className="grid gap-2 list-none">

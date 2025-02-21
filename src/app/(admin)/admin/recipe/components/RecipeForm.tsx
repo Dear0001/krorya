@@ -50,8 +50,7 @@ const schema: Yup.ObjectSchema<FormData> = Yup.object({
     description: Yup.string().required("Description is required"),
     durationInMinutes: Yup.number().min(1, "Duration must be at least 1 minute").required("Duration is required"),
     level: Yup.mixed<"Easy" | "Medium" | "Hard">()
-        .oneOf(["Easy", "Medium", "Hard"], "Invalid level")
-        .required("Level is required"),
+        .oneOf(["Easy", "Medium", "Hard"]).required("Level is required"),
     categoryId: Yup.number().required("Category is required"),
     cuisineId: Yup.number().required("Cuisine is required"),
     ingredients: Yup.array()
@@ -146,15 +145,13 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                 ...data,
                 photo: [{ photo: fileName }],
             };
-
-            console.log("Submitting Recipe:", finalData);
-
+            toast
+                .success("Recipe created successfully!");
             try {
                 await createRecipe(finalData).unwrap();
                 setIsFormOpen(false); // Close the form
-                toast.success("Recipe created successfully!"); // Show success toast
                 if (onSuccess) {
-                    onSuccess(); // Call the onSuccess callback
+                    onSuccess();
                 }
             } catch (recipeError) {
                 console.error("Recipe creation failed:", recipeError);
@@ -236,6 +233,26 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         <p className="text-center mt-2 text-lg font-semibold text-primary">
                             {duration} នាទី
                         </p>
+                    </div>
+
+                    {/*level*/}
+                    {/* Level Selection */}
+                    <div className="mb-5">
+                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                            កម្រិត
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                            {(["Easy", "Medium", "Hard"] as const)?.map((lvl) => (
+                                <button
+                                    key={lvl}
+                                    type="button"
+                                    className={`px-4 py-2 border rounded-lg ${watch("level") === lvl ? "bg-[#FFEFB1] text-secondary" : ""}`}
+                                    onClick={() => setValue("level", lvl)}
+                                >
+                                    {lvl}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Categories Selection */}

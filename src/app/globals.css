@@ -76,3 +76,10 @@ input[type="range"]::-moz-range-thumb {
   width: 150px;  /* Adjust width for the rotated slider */
   height: 400px;  /* Adjust height for the rotated slider */
 }
+:root {
+  --chkbg: #D7AD45;
+}
+
+.some-class {
+  background-color: var(--chkbg);
+}
