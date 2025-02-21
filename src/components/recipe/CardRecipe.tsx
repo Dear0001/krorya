@@ -27,8 +27,8 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
     // Background color mapping for levels
     const levelBgColors: { [key: string]: string } = {
         Easy: "bg-[#FFEBBB] text-[12px] text-[#AE7C00]",
-        Medium: "bg-[#ddd6fe] text-[##8b5cf6]",
-        Hard: "bg-[#f4d4d4] text-[#cf6464]",
+        Medium: "bg-[#ddd6fe] text-[12px] text-[##8b5cf6]",
+        Hard: "bg-[#f4d4d4] text-[12px] text-[#cf6464]",
     };
 
     // Get the corresponding background color class
@@ -66,8 +66,8 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
                         </svg>
                         <span className="text-xs">{recipe.durationInMinutes || "N/A"} នាទី</span>
                     </div>
-                    <div className="bg-[#FFEBBB] text-center rounded-[6px] w-[80px]">
-                        <span className={`text-[#AE7C00] text-xs ${levelClass}`}> {recipe.level}</span>
+                    <div className={`text-center rounded-[4px] py-[2px] w-[70px] ${levelClass}`}>
+                        <span className={"text-xs"}> {recipe.level}</span>
                     </div>
                 </div>
                 <div className="w-[19px] h-[17px] self-start">
