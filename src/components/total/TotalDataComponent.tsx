@@ -3,6 +3,7 @@ import TotalUi from "@/components/totalUI/TotalUI";
 import Image from "next/image";
 import { useGetDashboardCountQuery } from "@/redux/services/recipe";
 import Skeleton from "@/components/Skeleton";
+import TotalUiSkeleton from "@/components/totalUI/TotalUiSkeleton";
 
 const TotalDataComponent = () => {
     // Fetch dashboard count data
@@ -26,10 +27,10 @@ const TotalDataComponent = () => {
 
             {isLoading ? (
                 <div className="flex gap-2">
-                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
-                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
-                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
-                    <Skeleton className="flex flex-col gap-2 h-[108px] self-stretch p-4 rounded-2xl flex-[1_0_0] min-w-[200px] max-md:min-w-[180px] max-sm:p-3 max-sm:min-w-full" />
+                    <TotalUiSkeleton/>
+                    <TotalUiSkeleton/>
+                    <TotalUiSkeleton/>
+                    <TotalUiSkeleton/>
                 </div>
             ) : (
                 // ✅ Show dashboard data when loaded

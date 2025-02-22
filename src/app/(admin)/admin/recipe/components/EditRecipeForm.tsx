@@ -1,15 +1,14 @@
-"use client"
-import React, { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React, {useEffect, useState} from "react";
+import {useForm, useFieldArray} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 import Image from "next/image";
-import { useGetAllFoodQuery } from "@/redux/services/food";
-import { useGetAllCategoriesQuery } from "@/redux/services/category";
-import { useUploadFileMutation } from "@/redux/services/file";
-import { usePostRecipeMutation } from "@/redux/services/recipe";
-import { toast, ToastContainer } from "react-toastify";
-import {getRecipeSchema} from "@/lib/constants";
-import type { FormData } from "@/lib/definition";
+import {useGetAllFoodQuery} from "@/redux/services/food";
+import {useGetAllCategoriesQuery} from "@/redux/services/category";
+import {useUploadFileMutation} from "@/redux/services/file";
+import {useUpdateRecipeMutation} from "@/redux/services/recipe";
+import {toast, ToastContainer} from "react-toastify";
+import {getImageUrl, getRecipeSchema} from "@/lib/constants";
+import type {FormData} from "@/lib/definition";
 
 type UploadFileResponse = {
     message: string;
@@ -17,31 +16,49 @@ type UploadFileResponse = {
 };
 
 type RecipeFormProps = {
-    onSuccess?: () => void;
+    onSuccess?: () => void,
+    editRecipeData?: FormData,
+    recipeId: string,
 };
+
 
 const schema = getRecipeSchema();
 
-export default function RecipeForm({ onSuccess }: RecipeFormProps) {
+export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProps) {
+    console.log("Edit Recipe Data:", editRecipeData);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [selectedCuisine, setSelectedCuisine] = useState<number | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(true);
 
     const [uploadFile] = useUploadFileMutation();
-    const [createRecipe, { isLoading: isCreatingRecipe }] = usePostRecipeMutation();
+    const [updateRecipe, { isLoading: isUpdateRecipe }] = useUpdateRecipeMutation();
 
-    // Fetch cuisines and categories separately
+    // Fetch cuisines and categories
     const { data: cuisinesData } = useGetAllFoodQuery({ page: 0, pageSize: 10 });
     const { data: categoriesData } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 });
 
     const cuisines = cuisinesData?.payload;
     const categories = categoriesData?.payload;
 
-    const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
+    const handleCategoryChange = (categoryId: number) => {
+        setValue("categoryId", categoryId);
+    };
+
+    const handleCuisineChange = (cuisineId: number) => {
+        setValue("cuisineId", cuisineId);
+    };
+
+    const {
+        register,
+        control,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useForm<FormData>({
         resolver: yupResolver(schema) as any,
-        defaultValues: {
-            id: 0,
+        defaultValues: editRecipeData ?? {
             photo: [{ photo: "" }],
             name: "",
             description: "",
@@ -54,11 +71,29 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
         },
     });
 
-    const { fields: ingredientFields, append: addIngredient, remove: removeIngredient } = useFieldArray({ control, name: "ingredients" });
-    const { fields: cookingStepFields, append: addCookingStep, remove: removeCookingStep } = useFieldArray({ control, name: "cookingSteps" });
+    useEffect(() => {
+        if (editRecipeData) {
+            let photoUrl = editRecipeData?.photo?.[0]?.photo || "";
+            console.log("eeeeeeeeeee:", photoUrl);
 
+            let fileName = photoUrl ? photoUrl.split('/').pop() : undefined;
+            const baseUrl = getImageUrl(fileName);
+            console.log("Base URL:", baseUrl);
+            setValue("photo", [{ photo: photoUrl }]);
+            setValue("name", editRecipeData?.name);
+            setValue("description", editRecipeData?.description);
+            setValue("durationInMinutes", editRecipeData?.durationInMinutes);
+            setValue("level", editRecipeData?.level);
+            setValue("categoryId", editRecipeData?.categoryId);
+            setValue("cuisineId", editRecipeData?.cuisineId);
+            setValue("ingredients", editRecipeData?.ingredients);
+            setValue("cookingSteps", editRecipeData?.cookingSteps);
 
-    const duration = watch("durationInMinutes");
+            setSelectedImage(photoUrl || "/assets/image_placeholder.png");
+            setSelectedCategory(editRecipeData?.categoryId);
+            setSelectedCuisine(editRecipeData?.cuisineId);
+        }
+    }, [editRecipeData, setValue]);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -73,64 +108,60 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
         }
     };
 
+    const onSubmit = async (data: FormData, event?: React.BaseSyntheticEvent) => {
+        if (event) {
+            event.preventDefault(); // Prevent the default form submission
+        }
 
-    const onSubmit = async (data: FormData) => {
+        console.log("Submitting form data:", data); // <-- Debug log
+
         try {
-            let uploadedFileName = data.photo?.[0]?.photo || "";
-            let fileName = uploadedFileName;
+            let fileName = data.photo?.[0]?.photo || "";
 
             if (selectedImage && selectedImage.startsWith("blob:")) {
                 const formData = new FormData();
                 const fileInput = document.getElementById("dropzone-file") as HTMLInputElement;
-
                 if (fileInput?.files?.[0]) {
                     formData.append("files", fileInput.files[0]);
-
                     try {
                         const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
-                        const fileUrl = response.payload?.[0] || "";
-                        fileName = fileUrl.split("/").pop() || uploadedFileName;
+                        fileName = response.payload?.[0] || fileName;
                     } catch (uploadError) {
                         console.error("File upload failed:", uploadError);
-                        throw new Error("Image upload failed, please try again.");
+                        toast.error("Image upload failed, please try again.");
+                        return;
                     }
                 }
             }
 
-            const finalData = {
-                ...data,
-                id: 0,
-                photo: [{ photo: fileName }],
-            };
-            toast.success("Recipe created successfully!");
-            try {
-                await createRecipe(finalData).unwrap();
+            const finalData = { ...data, photo: [{ photo: fileName }] };
 
-                toast.success("Recipe created successfully!");
-                setIsFormOpen(false); // Close the form
-                if (onSuccess) {
-                    onSuccess();
-                }
-            } catch (recipeError) {
-                console.error("Recipe creation failed:", recipeError);
-                throw new Error("Failed to create recipe, please try again.");
+            if (editRecipeData?.id) {
+                await updateRecipe({ id: editRecipeData.id, FormData: finalData }).unwrap();
+                toast.success("Recipe updated successfully!");
+                setIsFormOpen(false);
+                if (onSuccess) onSuccess();
+            } else {
+                throw new Error("No recipe ID provided for update.");
             }
         } catch (error) {
-            console.error("Error submitting recipe:", error);
-            toast.error("Failed to create recipe. Please try again."); // Show error toast
+            console.error("Error updating recipe:", error);
+            toast.error("Failed to update recipe. Please try again.");
         }
     };
 
-    if (!isFormOpen) {
-        return null;
-    }
+    const { fields: ingredientFields, append: addIngredient, remove: removeIngredient } = useFieldArray({ control, name: "ingredients" });
+    const { fields: cookingStepFields, append: addCookingStep, remove: removeCookingStep } = useFieldArray({ control, name: "cookingSteps" });
+
+    if (!isFormOpen) return null;
+
 
     return (
         <>
             {/* Scrollable Section */}
             <div className="max-h-[700px] no-scrollbar overflow-y-auto">
-                <ToastContainer />
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <ToastContainer/>
+                <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
@@ -145,18 +176,29 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     </div>
 
                     {/* Image Upload */}
-                    <div className="flex flex-col items-center justify-center w-full">
-                        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white">
-                            {selectedImage ? (
-                                <Image src={selectedImage} alt="Preview" width={250} height={250} className="rounded-lg" />
-                            ) : (
-                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                </div>
-                            )}
-                            <input id="dropzone-file" type="file" className="hidden" onChange={handleImageUpload} />
-                        </label>
-                    </div>
+                    <label htmlFor="dropzone-file"
+                           className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white">
+                        {selectedImage ? (
+                            <div className="relative w-[250px] h-[250px]">
+                                <Image
+                                    src={selectedImage}
+                                    alt="Preview"
+                                    fill
+                                    objectFit="cover"
+                                    className="rounded-lg"
+                                    unoptimized
+                                />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <p className="mb-2 text-sm text-gray-500">
+                                    <span className="font-semibold">Click to upload</span> or drag and drop
+                                </p>
+                            </div>
+                        )}
+
+                        <input id="dropzone-file" type="file" className="hidden" onChange={handleImageUpload}/>
+                    </label>
 
                     {/* Description */}
                     <div className={"mb-5"}>
@@ -184,16 +226,15 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                                 {...register("durationInMinutes")}
                                 className="w-full appearance-none h-2 rounded-lg border-2 border-primary cursor-pointer transition-all duration-200"
                                 style={{
-                                    background: `linear-gradient(to right, #d7ad45 ${((duration - 1) / 119) * 100}%, #E5E7EB ${((duration - 1) / 119) * 100}%)`,
+                                    background: `linear-gradient(to right, #d7ad45 ${((watch("durationInMinutes") - 1) / 119) * 100}%, #E5E7EB ${((watch("durationInMinutes") - 1) / 119) * 100}%)`,
                                 }}
                             />
                         </div>
                         <p className="text-center mt-2 text-lg font-semibold text-primary">
-                            {duration} នាទី
+                            {watch("durationInMinutes")} នាទី
                         </p>
                     </div>
 
-                    {/*level*/}
                     {/* Level Selection */}
                     <div className="mb-5">
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
@@ -223,11 +264,8 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                                 <button
                                     key={cat.id}
                                     type="button"
-                                    className={`px-4 py-2 border rounded-lg ${selectedCategory === cat.id ? "bg-[#FFEFB1] text-secondary" : ""}`}
-                                    onClick={() => {
-                                        setSelectedCategory(cat.id);
-                                        setValue("categoryId", cat.id);
-                                    }}
+                                    className={`px-4 py-2 border rounded-lg ${watch("categoryId") === cat.id ? "bg-[#FFEFB1] text-secondary" : ""}`}
+                                    onClick={() => handleCategoryChange(cat.id)}
                                 >
                                     {cat.categoryName}
                                 </button>
@@ -236,16 +274,18 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     </div>
 
                     {/* Cuisine Selection */}
-                    <div>
+                    <div className="mb-5">
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             ឈ្មោះម្ហូប
                         </label>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                             {cuisines?.map((cuisine: any) => (
                                 <button
                                     key={cuisine.id}
                                     type="button"
-                                    className={`px-4 py-2 border rounded-lg ${selectedCuisine === cuisine.id ? "bg-[#FFEFB1] text-secondary" : ""}`}
+                                    className={`px-4 py-2 border rounded-lg transition-all duration-200 ${
+                                        watch("cuisineId") === cuisine.id ? "bg-[#FFEFB1] text-secondary border-primary" : "border-gray-300"
+                                    }`}
                                     onClick={() => {
                                         setSelectedCuisine(cuisine.id);
                                         setValue("cuisineId", cuisine.id);
@@ -258,12 +298,11 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     </div>
 
                     {/* Ingredients */}
-                    {/* Ingredients */}
                     <div className={"mb-5"}>
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             គ្រឿងផ្សំ
                         </label>
-                        {ingredientFields.map((field, index) => (
+                        {ingredientFields?.map((field, index) => (
                             <div key={field.id} className="flex gap-2 mb-2 items-center">
                                 <input
                                     {...register(`ingredients.${index}.name`)}
@@ -304,8 +343,6 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         </div>
                     </div>
 
-
-                    {/* Cooking Steps */}
                     {/* Cooking Steps */}
                     <div className={"mb-5"}>
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
@@ -339,16 +376,15 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         </div>
                     </div>
 
-
                     {/* Submit Button */}
                     <button
                         type="submit"
                         className={`btn bg-primary py-2.5 rounded-md border-none text-white normal-case w-32 font-normal transition-opacity ${
-                            isCreatingRecipe ? "opacity-50 cursor-not-allowed" : "hover:bg-primary hover:outline-amber-200"
+                            isUpdateRecipe ? "opacity-50 cursor-not-allowed" : "hover:bg-primary hover:outline-amber-200"
                         }`}
-                        disabled={isCreatingRecipe}
+                        disabled={isUpdateRecipe}
                     >
-                        {isCreatingRecipe ? "កំពុងបង្កើត..." : "បង្កើតរូបមន្ត"}
+                        {isUpdateRecipe ? "កំពុងែកែប្រែ..." : "កែប្រែរូបមន្ដ"}
                     </button>
 
                 </form>

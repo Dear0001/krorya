@@ -17,7 +17,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en" className={`${kantumruyPro.className} h-full rounded-lg overflow-auto scrollbar-hide`}>
+        <html lang="en" className={`${kantumruyPro.className} rounded-lg overflow-y-scroll scrollbar-hide h-full`}>
         <body>
         <SessionProvider>
             <StoreProvider>

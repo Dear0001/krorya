@@ -40,7 +40,7 @@ const Page = () => {
                                 <h1 className={"text-h3 font-bold py-3"}>{userData?.fullName ? `${userData.fullName}` : "Admin"}</h1>
                                 {/* Special Styling or Badge for Admin */}
                                 {userData?.role === "ROLE_ADMIN" && (
-                                    <span className="mt-1 px-5 py-1 text-2xl text-white bg-red-500 rounded-full text-sm font-bold">
+                                    <span className="mt-1 px-5 py-1 text-2xl text-white bg-red-500 rounded-full font-bold">
                                 ADMIN
                             </span>
                                 )}

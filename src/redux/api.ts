@@ -56,6 +56,13 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 };
 
 export const kroryaApi = createApi({
+    tagTypes: [
+        "recipe",
+        "file",
+        "category",
+        "food",
+        "user",
+    ],
     reducerPath: "kroryaApi",
     baseQuery: baseQueryWithReAuth,
     endpoints: () => ({}),

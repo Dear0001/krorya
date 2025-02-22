@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "@/components/Skeleton";
 import React from "react";
-import {getImageUrl} from "@/lib/constants";
+import {getImageUrl, levelBgColors} from "@/lib/constants";
 
 // Define the props for the component
 type RecipeProps = {
@@ -14,7 +14,7 @@ type RecipeProps = {
         photo: { photo: string; photoId: number }[];
         description: string;
         level: string;
-        durationInMinutes?: string;
+        durationInMinutes?: string | number; // Accepts both string & number
     };
     isLoading: boolean;
 };
@@ -25,14 +25,10 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
     const imageUrl = getImageUrl(photoFileName);
 
     // Background color mapping for levels
-    const levelBgColors: { [key: string]: string } = {
-        Easy: "bg-[#FFEBBB] text-[12px] text-[#AE7C00]",
-        Medium: "bg-[#ddd6fe] text-[12px] text-[##8b5cf6]",
-        Hard: "bg-[#f4d4d4] text-[12px] text-[#cf6464]",
-    };
+    const bgColor = levelBgColors;
 
     // Get the corresponding background color class
-    const levelClass = levelBgColors[recipe.level] || "bg-gray-100 text-gray-800"; // Default color
+    const levelClass = bgColor[recipe.level] || "bg-gray-100 text-gray-800";
 
     return (
         <Link
@@ -64,7 +60,11 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
                                 fill="#FFD233"
                             />
                         </svg>
-                        <span className="text-xs">{recipe.durationInMinutes || "N/A"} នាទី</span>
+                        <span className="text-xs">
+                            {typeof recipe.durationInMinutes === "number"
+                                ? `${recipe.durationInMinutes} នាទី`
+                                : recipe.durationInMinutes || "N/A"}
+                        </span>
                     </div>
                     <div className={`text-center rounded-[4px] py-[2px] w-[70px] ${levelClass}`}>
                         <span className={"text-xs"}> {recipe.level}</span>
@@ -90,81 +90,3 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
 }
 
 export default CardRecipe;
-// import React from "react";
-// import Image from "next/image";
-// import { FaClock } from "react-icons/fa";
-// import Skeleton from "@/components/Skeleton";
-//
-// // Define the props for the component
-// type RecipeProps = {
-//     recipe: {
-//         id: number;
-//         name: string;
-//         photo: { photo: string; photoId: number }[];
-//         description: string;
-//         level: string;
-//         durationInMinutes?: string;
-//     };
-//     isLoading: boolean;
-// };
-//
-// const CardRecipe: React.FC<RecipeProps> = ({ recipe, isLoading }) => {
-//     const photoFileName = recipe.photo?.[0]?.photo;
-//
-//     // Construct the full image URL
-//     const imageUrl = photoFileName
-//         ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}`
-//         : "/assets/image_login.png";
-//
-//     // Background color mapping for levels
-//     const levelBgColors: { [key: string]: string } = {
-//         Easy: "bg-[#FFEBBB] text-[12px] text-[#AE7C00]",
-//         Medium: "bg-[#ddd6fe] text-[##8b5cf6]",
-//         Hard: "bg-[#f4d4d4] text-[#cf6464]",
-//     };
-//
-//     // Get the corresponding background color class
-//     const levelClass = levelBgColors[recipe.level] || "bg-gray-100 text-gray-800"; // Default color
-//
-//     if (isLoading) {
-//         return (
-//             <main className="w-[373px] h-[90px] my-5">
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//                 <Skeleton className="h-20 w-full rounded-md mb-4" />
-//             </main>
-//         );
-//     }
-//
-//     return (
-//         <main className="w-[373px] h-[90px] my-5 flex gap-3 justify-start items-center text-center">
-//             <article>
-//                 <Image
-//                     width={90}
-//                     height={90}
-//                     src={imageUrl}
-//                     alt={recipe.name}
-//                     className="rounded-md object-cover"
-//                 />
-//             </article>
-//             <article>
-//                 <h2>{recipe.name}</h2>
-//                 <div className="flex flex-1 gap-2 py-2">
-//                     <span className="w-[15px] text-[#FFEBBB]">
-//                         <FaClock />
-//                     </span>
-//                     <span className="text-[12px]">{recipe.durationInMinutes || "N/A"} នាទី</span>
-//                 </div>
-//                 <p className={`rounded-md text-[12px] px-2 py-1 ${levelClass}`}>
-//                     {recipe.level}
-//                 </p>
-//             </article>
-//         </main>
-//     );
-// };
-//
-// export default CardRecipe;

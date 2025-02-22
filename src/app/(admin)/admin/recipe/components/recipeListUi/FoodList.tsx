@@ -9,6 +9,7 @@ import LoadingFoodCard from "./LoadingFoodCard";
 import NotFound from "./NotFound";
 import RecipeCard from "@/components/card/RecipeCard";
 import { FoodRecipe } from "@/lib/definition";
+import {levelBgColors} from "@/lib/constants";
 
 type FoodListProps = {
     activeCategoryId: string;
@@ -29,17 +30,12 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
     const isLoading = useSelector((state: RootState) => state.recipe.loading);
     const error = useSelector((state: RootState) => state.recipe.error);
 
-    console.log("data food: ", foods);
-    console.log("loading food: ", isLoading);
-    console.log("error food: ", error);
-
     const isAllSelected = activeCategoryId === "all";
     const categoryId = isAllSelected ? undefined : Number(activeCategoryId);
 
     if (categoryId !== undefined && isNaN(categoryId)) {
         console.error("Invalid categoryId:", activeCategoryId);
     }
-
     // ✅ Fetch all recipes when 'all' is selected
     const { data: allFoodData, error: allFoodError, isFetching: allFoodIsFetching } =
         useGetAllRecipesQuery(
@@ -83,7 +79,6 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
     const loadMore = () => {
         setVisibleCount((prev) => prev + 12);
     };
-
     return (
         <>
             {isLoading ? (

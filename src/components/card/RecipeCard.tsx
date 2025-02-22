@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
-import { getImageUrl } from "@/lib/constants";
+import {getImageUrl, levelBgColors} from "@/lib/constants";
 import convertRomanToKhmer from "@/app/(admin)/admin/recipe/components/convertRomanToKhmer";
 
 type CardFoodProps = {
@@ -12,7 +12,6 @@ type CardFoodProps = {
 };
 
 export default function CardFood({ food }: CardFoodProps) {
-    console.log("food card: ", food);
     const [favorite, setFavorite] = useState(false);
     const [minus, setMinus] = useState(false);
 
@@ -29,6 +28,9 @@ export default function CardFood({ food }: CardFoodProps) {
     const handleChangeMinus = () => {
         setMinus((prev) => !prev);
     };
+    const bgColor = levelBgColors;
+    // Get the corresponding background color class
+    const levelClass = bgColor[food?.level] || "bg-gray-100 text-gray-800";
 
 
     return (
@@ -73,7 +75,7 @@ export default function CardFood({ food }: CardFoodProps) {
             </figure>
 
             <div className="card-body p-2 bg-white md:col-span-1">
-                <div className="card-title text-slate-700 text-[20px] py-1">{food.name}</div>
+                <div className="card-title text-slate-700 text-[20px] py-1">{food?.name}</div>
                 <div className="flex items-center gap-2">
                     <svg
                         width="13"
@@ -87,11 +89,11 @@ export default function CardFood({ food }: CardFoodProps) {
                             fill="#FFD233"
                         />
                     </svg>
-                    <span className="text-xs">{convertRomanToKhmer(food.durationInMinutes.toString())} នាទី</span>
+                    <span className="text-xs">{convertRomanToKhmer(food?.durationInMinutes.toString())} នាទី</span>
                 </div>
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className="badge rounded-md bg-[#FFEBBB] border-none py-[1px] text-primary px-2 text-base">
-                        {food.level}
+                    <div className={`badge rounded-md border-none py-[1px]  px-2 text-base ${levelClass}`}>
+                        {food?.level}
                     </div>
                 </div>
             </div>

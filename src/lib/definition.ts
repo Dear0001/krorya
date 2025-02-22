@@ -1,23 +1,3 @@
-export type ProductType = {
-    id: number;
-    title: string;
-    price: number;
-    category: string;
-    description: string;
-    image: string;
-};
-
-
-export type CartProductType = {
-    title: string;
-    image: string;
-    price: number;
-    id: number;
-    onClick?: () => void;
-};
-
-
-// Define the type for recipe data
 export type RecipeType = {
     id: number;
     photo: { photo: string; photoId: number }[];
@@ -77,7 +57,33 @@ export type FoodRecipe = {
 export type FoodRecipeResponse = {
     paginationMeta: PaginationMeta;
     message: string;
-    payload: FoodRecipe[]; // Array of food items
+    payload: FoodRecipe[];
     statusCode: string;
     timestamp: string;
+};
+
+
+export type FormData = {
+    id: number;
+    photo: { photo: string }[];
+    name: string;
+    description: string;
+    durationInMinutes: number;
+    level: string;
+    cuisineId: number;
+    categoryId: number;
+    ingredients: Ingredient[];
+    cookingSteps: CookingStep[];
+};
+
+export type Ingredient = {
+    id: number;
+    name: string;
+    quantity: string;
+    price: number;
+};
+
+export  type CookingStep = {
+    id: number;
+    description: string;
 };

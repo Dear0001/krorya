@@ -5,7 +5,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/redux/services/user";
 import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
-import { SUPPORTED_FORMATS, FILE_SIZE } from "@/lib/constants";
+import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
 import {toast, ToastContainer} from "react-toastify";
 
 type UserProfile = {
@@ -58,7 +58,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit }) => {
                 fullName: userData.fullName,
                 phoneNumber: userData.phoneNumber,
             });
-            setImagePreview(userData.profileImage || "/assets/images/profile.png");
+            setImagePreview(getImageUrl(userData?.profileImage) || "/assets/images/profile.png");
         }
     }, [userData]);
 
@@ -163,10 +163,12 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit }) => {
                             <div className="w-[150px] h-[150px] relative">
                                 <div className="w-full h-full bg-gray-200 rounded-full overflow-hidden">
                                     {imagePreview ? (
-                                        <img
+                                        <Image
                                             src={imagePreview}
                                             alt="Profile Preview"
                                             className="w-full h-full object-cover"
+                                            width={130}
+                                            height={130}
                                         />
                                     ) : (
                                         <Image

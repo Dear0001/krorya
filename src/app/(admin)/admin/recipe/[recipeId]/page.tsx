@@ -8,47 +8,54 @@ import { useGetRecipeByIdQuery } from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
 import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
-
-type Recipe = {
-    id: number;
-    name: string;
-    description: string;
-    level: string;
-    durationInMinutes: number;
-    cookingSteps: { id: number; description: string }[];
-    ingredients: { id: number; name: string; quantity: string; price: number }[];
-    photo: { photoId: number; photo: string }[];
-    user: {
-        id: number;
-        fullName: string;
-        profileImage: string;
-    };
-}
-
+import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
+import type {FormData} from "@/lib/definition";
 
 export default function FoodDetailPage() {
-    const [recipe, setRecipe] = useState<Recipe | null>(null);
+    const [recipe, setRecipe] = useState<FormData | null>(null);
     const [groceryList, setGroceryList] = useState<any[]>([]);
     const [selectedItems, setSelectedItems] = useState<string>("");
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const params = useParams();
     const recipeId = params?.recipeId as string;
+    console.log("recipeId:", recipeId);
     const { data: recipes, isLoading, error } = useGetRecipeByIdQuery({ id: Number(recipeId) });
-
 
     const recipeData = recipes?.payload;
     console.log("data from url:", recipeData);
 
     // Check if the user profile data is loaded and if there's a profile image
-    const userProfile = recipeData?.user?.profileImage;
-    console.log("userProfile", userProfile);
-    const recipeImage = recipeData?.photo[0]?.photo;
+    const recipeImage = recipeData?.photo?.[0]?.photo || "";
+    const userProfile = recipeData?.user?.profileImage || "";
 
-
-    // Use the getImageUrl function to construct the full image URL
-    const imageUrl = getImageUrl(userProfile);
+    // Convert to valid URLs
     const recipeImageUrl = getImageUrl(recipeImage);
-    console.log("recipeImageUrl", recipeImageUrl);
+    const imageUrl = getImageUrl(userProfile);
+
+    type RecipeFormProps = {
+        onSuccess?: () => void;
+    };
+    const openModal = () => {
+        setIsModalOpen(true); // Open the modal
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const transformedRecipe = {
+        id: recipeData?.id,
+        photo: recipeData?.photo,
+        name: recipeData?.name,
+        description: recipeData?.description,
+        durationInMinutes: recipeData?.durationInMinutes,
+        level: recipeData?.level,
+        ingredients: recipeData?.ingredients,
+        cookingSteps: recipeData?.cookingSteps,
+        cuisineId: recipeData?.cuisineId,
+        categoryId: recipeData?.categoryId,
+    };
 
 
     return (
@@ -186,7 +193,7 @@ export default function FoodDetailPage() {
                                                     <div className="form-control w-fit">
                                                         {selectedItems === "" ? (
                                                                 // Show all groceryList items when searchTerm is empty
-                                                                groceryList.map((item, index) => (
+                                                                groceryList?.map((item, index) => (
                                                                     <label
                                                                         key={index}
                                                                         className="label cursor-pointer flex items-center"
@@ -207,8 +214,8 @@ export default function FoodDetailPage() {
                                                                     </label>
                                                                 ))
                                                             ) : // Show filtered groceryList items
-                                                            groceryList.length > 0 ? (
-                                                                groceryList.map((item, index) => (
+                                                            groceryList?.length > 0 ? (
+                                                                groceryList?.map((item, index) => (
                                                                     <label
                                                                         key={index}
                                                                         className="label cursor-pointer flex items-center"
@@ -244,59 +251,35 @@ export default function FoodDetailPage() {
                                     }
                                 >
                                     <Image
-                                        src={"/icons/material-symbols-light_report-outline.svg"}
+                                        src={"/icons/pancel.svg"}
                                         alt="Romdol Icon"
                                         width={23}
                                         height={23}
                                     />
-                                    <span className="text-slate-700">រាយការណ៌</span>
+                                    <span className="text-slate-700">កែប្រែរូបមន្ដ</span>
                                 </button>
-                                <dialog id="my_modal_3kjy" className="modal">
-                                    <div className="modal-box flex flex-col items-center bg-white text-slate-700">
+                                <dialog id="my_modal_3kjy" className="modal rounded-lg w-[650px]">
+                                    <div className="modal-box py-5 px-5 flex flex-col items-center text-slate-700">
                                         <form method="dialog">
                                             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                                                 ✕
                                             </button>
                                         </form>
-                                        <h3 className="font-bold text-lg font-moulpali text-secondary text-center">
-                                            រាយការណ៍
+                                        <h3 className="font-bold mb-5 text-lg font-moulpali text-secondary text-center">
+                                            កែប្រែរូបមន្ដ
                                         </h3>
                                         <Image
                                             src={"/icons/Kbach.svg"}
                                             width={100}
                                             height={100}
                                             alt={"image"}
+                                            className={"mb-5"}
                                         />
-                                        <p className="py-4">
-                                            ជួយពួកយើងខ្ញុំក្នុងការយល់ដឹងបន្ថែមអំពីបញ្ហាដែលអ្នកបានរកឃើញ។
-                                            យើងប្រាកដថា
-                                            ការរាយការណ៍របស់អ្នកនិងត្រូវបានផ្ទៀងផ្ទាត់ដោយអ្នកគ្រប់គ្រង
-                                            កម្មវិធីមួយនេះ។
-                                        </p>
-                                        <form
-                                            className="flex flex-col self-start w-full"
-                                            onSubmit={(e) => e.preventDefault()}
-                                        >
-                                            <label htmlFor="report font-bold">មូលហេតុ</label>
-                                            <textarea
-                                                id="report"
-                                                name="report"
-                                                className="resize-none border mt-3 focus:border-slate-400 focus:outline-slate-400 border-slate-400 bg-white rounded-md w-full h-40 p-4"
-                                            ></textarea>
-                                            <div className="modal-action">
-                                                <button
-                                                    type="submit"
-                                                    className="btn  w-fit bg-primary text-slate-100 self-end mt-4 border-none hover:bg-primary hover:opacity-65"
-                                                >
-                                                    បញ្ជូន
-                                                </button>
-                                            </div>
-                                        </form>
+                                        <EditRecipeForm editRecipeData={transformedRecipe} recipeId={recipeId} onSuccess={closeModal} />
                                     </div>
                                 </dialog>
                             </div>
                         </div>
-
                         {/*show author*/}
                         <div>
                             <div className={"bg-gray-50 p-4 rounded-md mt-5"}>
@@ -314,8 +297,8 @@ export default function FoodDetailPage() {
                                                 height={20}
                                             />
                                             <span className={"text-secondary text-lg   "}>
-                        បង្កើតដោយ៖
-                      </span>
+                                            បង្កើតដោយ៖
+                                          </span>
                                         </div>
                                         <div className="flex gap-2 text-start justify-center items-center">
                                             <Image
@@ -345,19 +328,13 @@ export default function FoodDetailPage() {
                                                     height={20}
                                                 />
                                                 <span className={"text-secondary text-lg   "}>
-                          ភាពលំបាក
-                        </span>
+                                              ភាពលំបាក
+                                            </span>
                                             </div>
-                                            <div
-                                                className={
-                                                    "flex flex-row justify-start pl-7 items-center gap-2 mb-2"
-                                                }
-                                            >
-                        <span
-                            className={"text-slate-700 text-md font-semibold"}
-                        >
-                          {recipeData?.level}
-                        </span>
+                                            <div className={"flex flex-row justify-start pl-7 items-center gap-2 mb-2"}>
+                                                <span className={"text-slate-700 text-md font-semibold"}>
+                                                  {recipeData?.level}
+                                                </span>
                                             </div>
                                         </div>
                                         <div>
@@ -440,8 +417,6 @@ export default function FoodDetailPage() {
                                 </div>
                             </div>
                         </div>
-
-
                         {/*Cooking step lists*/}
                         <div className={" py-4"}>
                             <div>
@@ -460,6 +435,7 @@ export default function FoodDetailPage() {
                                     វិធីសាស្រ្តក្នុងការធ្វើ
                                   </span>
                                 </div>
+
                                 <div className={"flex flex-col gap-4 mt-4 text-slate-700"}>
                                     {recipeData?.cookingSteps?.map((step: { id: number; description: string }, index: number) => (
                                         <div className="flex gap-4 items-center" key={step.id}>

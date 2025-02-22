@@ -80,7 +80,7 @@ const ExploreFood: React.FC = () => {
                     {/*create recipe button*/}
                     <li>
                         <button
-                            onClick={openModal} // Open modal when button is clicked
+                            onClick={openModal}
                             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
                         >
                             បង្កើតម្ហូប
