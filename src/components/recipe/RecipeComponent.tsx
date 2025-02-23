@@ -6,15 +6,16 @@ import "@/app/globals.css";
 import { useGetAllRecipesQuery } from "@/redux/services/recipe";
 import InfiniteScroll from "react-infinite-scroll-component";
 import CardRecipeSkeleton from "@/components/recipe/CardRecipeSkeleton";
-import {RecipeType} from "@/lib/definition";
+import { RecipeType } from "@/lib/definition";
 
 const RecipeComponent: React.FC = () => {
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
     const [pageSize, setPageSize] = useState<number>(10);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true); // State to control loading
 
     // Fetch recipes with pagination
-    const { data: recipesData, isLoading } = useGetAllRecipesQuery({ page: 0, pageSize });
+    const { data: recipesData, isLoading: isDataLoading } = useGetAllRecipesQuery({ page: 0, pageSize });
 
     useEffect(() => {
         if (recipesData?.payload?.length) {
@@ -32,11 +33,40 @@ const RecipeComponent: React.FC = () => {
         }
     }, [recipesData]);
 
+    // Set a minimum loading time of 2 seconds
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false); // After 2 seconds, set loading to false
+        }, 2000);
+
+        return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }, []);
+
     // Load more recipes
     const fetchMoreRecipes = () => {
         setPageSize((prevSize) => prevSize + 10);
     };
 
+    // Show skeleton if data is still loading or if the minimum loading time hasn't passed
+    if (isLoading || isDataLoading) {
+        return (
+            <main className="w-[423px] my-5 h-[555px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
+                <div className="flex gap-3 justify-start items-center text-center">
+                    <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
+                    <h1 className="text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                </div>
+
+                {/* Skeleton Loading State */}
+                <div className="mt-4 h-[calc(100%-70px)] overflow-y-scroll no-scrollbar">
+                    {Array.from({ length: pageSize })?.map((_, index) => (
+                        <CardRecipeSkeleton key={index} />
+                    ))}
+                </div>
+            </main>
+        );
+    }
+
+    // ✅ Show recipes when loaded
     return (
         <main className="w-[423px] my-5 h-[555px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
@@ -46,12 +76,6 @@ const RecipeComponent: React.FC = () => {
 
             {/* Infinite Scrolling Container */}
             <div id="scrollableDiv" className="mt-4 h-[calc(100%-70px)] overflow-y-scroll no-scrollbar">
-                {isLoading ? (
-                            // Show Skeleton while loading
-                            Array.from({ length: pageSize })?.map((_, index) => (
-                                <CardRecipeSkeleton key={index} />
-                            ))
-                        ): (
                 <InfiniteScroll
                     dataLength={recipes.length}
                     next={fetchMoreRecipes}
@@ -69,7 +93,6 @@ const RecipeComponent: React.FC = () => {
                         </div>
                     ))}
                 </InfiniteScroll>
-                )}
             </div>
         </main>
     );

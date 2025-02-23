@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 type CategoryListProps = {
     categories: { id: string | number; categoryName: string }[]; // ✅ Changed categoryId -> id
@@ -9,7 +9,27 @@ type CategoryListProps = {
 };
 
 const CategoryList: React.FC<CategoryListProps> = ({ categories, activeCategoryId, onCategoryClick }) => {
-    console.log("categories data:", categories);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Simulate a delay of 2 seconds before loading the categories
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2000); // 2 seconds delay
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (isLoading) {
+        return (
+            <div className="flex gap-4 overflow-x-auto">
+                {/* Skeleton loader */}
+                <div className="w-32 h-10 bg-gray-300 animate-pulse rounded-md"></div>
+                <div className="w-32 h-10 bg-gray-300 animate-pulse rounded-md"></div>
+                <div className="w-32 h-10 bg-gray-300 animate-pulse rounded-md"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex gap-4 overflow-x-auto">

@@ -27,8 +27,8 @@ const schema = getRecipeSchema();
 export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProps) {
     console.log("Edit Recipe Data:", editRecipeData);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-    const [selectedCuisine, setSelectedCuisine] = useState<number | null>(null);
+    const [, setSelectedCategory] = useState<number | null>(null);
+    const [, setSelectedCuisine] = useState<number | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(true);
 
     const [uploadFile] = useUploadFileMutation();
@@ -73,12 +73,14 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
     useEffect(() => {
         if (editRecipeData) {
-            let photoUrl = editRecipeData?.photo?.[0]?.photo || "";
-            console.log("eeeeeeeeeee:", photoUrl);
-
-            let fileName = photoUrl ? photoUrl.split('/').pop() : undefined;
+            const photoUrl = editRecipeData?.photo?.[0]?.photo || "";
+            const fileName = photoUrl.split("/").pop();
             const baseUrl = getImageUrl(fileName);
+
+            console.log("Photo URL:", photoUrl);
+            console.log("File Name:", fileName);
             console.log("Base URL:", baseUrl);
+
             setValue("photo", [{ photo: photoUrl }]);
             setValue("name", editRecipeData?.name);
             setValue("description", editRecipeData?.description);
@@ -89,61 +91,84 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             setValue("ingredients", editRecipeData?.ingredients);
             setValue("cookingSteps", editRecipeData?.cookingSteps);
 
-            setSelectedImage(photoUrl || "/assets/image_placeholder.png");
+            // Set the selectedImage state with the existing image URL
+            setSelectedImage(baseUrl || "/assets/image_placeholder.png");
             setSelectedCategory(editRecipeData?.categoryId);
             setSelectedCuisine(editRecipeData?.cuisineId);
         }
     }, [editRecipeData, setValue]);
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Edit Recipe Data:", editRecipeData);
+    console.log("Selected Image:", selectedImage);
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
         try {
+            // Display preview
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
-            setValue("photo.0.photo", imageUrl);
+            console.log("Selected Image::", imageUrl);
+
+            // Upload to API
+            const formData = new FormData();
+            formData.append("files", file);
+
+
+            const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
+            const uploadedFileName = response.payload?.[0] || "";
+            console.log("Uploaded file name::", uploadedFileName);
+            // slit
+            const fileName = uploadedFileName.split("/").pop();
+
+            if (fileName) {
+                setValue("photo.0.photo", fileName);
+            } else {
+                console.error("File upload failed: No file name returned");
+            }
         } catch (error) {
-            console.error("Error creating object URL:", error);
+            console.error("Error uploading file:", error);
+            toast.error("Image upload failed. Please try again.");
         }
     };
 
-    const onSubmit = async (data: FormData, event?: React.BaseSyntheticEvent) => {
-        if (event) {
-            event.preventDefault(); // Prevent the default form submission
-        }
 
-        console.log("Submitting form data:", data); // <-- Debug log
+    const onSubmit = async (data: FormData, event?: React.BaseSyntheticEvent) => {
+        event?.preventDefault();
+        console.log("Form submitted with data:", data);
 
         try {
+            if (!editRecipeData?.id) {
+                toast.error("Error: No recipe ID provided for update.");
+                return;
+            }
+
             let fileName = data.photo?.[0]?.photo || "";
+            console.log("Final photo fileName:", fileName);
 
-            if (selectedImage && selectedImage.startsWith("blob:")) {
-                const formData = new FormData();
-                const fileInput = document.getElementById("dropzone-file") as HTMLInputElement;
-                if (fileInput?.files?.[0]) {
-                    formData.append("files", fileInput.files[0]);
-                    try {
-                        const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
-                        fileName = response.payload?.[0] || fileName;
-                    } catch (uploadError) {
-                        console.error("File upload failed:", uploadError);
-                        toast.error("Image upload failed, please try again.");
-                        return;
-                    }
-                }
-            }
+            const finalData = {
+                ...data,
+                photo: [{ photo: fileName }],
+            };
 
-            const finalData = { ...data, photo: [{ photo: fileName }] };
+            console.log("Final data before update:", finalData);
 
-            if (editRecipeData?.id) {
-                await updateRecipe({ id: editRecipeData.id, FormData: finalData }).unwrap();
-                toast.success("Recipe updated successfully!");
-                setIsFormOpen(false);
+            await updateRecipe({
+                id: editRecipeData.id,
+                FormData: finalData,
+            }).unwrap();
+
+            console.log("Update successful!");
+
+            // Show toast notification before closing the modal
+            toast.success("Recipe updated successfully!");
+
+            // Wait for 1 second before closing modal (for better UX)
+            setTimeout(() => {
                 if (onSuccess) onSuccess();
-            } else {
-                throw new Error("No recipe ID provided for update.");
-            }
+            }, 1000);
+
         } catch (error) {
             console.error("Error updating recipe:", error);
             toast.error("Failed to update recipe. Please try again.");
@@ -157,10 +182,11 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
 
     return (
-        <>
+        <main>
             {/* Scrollable Section */}
+            <ToastContainer/>
             <div className="max-h-[700px] no-scrollbar overflow-y-auto">
-                <ToastContainer/>
+
                 <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>
@@ -286,10 +312,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                     className={`px-4 py-2 border rounded-lg transition-all duration-200 ${
                                         watch("cuisineId") === cuisine.id ? "bg-[#FFEFB1] text-secondary border-primary" : "border-gray-300"
                                     }`}
-                                    onClick={() => {
-                                        setSelectedCuisine(cuisine.id);
-                                        setValue("cuisineId", cuisine.id);
-                                    }}
+                                    onClick={() => handleCuisineChange(cuisine.id)}
                                 >
                                     {cuisine.cuisineName}
                                 </button>
@@ -379,6 +402,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                     {/* Submit Button */}
                     <button
                         type="submit"
+                        onClick={() => console.log("Submit button clicked")}
                         className={`btn bg-primary py-2.5 rounded-md border-none text-white normal-case w-32 font-normal transition-opacity ${
                             isUpdateRecipe ? "opacity-50 cursor-not-allowed" : "hover:bg-primary hover:outline-amber-200"
                         }`}
@@ -387,8 +411,9 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         {isUpdateRecipe ? "កំពុងែកែប្រែ..." : "កែប្រែរូបមន្ដ"}
                     </button>
 
+
                 </form>
             </div>
-        </>
+        </main>
     );
 }

@@ -6,7 +6,7 @@ import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/redux/se
 import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
 import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 type UserProfile = {
     profileImage: string;
@@ -125,10 +125,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit }) => {
             toast.success("Profile updated successfully");
         } catch (error) {
             console.error("Update Profile Error:", error);
-            // toast.error("Failed to update profile", {
-            //     autoClose: 3000,
-            // });
-            // setTimeout(() => toast.dismiss(), 3000);
         }
         console.log("Form Dataaa:", formData);
     };

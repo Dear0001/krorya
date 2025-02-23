@@ -17,7 +17,12 @@ export const foodApi = kroryaApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "food", id: "LIST" }],
         }),
+        // Search food by name
+        searchFoodByName: builder.query<any, { foodName: string }>({
+            query: ({ foodName }) => `/api/v1/foods/search?name=${foodName}`,
+            providesTags: [{ type: "food", id: "SEARCH" }]
+        }),
     }),
 });
 
-export const { useGetAllFoodQuery, usePostFoodMutation } = foodApi;
+export const { useGetAllFoodQuery, usePostFoodMutation, useSearchFoodByNameQuery } = foodApi;

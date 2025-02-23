@@ -7,7 +7,6 @@ import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/Cat
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm  from "../RecipeForm";
 
-
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
     const [query, setQuery] = useState<string>("");

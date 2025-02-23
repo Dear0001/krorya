@@ -1,8 +1,7 @@
 "use client";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
-import { useState } from "react";
-import { ToastContainer } from "react-toastify";
+import {useEffect, useState} from "react";
 import { useParams } from "next/navigation";
 import { useGetRecipeByIdQuery } from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
@@ -10,17 +9,34 @@ import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/I
 import CookingStep from "../components/ui/CookingStep";
 import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
 import type {FormData} from "@/lib/definition";
+import {useGetAllFoodQuery} from "@/redux/services/food";
+import {useGetAllCategoriesQuery} from "@/redux/services/category";
+import {Skeleton} from "../components/recipeListUi/Skeleton";
 
 export default function FoodDetailPage() {
-    const [recipe, setRecipe] = useState<FormData | null>(null);
-    const [groceryList, setGroceryList] = useState<any[]>([]);
+    const [groceryList, ] = useState<any[]>([]);
     const [selectedItems, setSelectedItems] = useState<string>("");
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [, setIsModalOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const params = useParams();
     const recipeId = params?.recipeId as string;
     console.log("recipeId:", recipeId);
-    const { data: recipes, isLoading, error } = useGetRecipeByIdQuery({ id: Number(recipeId) });
+    const { data: recipes, isLoading: isRecipeLoading } = useGetRecipeByIdQuery({ id: Number(recipeId) });
+    const { data: cuisinesData, isLoading: isCuisinesLoading } = useGetAllFoodQuery({ page: 0, pageSize: 10 });
+    const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 });
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false); // After 2 seconds, set loading to false
+        }, 2000); // 2 seconds delay
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (isLoading || isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
+        return <Skeleton />;
+    }
 
     const recipeData = recipes?.payload;
     console.log("data from url:", recipeData);
@@ -40,10 +56,6 @@ export default function FoodDetailPage() {
         setIsModalOpen(true); // Open the modal
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
     const transformedRecipe = {
         id: recipeData?.id,
         photo: recipeData?.photo,
@@ -53,22 +65,36 @@ export default function FoodDetailPage() {
         level: recipeData?.level,
         ingredients: recipeData?.ingredients,
         cookingSteps: recipeData?.cookingSteps,
-        cuisineId: recipeData?.cuisineId,
-        categoryId: recipeData?.categoryId,
+
+        // Convert categoryName to categoryId using correct dataset (categoriesData.payload)
+        categoryId: categoriesData?.payload?.find((cat: { categoryName: string; id: number }) =>
+            cat.categoryName.trim().toLowerCase() === recipeData?.categoryName?.trim().toLowerCase()
+        )?.id || 0,
+
+        // Convert cuisineName to cuisineId using correct dataset (cuisinesData.payload)
+        cuisineId: cuisinesData?.payload?.find((cuisine: { cuisineName: string; id: number }) =>
+            cuisine.cuisineName.trim().toLowerCase() === recipeData?.cuisineName?.trim().toLowerCase()
+        )?.id || 0,
+    };
+
+    const closeModal = () => {
+        const modal = document.getElementById("my_modal_3kjy") as HTMLDialogElement;
+        if (modal) {
+            modal.close();
+        }
     };
 
 
     return (
-        <>
-            <ToastContainer />
+        <main>
             <section className={"flex flex-col gap-6 relative"}>
-                <div className={"relative mx-20 top-0"}>
+                <div className={"relative mx-20 top-0 "}>
                     <div className={"h-96 rounded-lg"}></div>
                     <Image
                         src={recipeImageUrl}
                         fill
                         alt={"image"}
-                        className={"rounded-lg object-cover sticky top-0"}
+                        className={"rounded-lg object-cover"}
                     />
                 </div>
                 <div className={" bg-white self-center p-14 w-2/3 absolute top-3/4 rounded-md"}>
@@ -184,7 +210,7 @@ export default function FoodDetailPage() {
                                                     value={selectedItems}
                                                     onChange={(e) => setSelectedItems(e.target.value)}
                                                 />
-            
+
                                                 {/* Grocery list checkboxes */}
                                                 <form
                                                     className="flex flex-col self-start w-full mt-4"
@@ -456,6 +482,6 @@ export default function FoodDetailPage() {
                     </div>
                 </div>
             </section>
-        </>
+        </main>
     );
 }

@@ -12,11 +12,16 @@ export const fileApi = kroryaApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "file", id: "LIST" }],
         }),
-        viewFile: builder.query<any, string>({
-            query: (fileName: string) => `/api/v1/fileView/${fileName}`,
-            providesTags: [{ type: "file", id: "LIST" }]
+
+        getFileByName: builder.query<string, string>({
+            query: (fileName) => ({
+                url: `/api/v1/fileView/${fileName}`,
+                method: "GET",
+            }),
+            transformResponse: (response: string) => response,
+            providesTags: (_result, _error, fileName) => [{ type: "file", id: fileName }],
         }),
     }),
 });
 
-export const { useUploadFileMutation, useViewFileQuery } = fileApi;
+export const { useUploadFileMutation, useGetFileByNameQuery } = fileApi;

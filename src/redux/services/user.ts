@@ -14,7 +14,7 @@ export const userApi = kroryaApi.injectEndpoints({
             providesTags: [{ type: "user", id: "LIST" }],
         }),
         // Update user data
-        updateUserProfile: builder.mutation<any, { id: number; updatedUser: object }>({
+        updateUserProfile: builder.mutation<any, { id: string; updatedUser: object }>({
             query: ({ id, updatedUser }) => ({
                 url: `/api/v1/user/edit-profile`,
                 method: "PUT",
