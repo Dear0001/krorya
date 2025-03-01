@@ -70,13 +70,19 @@ export default function AdminUsersPage() {
                     </div>
                 </label>
             </div>
-            <div className="mt-4 flex flex-col justify-center items-center h-full">
+            <div className="mt-4 h-full">
                 {loading ? (
-                    <p className="text-center font-moulpali text-secondary">កំពុងទាញអ្នកប្រើប្រាស់...</p>
+                    <div className="flex justify-center items-center h-full">
+                        <p className="text-center font-moulpali text-secondary">
+                            កំពុងទាញអ្នកប្រើប្រាស់...
+                        </p>
+                    </div>
                 ) : filteredUsers.length > 0 ? (
                     <Table users={filteredUsers} />
                 ) : (
-                    <p className="text-center font-moulpali text-secondary">មិនមានឈ្មោះអ្នកប្រើប្រាស់ទេ</p>
+                    <p className="text-center font-moulpali text-secondary">
+                        មិនមានឈ្មោះអ្នកប្រើប្រាស់ទេ
+                    </p>
                 )}
             </div>
         </section>

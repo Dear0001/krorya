@@ -6,6 +6,7 @@ import FoodList from "@/app/(admin)/admin/recipe/components/recipeListUi/FoodLis
 import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/CategoryList";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm  from "../RecipeForm";
+import CategorySkeleton from "@/app/(admin)/admin/recipe/components/CategorySkeleton";
 
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
@@ -42,7 +43,7 @@ const ExploreFood: React.FC = () => {
 
                 {/* Category List */}
                 {isLoading ? (
-                    <p className="text-center">Loading categories...</p>
+                    <CategorySkeleton/>
                 ) : error ? (
                     <p className="text-red-500 text-center">Failed to load categories</p>
                 ) : (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 interface ModalProps {
     isOpen: boolean;
@@ -10,17 +10,17 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, title, onClose, onSubmit }) => {
     const [name, setName] = useState("");
-    const isSubmiting = false;
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const handleSubmit = async () => {
+        if (name.trim() === "") return;
 
-    const handleSubmit = () => {
-        if (name.trim() !== "") {
-            onSubmit(name);
-            toast.success(`${title} created successfully`);
-            setName(""); // Clear input
-            onClose(); // Close modal
-        }
-        console.log("name:", name);
+        setIsSubmitting(true);
+        await onSubmit(name);
+        setIsSubmitting(false);
+
+        setName(""); // Clear input
+        onClose(); // Close modal
     };
 
     if (!isOpen) return null;
@@ -28,7 +28,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, title, onClose, onSubmit }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg w-80">
-                <label className="text-color-2 font-semibold mb-2.5 flex justify-start">{title}
+                <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                    {title}
                 </label>
                 <input
                     type="text"
@@ -46,10 +47,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, title, onClose, onSubmit }) => {
                     </button>
                     <button
                         onClick={handleSubmit}
-                        disabled={isSubmiting}
+                        disabled={isSubmitting}
                         className="btn bg-primary py-2.5 rounded-md border-none text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
                     >
-                        {isSubmiting ? "Creating..." : "Create Cuisine"}
+                        {isSubmitting ? "Creating..." : `Create ${title}`}
                     </button>
                 </div>
             </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { formatDateToKhmer } from '@/components/ConvertDateToKhmer';
 import Pagination from "@/app/(admin)/admin/user/components/Pagination";
+import {getImageUrl} from "@/lib/constants";
+import Image from "next/image";
 
 type User = {
     id: number;
@@ -23,7 +25,7 @@ export default function Table({ users }: { users: User[] }) {
     const paginatedUsers = users.slice(startIndex, startIndex + pageSize);
 
     return (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
             <table className="table shadow-md w-full rounded-lg overflow-hidden">
                 <thead>
                 <tr className="text-lg text-center bg-[#F9FAFB] h-[55px] text-color-2">
@@ -34,31 +36,42 @@ export default function Table({ users }: { users: User[] }) {
                 </tr>
                 </thead>
                 <tbody>
-                {paginatedUsers.map((user, index) => (
-                    <tr key={user.id} className="text-center">
-                        <td className="text-color-2">{startIndex + index + 1}</td>
-                        <td className="text-color-2">
-                            <div className="text-sm opacity-50">{formatDateToKhmer(new Date().toISOString())}</div>
-                        </td>
-                        <td className="text-color-2">
-                            <div className="flex items-center">
-                                <div className="avatar mr-2">
-                                    <div className="mask mask-squircle w-12 h-12">
-                                        <img src={user.profileImage || '/default-avatar.jpg'} alt="Avatar" />
+                {paginatedUsers?.map((user, index) => {
+                    return (
+                        <tr key={user?.id} className="text-center">
+                            <td className="text-color-2">{startIndex + index + 1}</td>
+                            <td className="text-color-2">
+                                <div className="text-sm opacity-50">{formatDateToKhmer(new Date().toISOString())}</div>
+                            </td>
+                            <td className="text-color-2">
+                                <div className="flex items-center">
+                                    <div className="avatar mr-2">
+                                        <Image
+                                            src={
+                                                user?.profileImage && user.profileImage.includes("default.jpg")
+                                                    ? "/man.png"
+                                                    : getImageUrl(user?.profileImage) || "/man.png"
+                                            }
+                                            width={12}
+                                            height={12}
+                                            alt="Avatar"
+                                            className="w-12 h-12 object-cover"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col items-center">
+                                        <div className="text-sm opacity-50">{user?.fullName || "No name"}</div>
                                     </div>
                                 </div>
-                                <div className="flex flex-col items-start">
-                                    <div className="text-sm opacity-50">{user.fullName}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td className="text-color-2">
-                            <Link href="#" className={`flex-1 px-4 py-2 rounded text-center ${user.deleted ? 'bg-red-500 border-red-600 text-white' : 'bg-green-500 border-green-600 text-white'}`}>
-                                {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
-                            </Link>
-                        </td>
-                    </tr>
-                ))}
+                            </td>
+
+                            <td className="text-color-2">
+                                <Link href="#" className={`flex-1 px-4 py-2 rounded text-center ${user.deleted ? 'bg-red-500 border-red-600 text-white' : 'bg-green-500 border-green-600 text-white'}`}>
+                                    {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
+                                </Link>
+                            </td>
+                        </tr>
+                    );
+                })}
                 </tbody>
             </table>
             <Pagination

@@ -10,44 +10,45 @@ import { RecipeType } from "@/lib/definition";
 
 const RecipeComponent: React.FC = () => {
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
-    const [pageSize, setPageSize] = useState<number>(10);
+    const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
-    const [isLoading, setIsLoading] = useState<boolean>(true); // State to control loading
+    const [isLoading, setIsLoading] = useState<boolean>(true); // Minimum loading state
 
     // Fetch recipes with pagination
-    const { data: recipesData, isLoading: isDataLoading } = useGetAllRecipesQuery({ page: 0, pageSize });
+    const { data: recipesData, isLoading: isDataLoading } = useGetAllRecipesQuery({ page, pageSize: 10 });
 
     useEffect(() => {
         if (recipesData?.payload?.length) {
             setRecipes((prev) => {
-                // Prevent duplicate recipes from being added
+                // Prevent duplicates
                 const existingIds = new Set(prev.map((r) => r.id));
-                const newRecipes = recipesData?.payload?.filter((r: any) => !existingIds?.has(r.id));
+                const newRecipes = recipesData.payload.filter((r: RecipeType) => !existingIds.has(r.id));
                 return [...prev, ...newRecipes];
             });
 
             // Stop fetching if fewer items are returned than requested
-            setHasMore(recipesData?.payload?.length === pageSize);
+            setHasMore(recipesData.payload.length === 10);
         } else {
             setHasMore(false);
         }
     }, [recipesData]);
 
-    // Set a minimum loading time of 2 seconds
+    // Ensure a minimum loading time of 2 seconds
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false); // After 2 seconds, set loading to false
-        }, 2000);
-
-        return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }, []);
+        if (isDataLoading) {
+            const timer = setTimeout(() => setIsLoading(false), 2000);
+            return () => clearTimeout(timer);
+        } else {
+            setIsLoading(false);
+        }
+    }, [isDataLoading]);
 
     // Load more recipes
     const fetchMoreRecipes = () => {
-        setPageSize((prevSize) => prevSize + 10);
+        if (hasMore) setPage((prevPage) => prevPage + 1);
     };
 
-    // Show skeleton if data is still loading or if the minimum loading time hasn't passed
+    // Show skeleton while loading
     if (isLoading || isDataLoading) {
         return (
             <main className="w-[423px] my-5 h-[555px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
@@ -58,7 +59,7 @@ const RecipeComponent: React.FC = () => {
 
                 {/* Skeleton Loading State */}
                 <div className="mt-4 h-[calc(100%-70px)] overflow-y-scroll no-scrollbar">
-                    {Array.from({ length: pageSize })?.map((_, index) => (
+                    {Array.from({ length: 10 }).map((_, index) => (
                         <CardRecipeSkeleton key={index} />
                     ))}
                 </div>

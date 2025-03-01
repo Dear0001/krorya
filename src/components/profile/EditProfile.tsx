@@ -2,13 +2,14 @@
 import React, { useRef, useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import { MdOutlineCancel } from "react-icons/md";
-import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/redux/services/user";
+import { useUpdateUserProfileMutation } from "@/redux/services/user";
 import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
 import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
 import {toast} from "react-toastify";
 
 type UserProfile = {
+    id: string;
     profileImage: string;
     fullName: string;
     phoneNumber: string;
@@ -34,17 +35,17 @@ const fileValidationSchema = Yup.object().shape({
 
 type EditProfileProps = {
     onSubmit?: (formData: any) => Promise<void>;
+    userData: UserProfile;
 };
 
-const EditProfile: React.FC<EditProfileProps> = ({ onSubmit }) => {
-    const { data: userProfile, refetch } = useGetUserProfileQuery();
-    const userData: UserProfile | undefined = userProfile?.payload;
+const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
     const [updateProfile, { isLoading: isUpdating }] = useUpdateUserProfileMutation();
     const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
     const [isOpen, setIsOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [formData, setFormData] = useState<UserProfile>({
+        id: "",
         profileImage: "",
         fullName: "",
         phoneNumber: "",
@@ -54,6 +55,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit }) => {
     useEffect(() => {
         if (userData) {
             setFormData({
+                id: userData.id,
                 profileImage: userData.profileImage,
                 fullName: userData.fullName,
                 phoneNumber: userData.phoneNumber,
@@ -112,21 +114,28 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit }) => {
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
         try {
-            await updateProfile({
-            id: userProfile?.payload?.id,
-            updatedUser: {
-                fullName: formData.fullName,
-                phoneNumber: formData.phoneNumber,
-                profileImage: formData.profileImage,
-            },
-        }).unwrap();
-            refetch();
-            setIsOpen(false);
-            toast.success("Profile updated successfully");
-        } catch (error) {
+            const response = await updateProfile({
+                id: userData?.id,
+                updatedUser: {
+                    fullName: formData.fullName,
+                    phoneNumber: formData.phoneNumber,
+                    profileImage: formData.profileImage,
+                },
+            }).unwrap();
+
+            if (response.statusCode === "200") {
+                toast.success(response.message || "Profile updated successfully", { autoClose: 3000 });
+                setIsOpen(false);
+            } else {
+                toast.error(response.message || "Failed to update profile", { autoClose: 3000 });
+            }
+
+            console.log("Profile Update Response:", response);
+        } catch (error: any) {
             console.error("Update Profile Error:", error);
+            toast.dismiss(); // ✅ Ensure only one toast appears
+            toast.error(error?.data?.message || "An error occurred while updating the profile", { autoClose: 3000 });
         }
-        console.log("Form Dataaa:", formData);
     };
 
     return (

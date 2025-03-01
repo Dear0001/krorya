@@ -1,10 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useGetAllRecipesQuery } from "@/redux/services/recipe";
 import { useGetFoodRecipeByCategoryIdQuery } from "@/redux/services/category";
-import { setRecipes, setLoading } from "@/redux/features/recipe/recipesDateSlice";
-import { RootState, AppDispatch } from "@/redux/store";
 import LoadingFoodCard from "./LoadingFoodCard";
 import NotFound from "./NotFound";
 import RecipeCard from "@/components/card/RecipeCard";
@@ -22,13 +19,7 @@ const FoodList: React.FC<FoodListProps> = ({ activeCategoryId, query }) => {
 };
 
 const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) => {
-    const dispatch = useDispatch<AppDispatch>();
     const [visibleCount, setVisibleCount] = useState<number>(12);
-    const [isLoading, setIsLoading] = useState<boolean>(true); // State to control loading
-
-    // Get recipes from Redux state
-    const foods = useSelector((state: RootState) => state.recipe.data);
-    const isDataLoading = useSelector((state: RootState) => state.recipe.loading);
 
     const isAllSelected = activeCategoryId === "all";
     const categoryId = isAllSelected ? undefined : Number(activeCategoryId);
@@ -39,7 +30,7 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
         { skip: query.length < 3 }
     );
 
-    // Fetch all recipes when 'all' is selected
+    // Fetch all recipes directly
     const { data: allFoodData, isFetching: allFoodIsFetching } = useGetAllRecipesQuery(
         { page: 0, pageSize: INITIAL_FETCH_COUNT },
         { skip: !isAllSelected || query.length > 0 }
@@ -48,7 +39,7 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
     // Fetch category-specific recipes
     const { data: categoryFoodData, isFetching: categoryFoodIsFetching } = useGetFoodRecipeByCategoryIdQuery(
         { categoryId: categoryId ?? 0 },
-        { skip: isAllSelected || query.length > 0 } // Skip when searching
+        { skip: isAllSelected || query.length > 0 }
     );
 
     // Extract correct food data
@@ -62,25 +53,6 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
         return categoryFoodData?.payload?.foodRecipes ?? [];
     }, [query, searchFoodData, isAllSelected, allFoodData, categoryFoodData]);
 
-    // Store food data in Redux on successful fetch
-    useEffect(() => {
-        if (allFoodIsFetching || categoryFoodIsFetching || searchFoodIsFetching) {
-            dispatch(setLoading(true));
-            return;
-        }
-        dispatch(setLoading(false));
-        dispatch(setRecipes(foodData));
-    }, [foodData, allFoodIsFetching, categoryFoodIsFetching, searchFoodIsFetching, dispatch]);
-
-    // Set a minimum loading time of 2 seconds
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false); // After 2 seconds, set loading to false
-        }, 2000); // 2 seconds delay
-
-        return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }, []);
-
     // Reset visible items when category changes or new search
     useEffect(() => {
         setVisibleCount(12);
@@ -91,8 +63,8 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
         setVisibleCount((prev) => prev + 12);
     };
 
-    // Show skeleton if data is still loading or if the minimum loading time hasn't passed
-    if (isLoading || isDataLoading) {
+    // Show skeleton if data is still loading
+    if (allFoodIsFetching || categoryFoodIsFetching || searchFoodIsFetching) {
         return (
             <div className="grid grid-cols-1 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {Array.from({ length: 12 }).map((_, index) => (
@@ -105,17 +77,17 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
     // ✅ Show food data when loaded
     return (
         <>
-            {(foods ?? []).length === 0 ? (
+            {(foodData ?? []).length === 0 ? (
                 <NotFound props="មិនមានម្ហូបដែលស្វែងរកទេ" />
             ) : (
                 <>
                     <div className="grid grid-cols-1 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                        {(foods ?? []).slice(0, visibleCount)?.map((food: FoodRecipe) => (
+                        {(foodData ?? []).slice(0, visibleCount)?.map((food: FoodRecipe) => (
                             <RecipeCard key={food.id} food={food} />
                         ))}
                     </div>
 
-                    {(foods ?? []).length > visibleCount && (
+                    {(foodData ?? []).length > visibleCount && (
                         <div className="text-center mt-10">
                             <button
                                 className="px-3 py-2 w-full md:w-28 rounded-lg border border-[#d7ad45] bg-white text-[#d7ad45] font-kantumruy text-sm leading-6"

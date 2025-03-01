@@ -22,12 +22,16 @@ const TotalDataComponent = () => {
 
     // Set a minimum loading time of 2 seconds
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false); // After 2 seconds, set loading to false
-        }, 2000); // 2 seconds delay
+        if (isDataLoading) {
+            const timer = setTimeout(() => {
+                setIsLoading(false);
+            }, 3000);
 
-        return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }, []);
+            return () => clearTimeout(timer); // Cleanup the timer on unmount
+        } else {
+            setIsLoading(false);
+        }
+    }, [isDataLoading]);
 
     // Show skeleton if data is still loading or if the minimum loading time hasn't passed
     if (isLoading || isDataLoading) {

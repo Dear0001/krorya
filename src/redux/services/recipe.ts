@@ -3,7 +3,7 @@ import {FormData} from "@/lib/definition";
 
 export const RecipeApi = kroryaApi.injectEndpoints({
     endpoints: (builder) => ({
-        // Fetch all users
+        // Fetch all recipes
         getAllRecipes: builder.query<any, { page: number; pageSize: number }>({
             query: ({ page = 0, pageSize = 10 }) =>
                 `/api/v1/food-recipe/list?page=${page}&size=${pageSize}`,

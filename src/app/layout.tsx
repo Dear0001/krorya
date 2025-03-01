@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import SessionProvider from "@/app/SessionProvider";
 import StoreProvider from "@/app/StoreProvider";
+import {ToastContainer} from "react-toastify";
 
 const kantumruyPro = Kantumruy_Pro({
     subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SessionProvider>
             <StoreProvider>
                 {children}
+                <ToastContainer position="top-right" autoClose={3000} />
             </StoreProvider>
         </SessionProvider>
         </body>

@@ -1,43 +1,34 @@
 "use client";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
-import {useEffect, useState} from "react";
+import React, { useState} from "react";
 import { useParams } from "next/navigation";
 import { useGetRecipeByIdQuery } from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
 import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
 import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
-import type {FormData} from "@/lib/definition";
 import {useGetAllFoodQuery} from "@/redux/services/food";
 import {useGetAllCategoriesQuery} from "@/redux/services/category";
 import {Skeleton} from "../components/recipeListUi/Skeleton";
+import {ToastContainer} from "react-toastify";
 
 export default function FoodDetailPage() {
     const [groceryList, ] = useState<any[]>([]);
     const [selectedItems, setSelectedItems] = useState<string>("");
     const [, setIsModalOpen] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const params = useParams();
     const recipeId = params?.recipeId as string;
     console.log("recipeId:", recipeId);
     const { data: recipes, isLoading: isRecipeLoading } = useGetRecipeByIdQuery({ id: Number(recipeId) });
     const { data: cuisinesData, isLoading: isCuisinesLoading } = useGetAllFoodQuery({ page: 0, pageSize: 10 });
-    const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 });
+    const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 })
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false); // After 2 seconds, set loading to false
-        }, 2000); // 2 seconds delay
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (isLoading || isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
+    // Show skeleton if any API is still loading
+    if (isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
         return <Skeleton />;
     }
-
     const recipeData = recipes?.payload;
     console.log("data from url:", recipeData);
 
@@ -84,9 +75,9 @@ export default function FoodDetailPage() {
         }
     };
 
-
     return (
         <main>
+            <ToastContainer/>
             <section className={"flex flex-col gap-6 relative"}>
                 <div className={"relative mx-20 top-0 "}>
                     <div className={"h-96 rounded-lg"}></div>
