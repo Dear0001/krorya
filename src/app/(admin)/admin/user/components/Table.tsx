@@ -18,7 +18,7 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [confirmType, setConfirmType] = useState<'suspend' | 'approve' | null>(null); // ✅ Track action type
+    const [confirmType, setConfirmType] = useState<'suspend' | 'approve' | null>(null);
     const [users, setUsers] = useState<User[]>(initialUsers);
 
     const [updateUserStatus, { isLoading }] = useDeleteUserByIdMutation();

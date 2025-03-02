@@ -77,23 +77,22 @@ export default function FoodDetailPage() {
     return (
         <main className={"h-screen overflow-auto scrollbar-hide"}>
             <section className={"flex flex-col gap-6 relative"}>
-                <div className={"relative mx-20 h-96"}>
+                <div className={"relative mx-20 h-[444px]"}>
                     <Image
                         src={recipeImageUrl}
-                        fill
                         alt={"Recipe Image"}
-                        className={"rounded-lg object-cover"}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-                        priority
+                        className={"rounded-lg w-full h-full object-cover"}
+                        layout="fill"
+                        quality={100}
                     />
                 </div>
-                <div className={" bg-white self-center p-14 w-2/3 absolute top-3/4 rounded-md"}>
-                <div className={" flex flex-col items-center gap-4"}>
-            <span
-                className={"font-moulpali text-5xl text-center text-secondary"}
-            >
-              {recipeData?.name}
-            </span>
+                <div className={" bg-white self-center w-2/3 absolute top-3/4 rounded-md"}>
+                <div className={" flex flex-col items-center pt-14 px-14 gap-4"}>
+                <span
+                    className={"font-moulpali text-5xl text-center text-secondary"}
+                >
+                  {recipeData?.name}
+                </span>
                         <Image
                             className={"pt-3"}
                             src={"/icons/Kbach.svg"}
@@ -102,7 +101,7 @@ export default function FoodDetailPage() {
                             height={100}
                         />
                     </div>
-                    <div>
+                    <div className={" pt-14 px-14"}>
                         <div>
                             <div className={"flex items-center gap-2 mb-2"}>
                                 <Image
@@ -470,7 +469,47 @@ export default function FoodDetailPage() {
                             </div>
                         </div>
                     </div>
+                    {/*images*/}
+                    <div className={"flex justify-between mt-20 mb-0"}>
+                        <Image
+                            src={"/icons/kbach-1.svg"}
+                            alt={"kbach"}
+                            width={155}
+                            height={155}
+                            className={"top-0 right-0 rotate-[180deg]"}
+                        />
+                        <Image
+                            src={"/icons/kbach.svg"}
+                            alt={"kbach"}
+                            width={155}
+                            height={155}
+                        />
+                        <Image
+                            src={"/icons/kbach-1.svg"}
+                            alt={"kbach"}
+                            width={155}
+                            height={155}
+                            className={"top-0 right-0 rotate-[-270deg]"}
+                        />
+                    </div>
                 </div>
+            </section>
+
+            <section className={"relative mt-36"}>
+                <Image
+                    src={"/icons/Asset-2.svg"}
+                    alt={"kbach"}
+                    width={155}
+                    height={155}
+                    className={"absolute fixed top-0 right-0"}
+                />
+                <Image
+                    src={"/icons/Asset-1.svg"}
+                    alt={"kbach"}
+                    width={175}
+                    height={175}
+                    className={"absolute fixed top-0 left-0"}
+                />
             </section>
         </main>
     );

@@ -7,11 +7,11 @@ const BannerComponent = () => {
             className="w-full h-[268px] bg-white rounded-[15px] grid grid-cols-2 gap-4"
         >
             {/* Left Column */}
-            <div className="flex flex-col p-[40px] w-[600px] justify-start">
-                <h1 data-layer="Title" className="Title text-[46px] font-bold">
+            <div className="flex flex-col gap-3 p-[40px] w-[600px] justify-start">
+                <h1 className={"gradient-text md:text-4xl font-bold text-slate-700"}>
                     ស្វាគមន៍មកកាន់ក្រយ៉ា
                 </h1>
-                <p className="text-[18px] pb-5">
+                <p className="text-[18px] leading-loose pb-1">
                     ម្ហូបខ្មែរ មានច្រើនសណ្ឋានដូចជា ស្ល ឆា ចៀន ស្ងោរ ជាដើម និងមានរសជាតិប្លែកៗពីគ្នា។
                 </p>
 

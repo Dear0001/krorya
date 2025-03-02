@@ -82,7 +82,7 @@ const ExploreFood: React.FC = () => {
                     <li>
                         <button
                             onClick={openModal}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                            className="border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition duration-300 "
                         >
                             បង្កើតម្ហូប
                         </button>

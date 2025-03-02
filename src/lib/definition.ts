@@ -67,7 +67,7 @@ export type FormData = {
     id: number;
     photo: { photo: string }[];
     name: string;
-    description: string;
+    description?: string;
     durationInMinutes: number;
     level: string;
     cuisineId: number;
@@ -79,7 +79,7 @@ export type FormData = {
 export type Ingredient = {
     id: number;
     name: string;
-    quantity: string;
+    quantity?: string;
     price: number;
 };
 
