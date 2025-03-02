@@ -77,15 +77,11 @@ export default function FoodDetailPage() {
     return (
         <main className={"h-screen overflow-auto scrollbar-hide"}>
             <section className={"flex flex-col gap-6 relative"}>
-                <div className={"relative mx-20 h-[444px]"}>
-                    <Image
-                        src={recipeImageUrl}
-                        alt={"Recipe Image"}
-                        className={"rounded-lg w-full h-full object-cover"}
-                        layout="fill"
-                        quality={100}
-                    />
-                </div>
+                <div
+                    className="relative mx-20 h-[444px] rounded-lg bg-cover bg-center"
+                    style={{ backgroundImage: `url(${recipeImageUrl})` }}
+                ></div>
+
                 <div className={" bg-white self-center w-2/3 absolute top-3/4 rounded-md"}>
                 <div className={" flex flex-col items-center pt-14 px-14 gap-4"}>
                 <span
@@ -470,27 +466,15 @@ export default function FoodDetailPage() {
                         </div>
                     </div>
                     {/*images*/}
-                    <div className={"flex justify-between mt-20 mb-0"}>
-                        <Image
-                            src={"/icons/kbach-1.svg"}
-                            alt={"kbach"}
-                            width={155}
-                            height={155}
-                            className={"top-0 right-0 rotate-[180deg]"}
-                        />
-                        <Image
-                            src={"/icons/kbach.svg"}
-                            alt={"kbach"}
-                            width={155}
-                            height={155}
-                        />
-                        <Image
-                            src={"/icons/kbach-1.svg"}
-                            alt={"kbach"}
-                            width={155}
-                            height={155}
-                            className={"top-0 right-0 rotate-[-270deg]"}
-                        />
+                    <div className="relative flex justify-between items-center mt-20 mb-0">
+                        {/* Left Background Image */}
+                        <div className="w-[155px] h-[155px] bg-[url('/icons/kbach-1.svg')] bg-contain bg-no-repeat rotate-180"></div>
+
+                        {/* Center Logo */}
+                        <div className="w-[155px] h-[155px] bg-[url('/icons/Kbach.svg')] bg-contain bg-no-repeat"></div>
+
+                        {/* Right Background Image */}
+                        <div className="w-[155px] h-[155px] bg-[url('/icons/kbach-1.svg')] bg-contain bg-no-repeat rotate-[-270deg]"></div>
                     </div>
                 </div>
             </section>
