@@ -59,8 +59,8 @@ export function NavbarComponent() {
                     <button onClick={toggleDropdown} className="focus:outline-none">
 
                         <Image
-                            width={50}
-                            height={50}
+                            width={100}
+                            height={100}
                             className="w-[50px] h-[50px] rounded-full object-cover border-2"
                             src={
                                 imageUrl && imageUrl.startsWith("http")

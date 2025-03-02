@@ -13,6 +13,6 @@ export const MenuList = [
     {
         href: "/admin/user",
         label: "អ្នកប្រើប្រាស់ទាំងអស់",
-        icon: "group.svg",
+        icon: "users.svg",
     },
 ];

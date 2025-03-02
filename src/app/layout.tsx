@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import SessionProvider from "@/app/SessionProvider";
 import StoreProvider from "@/app/StoreProvider";
+import {ToastContainer} from "react-toastify";
 
 const kantumruyPro = Kantumruy_Pro({
     subsets: ["latin"],
@@ -17,11 +18,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en" className={`${kantumruyPro.className} rounded-lg overflow-y-scroll scrollbar-hide h-full`}>
+        <html lang="en" className={`${kantumruyPro.className} rounded-lg overflow-auto scrollbar-hide h-full`}>
         <body>
         <SessionProvider>
             <StoreProvider>
                 {children}
+                <ToastContainer position="top-right" autoClose={3000} />
             </StoreProvider>
         </SessionProvider>
         </body>

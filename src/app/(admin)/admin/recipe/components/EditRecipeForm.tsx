@@ -29,7 +29,8 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [, setSelectedCategory] = useState<number | null>(null);
     const [, setSelectedCuisine] = useState<number | null>(null);
-    const [isFormOpen, setIsFormOpen] = useState(true);
+    const [isFormOpen,] = useState(true);
+    const [isFormVisible, setIsFormVisible] = useState(true);
 
     const [uploadFile] = useUploadFileMutation();
     const [updateRecipe, { isLoading: isUpdateRecipe }] = useUpdateRecipeMutation();
@@ -98,9 +99,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
         }
     }, [editRecipeData, setValue]);
 
-    console.log("Edit Recipe Data:", editRecipeData);
-    console.log("Selected Image:", selectedImage);
-
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -136,8 +134,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
     const onSubmit = async (data: FormData, event?: React.BaseSyntheticEvent) => {
         event?.preventDefault();
-        console.log("Form submitted with data:", data);
-
         try {
             if (!editRecipeData?.id) {
                 toast.error("Error: No recipe ID provided for update.");
@@ -145,33 +141,29 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             }
 
             let fileName = data.photo?.[0]?.photo || "";
-            console.log("Final photo fileName:", fileName);
-
             const finalData = {
                 ...data,
                 photo: [{ photo: fileName }],
             };
 
-            console.log("Final data before update:", finalData);
-
-            await updateRecipe({
+            const response = await updateRecipe({
                 id: editRecipeData.id,
                 FormData: finalData,
             }).unwrap();
 
-            console.log("Update successful!");
+            if (response?.message) {
+                toast.success(response.message);
+            }
 
-            // Show toast notification before closing the modal
-            toast.success("Recipe updated successfully!");
-
-            // Wait for 1 second before closing modal (for better UX)
             setTimeout(() => {
+                setIsFormVisible(false);
                 if (onSuccess) onSuccess();
-            }, 1000);
+            }, 2000);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error updating recipe:", error);
-            toast.error("Failed to update recipe. Please try again.");
+            const errorMessage = error?.data?.message || "Failed to update recipe. Please try again.";
+            toast.error(errorMessage);
         }
     };
 
@@ -183,10 +175,8 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
     return (
         <main>
-            {/* Scrollable Section */}
-            <ToastContainer/>
+            <ToastContainer autoClose={2000} />
             <div className="max-h-[700px] no-scrollbar overflow-y-auto">
-
                 <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>

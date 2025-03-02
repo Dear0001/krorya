@@ -5,7 +5,9 @@ import Image from "next/image";
 import FoodList from "@/app/(admin)/admin/recipe/components/recipeListUi/FoodList";
 import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/CategoryList";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
-import RecipeForm  from "../RecipeForm";
+import RecipeForm from "../RecipeForm";
+import CategorySkeleton from "@/app/(admin)/admin/recipe/components/CategorySkeleton";
+import { useGetRecipeByNameQuery } from "@/redux/services/recipe";
 
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
@@ -42,7 +44,7 @@ const ExploreFood: React.FC = () => {
 
                 {/* Category List */}
                 {isLoading ? (
-                    <p className="text-center">Loading categories...</p>
+                    <CategorySkeleton />
                 ) : error ? (
                     <p className="text-red-500 text-center">Failed to load categories</p>
                 ) : (
@@ -57,12 +59,12 @@ const ExploreFood: React.FC = () => {
             {/* Food List Section */}
             <div className="bg-white p-5 md:p-6 lg:p-8 rounded-md h-full">
                 <ul className="grid grid-cols-1 lg:flex lg:justify-between">
-                    {/*header title*/}
+                    {/* Header title */}
                     <li className="flex items-center">
                         <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
                         <span className="font-moulpali text-lg px-5 text-color-2">បញ្ជីមុខម្ហូប</span>
                     </li>
-                    {/*search*/}
+                    {/* Search */}
                     <li className="pt-5 lg:pt-0">
                         <div className="lg:justify-center flex items-center rounded-md text-sm border gap-4 ps-2">
                             <Image src="/icons/search.svg" alt="Search Icon" width={20} height={20} />
@@ -76,7 +78,7 @@ const ExploreFood: React.FC = () => {
                             />
                         </div>
                     </li>
-                    {/*create recipe button*/}
+                    {/* Create recipe button */}
                     <li>
                         <button
                             onClick={openModal}
@@ -93,17 +95,12 @@ const ExploreFood: React.FC = () => {
 
             {/* Modal for RecipeForm */}
             {isModalOpen && (
-                <div className="fixed h-screen inset-0 top-0  bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className=" p-6 bg-white rounded-md w-full max-w-2xl relative">
+                <div className="fixed h-screen inset-0 top-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="p-6 bg-white rounded-md w-full max-w-2xl relative">
                         <div className="text-center mt-2 mb-5">
                             <h3 className="mb-3 text-2xl font-semibold leading-5 font-moulpali text-secondary lg:text-2xl">កែប្រែព័ត៍មាន</h3>
                             <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
-                                <Image
-                                    src="/icons/Kbach.svg"
-                                    alt="border"
-                                    width={100}
-                                    height={13}
-                                />
+                                <Image src="/icons/Kbach.svg" alt="border" width={100} height={13} />
                             </p>
                         </div>
                         <button

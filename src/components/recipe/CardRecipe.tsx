@@ -14,7 +14,7 @@ type RecipeProps = {
         photo: { photo: string; photoId: number }[];
         description: string;
         level: string;
-        durationInMinutes?: string | number; // Accepts both string & number
+        durationInMinutes?: string | number;
     };
     isLoading: boolean;
 };

@@ -21,9 +21,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
-    // const accessToken = useAppSelector(selectToken);
     const router = useRouter();
-    // console.log("Access token: from Redux stores in page login", accessToken);
 
     const onSubmit: SubmitHandler<ValueTypes> = async (values) => {
         setLoading(true);

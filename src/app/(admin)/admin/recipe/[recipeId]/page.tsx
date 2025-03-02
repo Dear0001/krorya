@@ -1,14 +1,13 @@
 "use client";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
-import {useEffect, useState} from "react";
+import React, { useState} from "react";
 import { useParams } from "next/navigation";
 import { useGetRecipeByIdQuery } from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
 import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
 import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
-import type {FormData} from "@/lib/definition";
 import {useGetAllFoodQuery} from "@/redux/services/food";
 import {useGetAllCategoriesQuery} from "@/redux/services/category";
 import {Skeleton} from "../components/recipeListUi/Skeleton";
@@ -17,27 +16,18 @@ export default function FoodDetailPage() {
     const [groceryList, ] = useState<any[]>([]);
     const [selectedItems, setSelectedItems] = useState<string>("");
     const [, setIsModalOpen] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const params = useParams();
     const recipeId = params?.recipeId as string;
     console.log("recipeId:", recipeId);
     const { data: recipes, isLoading: isRecipeLoading } = useGetRecipeByIdQuery({ id: Number(recipeId) });
     const { data: cuisinesData, isLoading: isCuisinesLoading } = useGetAllFoodQuery({ page: 0, pageSize: 10 });
-    const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 });
+    const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 })
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false); // After 2 seconds, set loading to false
-        }, 2000); // 2 seconds delay
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (isLoading || isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
+    // Show skeleton if any API is still loading
+    if (isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
         return <Skeleton />;
     }
-
     const recipeData = recipes?.payload;
     console.log("data from url:", recipeData);
 
@@ -84,17 +74,17 @@ export default function FoodDetailPage() {
         }
     };
 
-
     return (
-        <main>
+        <main className={"h-screen overflow-auto scrollbar-hide"}>
             <section className={"flex flex-col gap-6 relative"}>
-                <div className={"relative mx-20 top-0 "}>
-                    <div className={"h-96 rounded-lg"}></div>
+                <div className={"relative mx-20 h-96"}>
                     <Image
                         src={recipeImageUrl}
                         fill
-                        alt={"image"}
+                        alt={"Recipe Image"}
                         className={"rounded-lg object-cover"}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                        priority
                     />
                 </div>
                 <div className={" bg-white self-center p-14 w-2/3 absolute top-3/4 rounded-md"}>

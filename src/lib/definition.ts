@@ -87,3 +87,23 @@ export  type CookingStep = {
     id: number;
     description: string;
 };
+
+export type PopularType = {
+    id: number;
+    photo: { photoId: number; photo: string }[];
+    name: string;
+    description: string;
+    level: string;
+    durationInMinutes: number;
+    averageRating: number | null;
+    totalRaters: number | null;
+    isFavorite: boolean | null;
+    itemType: string;
+    user: {
+        id: number;
+        fullName: string;
+        profileImage: string;
+        role: string;
+        deleted: boolean;
+    };
+}

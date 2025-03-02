@@ -22,15 +22,17 @@ export const userApi = kroryaApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "user", id: "LIST" }],
         }),
-        // Delete user by ID
-        deleteUserById: builder.mutation<any, number>({
-            query: (id) => ({
+        // Delete user by ID (Rename from updateUserById)
+        deleteUserById: builder.mutation<{ success: boolean }, { id: number; deleted: boolean }>({
+            query: ({ id, deleted }) => ({
                 url: `/api/v1/user/deleteUserById/${id}`,
-                method: "DELETE",
+                method: "PUT",
+                body: { deleted },
             }),
             invalidatesTags: [{ type: "user", id: "LIST" }],
         }),
-    //     get user progile
+
+        //     get user progile
         getUserProfile: builder.query<any, void>({
             query: () =>
                 `/api/v1/user/profile`,

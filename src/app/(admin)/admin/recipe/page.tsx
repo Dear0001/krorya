@@ -8,7 +8,7 @@ const RecipeList = () => {
     return (
         <main>
             <ToastContainer/>
-            <section className="bg-gray-50 ">
+            <section className="bg-gray-50 overflow-auto scrollbar-hide ">
                 <ExploreFood />
             </section>
         </main>

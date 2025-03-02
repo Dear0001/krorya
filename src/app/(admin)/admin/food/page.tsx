@@ -3,7 +3,7 @@ import DisplayTable from "./components/DisplayTable";
 
 const Page = () => {
     return (
-        <div>
+        <div className={"overflow-auto scrollbar-hide"}>
             <DisplayTable/>
         </div>
     );

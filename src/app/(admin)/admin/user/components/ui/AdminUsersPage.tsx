@@ -38,9 +38,9 @@ export default function AdminUsersPage() {
     return (
         <section className="bg-white h-screen w-full rounded-lg p-4 dark:bg-white text-black">
             <div>
-                <h1 className="font-semibold mb-2">ព័ត៌មានការរាយការណ៍រូបមន្តម្ហូបទាំងអស់</h1>
+                <h1 className="font-semibold mb-2">ព័ត៌មានអ្នកប្រើប្រាស់ទាំងអស់</h1>
                 <span className="mt-2">
-                  មានរូបមន្ត{" "}
+                  អ្នកប្រើប្រាស់{" "}
                     <span className="text-secondary">
                         {users.length > 99 ? "99+" : users.length}
                     </span>{" "}
@@ -70,13 +70,17 @@ export default function AdminUsersPage() {
                     </div>
                 </label>
             </div>
-            <div className="mt-4 flex flex-col justify-center items-center h-full">
+            <div className="mt-4 h-full">
                 {loading ? (
-                    <p className="text-center font-moulpali text-secondary">កំពុងទាញអ្នកប្រើប្រាស់...</p>
+                        <p className="h-screen grid place-content-center font-moulpali text-secondary">
+                            កំពុងទាញអ្នកប្រើប្រាស់...
+                        </p>
                 ) : filteredUsers.length > 0 ? (
                     <Table users={filteredUsers} />
                 ) : (
-                    <p className="text-center font-moulpali text-secondary">មិនមានឈ្មោះអ្នកប្រើប្រាស់ទេ</p>
+                    <p className="h-screen grid place-content-center font-moulpali text-secondary">
+                        មិនមានឈ្មោះអ្នកប្រើប្រាស់ទេ
+                    </p>
                 )}
             </div>
         </section>
