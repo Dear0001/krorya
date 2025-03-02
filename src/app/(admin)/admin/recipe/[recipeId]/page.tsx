@@ -465,35 +465,7 @@ export default function FoodDetailPage() {
                             </div>
                         </div>
                     </div>
-                    {/*images*/}
-                    <div className="relative flex justify-between items-center mt-20 mb-0">
-                        {/* Left Background Image */}
-                        <div className="w-[155px] h-[155px] bg-[url('/icons/kbach-1.svg')] bg-contain bg-no-repeat rotate-180"></div>
-
-                        {/* Center Logo */}
-                        <div className="w-[155px] h-[155px] bg-[url('/icons/Kbach.svg')] bg-contain bg-no-repeat"></div>
-
-                        {/* Right Background Image */}
-                        <div className="w-[155px] h-[155px] bg-[url('/icons/kbach-1.svg')] bg-contain bg-no-repeat rotate-[-270deg]"></div>
-                    </div>
                 </div>
-            </section>
-
-            <section className={"relative mt-36"}>
-                <Image
-                    src={"/icons/Asset-2.svg"}
-                    alt={"kbach"}
-                    width={155}
-                    height={155}
-                    className={"top-0 right-0"}
-                />
-                <Image
-                    src={"/icons/Asset-1.svg"}
-                    alt={"kbach"}
-                    width={175}
-                    height={175}
-                    className={"top-0 left-0"}
-                />
             </section>
         </main>
     );
