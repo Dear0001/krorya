@@ -30,7 +30,7 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
         { skip: query.length < 1 }
     );
 
-    // Fetch all recipes directly
+    // Fetch all recipes when 'all' is selected
     const { data: allFoodData, isFetching: allFoodIsFetching } = useGetAllRecipesQuery(
         { page: 0, pageSize: INITIAL_FETCH_COUNT },
         { skip: !isAllSelected || query.length >= 1 }

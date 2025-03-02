@@ -83,7 +83,7 @@ export default function FoodDetailPage() {
                 ></div>
 
                 <div className={" bg-white self-center w-2/3 absolute top-3/4 rounded-md"}>
-                <div className={" flex flex-col items-center pt-14 px-14 gap-4"}>
+                    <div className={" flex flex-col items-center pt-14 px-14 gap-4"}>
                 <span
                     className={"font-moulpali text-5xl text-center text-secondary"}
                 >
@@ -485,14 +485,14 @@ export default function FoodDetailPage() {
                     alt={"kbach"}
                     width={155}
                     height={155}
-                    className={"top-0 right-0"}
+                    className={"absolute top-0 right-0"}
                 />
                 <Image
                     src={"/icons/Asset-1.svg"}
                     alt={"kbach"}
                     width={175}
                     height={175}
-                    className={"top-0 left-0"}
+                    className={"absolute top-0 left-0"}
                 />
             </section>
         </main>
