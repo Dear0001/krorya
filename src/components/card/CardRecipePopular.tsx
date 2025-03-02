@@ -44,7 +44,7 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
             </figure>
 
             <div className="card-body p-2 bg-white md:col-span-1">
-                <div className="card-title text-slate-700 text-[20px] py-1">{recipe?.name}</div>
+                <div className="card-title text-slate-700 text-[20px] py-1 truncate">{recipe?.name}</div>
                 <div className="flex items-center gap-2">
                     <svg
                         width="13"

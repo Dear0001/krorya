@@ -41,9 +41,9 @@ const PaginatedList: React.FC<PaginatedListProps> = ({
                 <h2 className="text-xl font-bold">{title}</h2>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-700"
+                    className="border border-primary text-primary px-3 py-1 rounded-md hover:bg-primary hover:text-white"
                 >
-                    + Create
+                    បង្កើត
                 </button>
             </div>
 

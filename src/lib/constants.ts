@@ -18,7 +18,7 @@ export const levelBgColors: { [key: string]: string } = {
         Hard: "bg-[#f4d4d4] text-[12px] text-[#cf6464]",
     };
 
-//validate create recipe
+//validate create recipe constant
 export const getRecipeSchema = (): Yup.ObjectSchema<FormData> => {
     return Yup.object({
         id: Yup.number().required(),
@@ -26,7 +26,7 @@ export const getRecipeSchema = (): Yup.ObjectSchema<FormData> => {
         name: Yup.string()
             .matches(/^[^\d\s]/, "Name cannot start with a number or space")
             .required("Name is required"),
-        description: Yup.string().required("Description is required"),
+        description: Yup.string().optional(),
         durationInMinutes: Yup.number().min(1, "Duration must be at least 1 minute").required("Duration is required"),
         level: Yup.mixed<"Easy" | "Medium" | "Hard">()
             .oneOf(["Easy", "Medium", "Hard"]).required("Level is required"),
@@ -37,7 +37,7 @@ export const getRecipeSchema = (): Yup.ObjectSchema<FormData> => {
                 Yup.object({
                     id: Yup.number().required(),
                     name: Yup.string().required("Ingredient name is required"),
-                    quantity: Yup.string().required("Quantity is required"),
+                    quantity: Yup.string().optional(),
                     price: Yup.number().min(0, "Price must be positive").required("Price is required"),
                 })
             )

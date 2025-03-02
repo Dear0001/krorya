@@ -73,9 +73,19 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
         }
     };
 
-
     const onSubmit = async (data: FormData) => {
         try {
+            // Set default value for description if empty
+            if (!data.description) {
+                data.description = "មិនមទាន់ានទេ";
+            }
+
+            // Set default value for quantity if empty for each ingredient
+            data.ingredients = data.ingredients.map(ingredient => ({
+                ...ingredient,
+                quantity: ingredient.quantity || "លៃឲ្យល្មម",
+            }));
+
             let uploadedFileName = data.photo?.[0]?.photo || "";
             let fileName = uploadedFileName;
 
@@ -102,6 +112,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                 id: 0,
                 photo: [{ photo: fileName }],
             };
+
             toast.success("Recipe created successfully!");
             try {
                 await createRecipe(finalData).unwrap();
