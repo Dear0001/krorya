@@ -83,7 +83,7 @@ export default function FoodDetailPage() {
                 ></div>
 
                 <div className={" bg-white self-center w-2/3 absolute top-3/4 rounded-md"}>
-                    <div className={" flex flex-col items-center pt-14 px-14 gap-4"}>
+                <div className={" flex flex-col items-center pt-14 px-14 gap-4"}>
                 <span
                     className={"font-moulpali text-5xl text-center text-secondary"}
                 >
