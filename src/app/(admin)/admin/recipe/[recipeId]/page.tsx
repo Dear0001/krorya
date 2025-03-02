@@ -485,14 +485,14 @@ export default function FoodDetailPage() {
                     alt={"kbach"}
                     width={155}
                     height={155}
-                    className={"absolute fixed top-0 right-0"}
+                    className={"top-0 right-0"}
                 />
                 <Image
                     src={"/icons/Asset-1.svg"}
                     alt={"kbach"}
                     width={175}
                     height={175}
-                    className={"absolute fixed top-0 left-0"}
+                    className={"top-0 left-0"}
                 />
             </section>
         </main>
