@@ -4,6 +4,7 @@ import { useGetUserProfileQuery } from "@/redux/services/user";
 import EditProfile from "@/components/profile/EditProfile";
 import React from "react";
 import {getImageUrl} from "@/lib/constants";
+import {ToastContainer} from "react-toastify";
 
 const Page = () => {
     // Get user profile data using RTK Query
@@ -16,6 +17,7 @@ const Page = () => {
 
     return (
            <div className={"mx-auto p-5 bg-[#FFFFFF] w-full rounded-lg"}>
+               <ToastContainer/>
                 <div className={"flex gap-5 flex-col"}>
                     <section className={"flex justify-between"}>
                         {/* Profile Image - Always Rounded */}

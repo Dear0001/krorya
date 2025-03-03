@@ -138,9 +138,8 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
     return (
         <>
-            {/* Scrollable Section */}
             <div className="max-h-[700px] no-scrollbar overflow-y-auto">
-                <ToastContainer />
+                <ToastContainer/>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>
@@ -204,7 +203,6 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         </p>
                     </div>
 
-                    {/*level*/}
                     {/* Level Selection */}
                     <div className="mb-5">
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
@@ -229,7 +227,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             ប្រភេទ
                         </label>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             {categories?.map((cat: any) => (
                                 <button
                                     key={cat.id}
@@ -251,7 +249,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             ឈ្មោះម្ហូប
                         </label>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             {cuisines?.map((cuisine: any) => (
                                 <button
                                     key={cuisine.id}
@@ -269,13 +267,12 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     </div>
 
                     {/* Ingredients */}
-                    {/* Ingredients */}
                     <div className={"mb-5"}>
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             គ្រឿងផ្សំ
                         </label>
                         {ingredientFields.map((field, index) => (
-                            <div key={field.id} className="flex gap-2 mb-2 items-center">
+                            <div key={field.id} className="flex gap-2 mb-2 items-center ">
                                 <input
                                     {...register(`ingredients.${index}.name`)}
                                     className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
@@ -315,8 +312,6 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         </div>
                     </div>
 
-
-                    {/* Cooking Steps */}
                     {/* Cooking Steps */}
                     <div className={"mb-5"}>
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">

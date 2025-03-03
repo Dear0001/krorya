@@ -5,6 +5,7 @@ import Link from "next/link";
 import Skeleton from "@/components/Skeleton";
 import React from "react";
 import {getImageUrl, levelBgColors} from "@/lib/constants";
+import {convertRomanToKhmer} from "@/app/(admin)/admin/recipe/components/ui/CookingStep";
 
 // Define the props for the component
 type RecipeProps = {
@@ -36,17 +37,20 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
             className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md sha  carousel-item m-0"
             style={{ margin: 0 }}
         >
-            <div className="w-[90px] h-[90px] relative">
+            <div className="w-[90px] h-[90px]">
                 <Image
                     src={imageUrl}
                     alt="recipe-image"
-                    className="rounded-l-lg object-cover"
-                    fill
+                    width={100} // Explicit width
+                    height={100} // Explicit height
+                    className="w-full h-full rounded-l-lg object-cover"
                 />
             </div>
             <section className="flex flex-grow items-center justify-between p-3">
                 <div className="flex flex-col gap-1">
-                    <h1 className="text-xs font-medium text-slate-700">{recipe.name}</h1>
+                    <h1 className="text-xs font-medium text-slate-700 truncate">
+                        {recipe.name}
+                    </h1>
                     <div className="flex items-center gap-2">
                         <svg
                             width="13"
@@ -61,10 +65,11 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
                             />
                         </svg>
                         <span className="text-xs">
-                            {typeof recipe.durationInMinutes === "number"
-                                ? `${recipe.durationInMinutes} នាទី`
-                                : recipe.durationInMinutes || "N/A"}
+                          {typeof recipe.durationInMinutes === "number"
+                              ? `${convertRomanToKhmer(recipe.durationInMinutes.toString())} នាទី`
+                              : recipe.durationInMinutes || "N/A"}
                         </span>
+
                     </div>
                     <div className={`text-center rounded-[4px] py-[2px] w-[70px] ${levelClass}`}>
                         <span className={"text-xs"}> {recipe.level}</span>

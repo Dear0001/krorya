@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
-import {getImageUrl, levelBgColors} from "@/lib/constants";
-import convertRomanToKhmer from "@/app/(admin)/admin/recipe/components/convertRomanToKhmer";
+import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
 
 type CardFoodProps = {
     food: FoodRecipe;
@@ -28,21 +27,20 @@ export default function CardFood({ food }: CardFoodProps) {
     const handleChangeMinus = () => {
         setMinus((prev) => !prev);
     };
+
     const bgColor = levelBgColors;
     // Get the corresponding background color class
     const levelClass = bgColor[food?.level] || "bg-gray-100 text-gray-800";
 
-
     return (
-        <div className="card shadow-md  p-2 rounded-lg mx-0"
-             style={{ width: "14rem", maxWidth: "14rem", minWidth: "14rem" }}
-        >
+        <div className="card shadow-md p-2  rounded-lg mx-0 w-full sm:w-48 md:w-43 lg:w-[13.5rem]">
+            {/* Image Section */}
             <figure className="relative w-full h-40">
                 <Link href={`/admin/recipe/${food.id}`}>
                     <Image
                         src={imageUrl}
-                        alt={food?.name || "Food Image"}
                         fill
+                        alt={food?.name || "Food Image"}
                         className="w-full h-full object-cover rounded-md"
                     />
                 </Link>
@@ -74,8 +72,9 @@ export default function CardFood({ food }: CardFoodProps) {
                 </div>
             </figure>
 
-            <div className="card-body p-2 bg-white md:col-span-1">
-                <div className="card-title text-slate-700 text-[20px] py-1 truncate">{food?.name}</div>
+            {/* Card Body Section */}
+            <div className="card-body p-2 bg-white">
+                <div className="card-title text-slate-700 text-lg sm:text-xl truncate">{food?.name}</div>
                 <div className="flex items-center gap-2">
                     <svg
                         width="13"
@@ -92,7 +91,7 @@ export default function CardFood({ food }: CardFoodProps) {
                     <span className="text-xs">{convertRomanToKhmer(food?.durationInMinutes.toString())} នាទី</span>
                 </div>
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className={`badge rounded-md border-none py-[1px]  px-2 text-base ${levelClass}`}>
+                    <div className={`badge rounded-md border-none py-[1px] px-2 text-sm ${levelClass}`}>
                         {food?.level}
                     </div>
                 </div>

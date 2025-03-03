@@ -18,6 +18,32 @@ export const levelBgColors: { [key: string]: string } = {
         Hard: "bg-[#f4d4d4] text-[12px] text-[#cf6464]",
     };
 
+// convert number to khmer
+export const convertRomanToKhmerWithIndex = (num: number) => {
+    const khmerNumbers = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"];
+    return num.toString().split("").map(digit => khmerNumbers[parseInt(digit)]).join("");
+};
+
+export const convertRomanToKhmer = (romanNumeral: string): string => {
+    const romanToKhmerDigitMap: Record<string, string> = {
+        "1": "១",
+        "2": "២",
+        "3": "៣",
+        "4": "៤",
+        "5": "៥",
+        "6": "៦",
+        "7": "៧",
+        "8": "៨",
+        "9": "៩",
+        "0": "០",
+    };
+
+    return romanNumeral
+        ?.split("")
+        .map((digit) => romanToKhmerDigitMap[digit] || digit) // Handle non-digit cases safely
+        .join("");
+};
+
 //validate create recipe constant
 export const getRecipeSchema = (): Yup.ObjectSchema<FormData> => {
     return Yup.object({

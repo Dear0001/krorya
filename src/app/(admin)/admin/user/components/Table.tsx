@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import Link from 'next/link';
 import { formatDateToKhmer } from '@/components/ConvertDateToKhmer';
 import Pagination from "@/app/(admin)/admin/user/components/Pagination";
-import { getImageUrl } from "@/lib/constants";
+import {convertRomanToKhmerWithIndex, getImageUrl} from "@/lib/constants";
 import Image from "next/image";
 import {useDeleteUserByIdMutation} from "@/redux/services/user";
 
@@ -62,6 +61,7 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
         setConfirmType(null);
     };
 
+
     return (
         <div className="overflow-x-auto w-full">
             <table className="table shadow-md w-full rounded-lg overflow-hidden">
@@ -76,12 +76,15 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
                 </thead>
                 <tbody>
                 {paginatedUsers?.map((user, index) => (
-                    <tr key={user?.id} className="text-left px-5">
-                        <td className="text-color-2 pl-5">{startIndex + index + 1}</td>
-                        <td className="text-color-2 pl-5">
+                    <tr
+                        key={user?.id}
+                        className="text-left border-b border-gray-300 hover:bg-gray-100 transition duration-200"
+                    >
+                        <td className="text-color-2 pl-5 py-3">{convertRomanToKhmerWithIndex(startIndex + index + 1)}</td>
+                        <td className="text-color-2 pl-5 py-3">
                             <div className="text-sm opacity-50">{formatDateToKhmer(new Date().toISOString())}</div>
                         </td>
-                        <td className="text-color-2">
+                        <td className="text-color-2 py-3">
                             <div className="flex items-center">
                                 <div className="avatar mr-2">
                                     <Image
@@ -100,12 +103,12 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
                                 </div>
                             </div>
                         </td>
-                        <td className="text-color-2 pl-5">
-                                <span className={`px-3 py-2.5 rounded ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-                                    {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
-                                </span>
+                        <td className="text-color-2 pl-5 py-3">
+        <span className={`px-3 py-2.5 rounded ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+          {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
+        </span>
                         </td>
-                        <td className="pl-5 flex gap-2">
+                        <td className="pl-5 flex gap-2 py-3">
                             {!user.deleted ? (
                                 <button
                                     onClick={() => handleStatusClick(user, 'suspend')}
@@ -154,7 +157,6 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
                     </div>
                 </div>
             )}
-
             <Pagination className="mt-4 flex" onPageChange={handlePageChange} pageSize={pageSize} totalCount={users.length} currentPage={currentPage} />
         </div>
     );

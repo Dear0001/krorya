@@ -1,10 +1,11 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import Image from "next/image";
 import "@/app/globals.css";
-import {MenuList} from "@/components/sidebar/menu";
+import { MenuList } from "@/components/sidebar/menu";
+import { IoMdClose } from "react-icons/io";
 
 type MenuItem = {
     href: string;
@@ -12,13 +13,23 @@ type MenuItem = {
     icon: string;
 };
 
-
-export function SidebarComponent() {
+export function SidebarComponent({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const pathname = usePathname();
     const [menuList, setMenuList] = useState<MenuItem[]>(MenuList);
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 1024) {
+                onClose();
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [onClose]);
+
     return (
-        <aside className="h-screen w-full bg-white rounded-lg overflow-hidden">
+        <aside className={`h-screen w-64 bg-white rounded-lg overflow-hidden transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 z-50`}>
             <div className="flex justify-center pb-4">
                 <Image width={200} height={71} src="/assets/logo.svg" alt="logo-krorya" />
             </div>
@@ -29,9 +40,7 @@ export function SidebarComponent() {
                             <Link
                                 href={item.href}
                                 className={`list-item items-center gap-4 text-[18px] font-medium px-7 py-4 transition-all duration-100 ${
-                                    pathname === item.href
-                                        ? "active bg-custom-gradient"
-                                        : ""
+                                    pathname === item.href ? "active bg-custom-gradient" : ""
                                 }`}
                             >
                                 <Image
@@ -46,6 +55,9 @@ export function SidebarComponent() {
                     ))}
                 </ul>
             </div>
+            <button onClick={onClose} className="lg:hidden absolute top-4 right-4 p-2 rounded-full">
+                <IoMdClose width={1} height={1}/>
+            </button>
         </aside>
     );
 }

@@ -19,7 +19,7 @@ const FoodList: React.FC<FoodListProps> = ({ activeCategoryId, query }) => {
 };
 
 const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) => {
-    const [visibleCount, setVisibleCount] = useState<number>(12);
+    const [visibleCount, setVisibleCount] = useState<number>(15);
 
     const isAllSelected = activeCategoryId === "all";
     const categoryId = isAllSelected ? undefined : Number(activeCategoryId);
@@ -58,19 +58,19 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
 
     // Reset visible items when category changes or new search
     useEffect(() => {
-        setVisibleCount(12);
+        setVisibleCount(15);
     }, [activeCategoryId, query]);
 
     // Load More Button Handler
     const loadMore = () => {
-        setVisibleCount((prev) => prev + 12);
+        setVisibleCount((prev) => prev + 15);
     };
 
     // Show skeleton if data is still loading
     if (isSearching || allFoodIsFetching || categoryFoodIsFetching) {
         return (
             <div className="grid grid-cols-1 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                {Array.from({ length: 12 }).map((_, index) => (
+                {Array.from({ length: 15 }).map((_, index) => (
                     <LoadingFoodCard key={index} />
                 ))}
             </div>
@@ -86,10 +86,13 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
                 </div>
             ) : (
                 <div className={"h-screen"}>
-                    <div className="grid grid-cols-1 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                        {foodData.slice(0, visibleCount).map((food) => (
-                            <RecipeCard key={food.id} food={food} />
-                        ))}
+                    <div className="w-full">
+                        {/* Responsive Grid Layout */}
+                        <div className="grid grid-cols-2 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                            {foodData.slice(0, visibleCount).map((food) => (
+                                <RecipeCard key={food.id} food={food} />
+                            ))}
+                        </div>
                     </div>
 
                     {foodData.length > visibleCount && (

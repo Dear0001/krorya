@@ -133,7 +133,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
             console.log("Profile Update Response:", response);
         } catch (error: any) {
             console.error("Update Profile Error:", error);
-            toast.dismiss(); // ✅ Ensure only one toast appears
+            toast.dismiss();
             toast.error(error?.data?.message || "An error occurred while updating the profile", { autoClose: 3000 });
         }
     };

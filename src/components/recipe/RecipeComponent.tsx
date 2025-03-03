@@ -51,7 +51,7 @@ const RecipeComponent: React.FC = () => {
     // Show skeleton while loading
     if (isLoading || isDataLoading) {
         return (
-            <main className="w-[423px] my-5 h-[600px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
+            <main className="w-full my-5 h-[600px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
                 <div className="flex gap-3 justify-start items-center text-center">
                     <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
                     <h1 className="text-h1">សង្ខេបរូបមន្តអាហារ</h1>
@@ -69,7 +69,7 @@ const RecipeComponent: React.FC = () => {
 
     // ✅ Show recipes when loaded
     return (
-        <main className="w-[423px] my-5 h-[600px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
+        <main className="w-full my-5 h-[600px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
                 <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
                 <h1 className="text-h1">សង្ខេបរូបមន្តអាហារ</h1>

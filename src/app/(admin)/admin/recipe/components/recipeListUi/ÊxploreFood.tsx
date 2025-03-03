@@ -7,7 +7,7 @@ import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/Cat
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm from "../RecipeForm";
 import CategorySkeleton from "@/app/(admin)/admin/recipe/components/CategorySkeleton";
-import { useGetRecipeByNameQuery } from "@/redux/services/recipe";
+import {ToastContainer} from "react-toastify";
 
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
@@ -32,9 +32,10 @@ const ExploreFood: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col">
+            <ToastContainer />
             {/* Category Section */}
-            <div className="bg-white md:p-6 lg:p-8 p-5 flex flex-col gap-4 rounded-md">
+            <div className="bg-white md:p-6 mb-5 flex flex-col gap-5 p-2 rounded-lg">
                 <ul className="grid gap-2 list-none">
                     <li className="flex items-center">
                         <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
@@ -54,18 +55,18 @@ const ExploreFood: React.FC = () => {
                         onCategoryClick={handleCategoryClick}
                     />
                 )}
-            </div>
+        </div>
 
             {/* Food List Section */}
             <div className="bg-white p-5 md:p-6 lg:p-8 rounded-md h-full">
-                <ul className="grid grid-cols-1 lg:flex lg:justify-between">
+                <ul className="grid grid-cols-1 lg:flex gap-3 lg:justify-between">
                     {/* Header title */}
                     <li className="flex items-center">
                         <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
                         <span className="font-moulpali text-lg px-5 text-color-2">បញ្ជីមុខម្ហូប</span>
                     </li>
                     {/* Search */}
-                    <li className="pt-5 lg:pt-0">
+                    <li className="pt-5 lg:pt-0 md:my-2 sm:my-2">
                         <div className="lg:justify-center flex items-center rounded-md text-sm border gap-4 ps-2">
                             <Image src="/icons/search.svg" alt="Search Icon" width={20} height={20} />
                             <input
@@ -82,7 +83,7 @@ const ExploreFood: React.FC = () => {
                     <li>
                         <button
                             onClick={openModal}
-                            className="border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition duration-300 "
+                            className="border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition duration-300 md:m-2 sm:m-2"
                         >
                             បង្កើតម្ហូប
                         </button>
@@ -96,9 +97,9 @@ const ExploreFood: React.FC = () => {
             {/* Modal for RecipeForm */}
             {isModalOpen && (
                 <div className="fixed h-screen inset-0 top-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="p-6 bg-white rounded-md w-full max-w-2xl relative">
+                    <div className="p-6 bg-white rounded-md w-full max-w-2xl relative mx-2">
                         <div className="text-center mt-2 mb-5">
-                            <h3 className="mb-3 text-2xl font-semibold leading-5 font-moulpali text-secondary lg:text-2xl">កែប្រែព័ត៍មាន</h3>
+                            <h3 className="mb-3 text-2xl font-semibold leading-5 font-moulpali text-secondary lg:text-2xl">បង្កើតរូបមន្តម្ហូប</h3>
                             <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
                                 <Image src="/icons/Kbach.svg" alt="border" width={100} height={13} />
                             </p>

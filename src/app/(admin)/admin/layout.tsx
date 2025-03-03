@@ -3,6 +3,7 @@ import { Kantumruy_Pro } from "next/font/google";
 import "../../globals.css";
 import React from "react";
 import LayoutClient from "@/components/layout/LayoutClient";
+import { ToastContainer } from "react-toastify";
 
 const kantumruyPro = Kantumruy_Pro({
     subsets: ["latin"],
@@ -18,9 +19,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <main className={`${kantumruyPro.className} h-screen overflow-auto scrollbar-hide`}>
-        <div className="grid grid-rows-[auto_1fr] md:grid-cols-12 min-h-screen h-full rounded-lg">
-        <LayoutClient>{children}</LayoutClient>
-        </div>
+            <div className="grid grid-rows-[auto_1fr] grid-cols-12 min-h-screen h-full rounded-lg">
+                <LayoutClient>
+                    {children}
+                    <ToastContainer />
+                </LayoutClient>
+            </div>
         </main>
     );
 }

@@ -7,8 +7,9 @@ import {useGetAllCategoriesQuery} from "@/redux/services/category";
 import {useUploadFileMutation} from "@/redux/services/file";
 import {useUpdateRecipeMutation} from "@/redux/services/recipe";
 import {toast, ToastContainer} from "react-toastify";
-import {getImageUrl, getRecipeSchema} from "@/lib/constants";
+import {convertRomanToKhmerWithIndex, getImageUrl, getRecipeSchema} from "@/lib/constants";
 import type {FormData} from "@/lib/definition";
+
 
 type UploadFileResponse = {
     message: string;
@@ -131,7 +132,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
         }
     };
 
-
     const onSubmit = async (data: FormData, event?: React.BaseSyntheticEvent) => {
         event?.preventDefault();
         try {
@@ -158,7 +158,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             setTimeout(() => {
                 setIsFormVisible(false);
                 if (onSuccess) onSuccess();
-            }, 2000);
+            }, 3000);
 
         } catch (error: any) {
             console.error("Error updating recipe:", error);
@@ -176,7 +176,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
     return (
         <main>
             <ToastContainer autoClose={2000} />
-            <div className="max-h-[700px] no-scrollbar overflow-y-auto">
+            <div className="max-h-[700px] no-scrollbar overflow-y-auto mx-2">
                 <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>
@@ -271,11 +271,11 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                     </div>
 
                     {/* Categories Selection */}
-                    <div className={"mb-5"}>
+                    <div className="mb-5">
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             ប្រភេទ
                         </label>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             {categories?.map((cat: any) => (
                                 <button
                                     key={cat.id}
@@ -294,7 +294,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                             ឈ្មោះម្ហូប
                         </label>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex flex-wrap gap-2">
                             {cuisines?.map((cuisine: any) => (
                                 <button
                                     key={cuisine.id}
@@ -363,7 +363,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         </label>
                         {cookingStepFields.map((field, index) => (
                             <div key={field.id} className="flex gap-2 items-center mb-2">
-                                <span className="font-bold">{index + 1}.</span>
+                                <span className="font-bold text-primary">{convertRomanToKhmerWithIndex(index + 1).toString()}.</span>
                                 <input
                                     {...register(`cookingSteps.${index}.description`)}
                                     className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"

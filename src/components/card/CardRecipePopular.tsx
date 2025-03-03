@@ -4,15 +4,15 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
-import { getImageUrl, levelBgColors } from "@/lib/constants";
-import convertRomanToKhmer from "@/app/(admin)/admin/recipe/components/convertRomanToKhmer";
+import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
 
 type CardRecipePopularProps = {
-    recipe: FoodRecipe; // Change `food` to `recipe`
+    recipe: FoodRecipe;
 };
 
 export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     const [minus, setMinus] = useState(false);
+    console.log("recipes dashboard:", recipe);
 
     // Get recipe image or default
     const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
@@ -28,23 +28,21 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     const levelClass = bgColor[recipe?.level] || "bg-gray-100 text-gray-800";
 
     return (
-        <div
-            className="card shadow-md p-2 rounded-lg mx-0"
-            style={{ width: "14rem", maxWidth: "14rem", minWidth: "14rem" }}
-        >
-            <figure className="relative w-full h-40">
+        <div className="card shadow-md p-2 rounded-lg overflow-hidden mx-0 w-full sm:w-[14rem] max-w-[14rem] min-w-[10rem]">
+            <div className="w-full h-32 sm:h-40">
                 <Link href={`/admin/recipe/${recipe.id}`}>
                     <Image
                         src={imageUrl}
                         alt={recipe?.name || "Food Image"}
-                        fill
+                        width={200} // Set explicit width
+                        height={160} // Set explicit height
                         className="w-full h-full object-cover rounded-md"
                     />
                 </Link>
-            </figure>
+            </div>
 
             <div className="card-body p-2 bg-white md:col-span-1">
-                <div className="card-title text-slate-700 text-[20px] py-1 truncate">{recipe?.name}</div>
+                <div className="card-title text-slate-700 text-[18px] sm:text-[20px] py-1 truncate">{recipe?.name}</div>
                 <div className="flex items-center gap-2">
                     <svg
                         width="13"

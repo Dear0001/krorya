@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Table from '../Table';
 import { useGetUsersQuery } from "@/redux/services/user";
 import Image from 'next/image';
+import {convertRomanToKhmer} from "@/lib/constants";
 
 type User = {
     id: number;
@@ -39,13 +40,13 @@ export default function AdminUsersPage() {
         <section className="bg-white h-screen w-full rounded-lg p-4 dark:bg-white text-black">
             <div>
                 <h1 className="font-semibold mb-2">ព័ត៌មានអ្នកប្រើប្រាស់ទាំងអស់</h1>
-                <span className="mt-2">
-                  អ្នកប្រើប្រាស់{" "}
-                    <span className="text-secondary">
-                        {users.length > 99 ? "99+" : users.length}
-                    </span>{" "}
-                                    បន្ថែមទៀត
-                </span>
+                    <span className="mt-2">
+                      អ្នកប្រើប្រាស់{" "}
+                                        <span className="text-secondary text-[27px]">
+                        {convertRomanToKhmer(users.length > 99 ? "99+" : users.length.toString())}
+                      </span>{" "}
+                        បន្ថែមទៀត
+                    </span>
 
                 <label className="input input-bordered flex items-center gap-2 mt-4 w-fit dark:bg-white text-black">
                     {/* Input Field */}

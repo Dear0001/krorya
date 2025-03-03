@@ -3,21 +3,20 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetUserProfileQuery } from "@/redux/services/user";
-import {toast, ToastContainer} from "react-toastify";
-import {getImageUrl} from "@/lib/constants";
+import { toast, ToastContainer } from "react-toastify";
+import { getImageUrl } from "@/lib/constants";
+import { SidebarComponent } from "@/components/sidebar/SidebarComponent";
+import { FaBars } from "react-icons/fa";
 
 export function NavbarComponent() {
-    // getUserProfile from redux RTK Query
     const { data: userProfile } = useGetUserProfileQuery();
-
     const router = useRouter();
-
-    // State to manage dropdown visibility
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    // Toggle dropdown visibility
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-    // Sign out function
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
     const handleSignOut = async () => {
         try {
             await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, { method: "POST" });
@@ -30,18 +29,25 @@ export function NavbarComponent() {
     };
 
     const photoFileName = userProfile?.payload?.profileImage;
-    // Use the getImageUrl function to construct the full image URL
     const imageUrl = getImageUrl(photoFileName);
 
     return (
-        <main className="w-full h-20 relative bg-white flex items-center px-4 ">
-            <ToastContainer/>
+        <main className="w-full h-20 relative bg-white flex items-center px-4 z-40">
+            <ToastContainer />
+            {/* Sidebar Toggle Button for Mobile */}
+            <button onClick={toggleSidebar} className="lg:hidden p-2">
+                <FaBars className="w-6 h-6" />
+            </button>
+
             {/* Left Section */}
             <div>
-                <div className="text-neutral-700 text-sm sm:text-base font-normal leading-snug">
-                    <h1>
-                        សួរស្តី    {userProfile?.payload?.fullName ? `${userProfile.payload.fullName}` : "Admin"}
-                    </h1>
+                <div className="sm:text-base flex justify-start items-center font-normal leading-snug flex gap-2">
+                    <h1>សួរស្តី</h1>
+                    <span className="text-secondary text-[24px] font-semibold">
+                        {userProfile?.payload?.fullName
+                            ? userProfile.payload.fullName.split(" ").pop()
+                            : "Admin"}
+                    </span>
                 </div>
             </div>
 
@@ -57,7 +63,6 @@ export function NavbarComponent() {
                 {/* User Avatar with Dropdown */}
                 <div className="relative">
                     <button onClick={toggleDropdown} className="focus:outline-none">
-
                         <Image
                             width={100}
                             height={100}
@@ -73,7 +78,7 @@ export function NavbarComponent() {
 
                     {/* Dropdown Menu */}
                     {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                             <ul className="py-1">
                                 {/* Profile Option */}
                                 <li
@@ -97,6 +102,19 @@ export function NavbarComponent() {
                         </div>
                     )}
                 </div>
+            </div>
+
+            {/* Sidebar with Backdrop */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                    onClick={toggleSidebar}
+                ></div>
+            )}
+            <div className={`lg:hidden fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ${
+                isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            } lg:translate-x-0 lg:relative`}>
+                <SidebarComponent isOpen={isSidebarOpen} onClose={toggleSidebar} />
             </div>
         </main>
     );
