@@ -14,8 +14,8 @@ import {Skeleton} from "../components/recipeListUi/Skeleton";
 import {ToastContainer} from "react-toastify";
 
 export default function FoodDetailPage() {
-    const [groceryList, ] = useState<any[]>([]);
-    const [selectedItems, setSelectedItems] = useState<string>("");
+    // const [groceryList, ] = useState<any[]>([]);
+    // const [selectedItems, setSelectedItems] = useState<string>("");
     const [, setIsModalOpen] = useState<boolean>(false);
 
     const params = useParams();
@@ -165,7 +165,7 @@ export default function FoodDetailPage() {
                             </div>
 
                             {/* Edit Recipe Button */}
-                            <div className="flex flex-col items-center gap-2">
+                            <div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar">
                                 <button
                                     className="flex flex-col items-center gap-2"
                                     onClick={() =>
@@ -180,7 +180,7 @@ export default function FoodDetailPage() {
                                     />
                                     <span className="text-slate-700 text-sm">កែប្រែរូបមន្ដ</span>
                                 </button>
-                                <dialog id="my_modal_3kjy" className="modal">
+                                <dialog id="my_modal_3kjy" className="modal rounded-lg hide-scrollbar">
                                     <div className="modal-box max-w-full sm:max-w-[650px] w-[95%] mx-auto py-5 px-5 flex flex-col items-center text-slate-700">
                                         {/* Close Button */}
                                         <form method="dialog">

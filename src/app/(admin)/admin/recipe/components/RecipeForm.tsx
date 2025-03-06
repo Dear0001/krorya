@@ -138,7 +138,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
     return (
         <>
-            <div className="max-h-[700px] no-scrollbar overflow-y-auto">
+            <div className="max-h-[700px] no-scrollbar overflow-y-auto sm:max-h-[500px] md:max-h-[600px] lg:max-h-[700px]">
                 <ToastContainer/>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Recipe Name */}

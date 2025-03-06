@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatDateToKhmer } from '@/components/ConvertDateToKhmer';
 import Pagination from "@/app/(admin)/admin/user/components/Pagination";
-import {convertRomanToKhmerWithIndex, getImageUrl} from "@/lib/constants";
+import { convertRomanToKhmerWithIndex, getImageUrl } from "@/lib/constants";
 import Image from "next/image";
-import {useDeleteUserByIdMutation} from "@/redux/services/user";
+import { useDeleteUserByIdMutation } from "@/redux/services/user";
 
 type User = {
     id: number;
@@ -61,74 +61,75 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
         setConfirmType(null);
     };
 
-
     return (
         <div className="overflow-x-auto w-full">
-            <table className="table shadow-md w-full rounded-lg overflow-hidden">
-                <thead>
-                <tr className="text-lg text-left bg-[#F9FAFB] h-[55px] text-color-2">
-                    <th className="font-light px-5">លេខរៀង</th>
-                    <th className="font-light px-5">កាលបរិច្ឆេទបង្កើតគណនី</th>
-                    <th className="font-light px-5">ឈ្មោះអ្នកប្រើប្រាស់</th>
-                    <th className="font-light px-5">ស្ថានភាពអ្នកប្រើប្រាស់</th>
-                    <th className="font-light px-5">សកម្មភាព</th>
-                </tr>
-                </thead>
-                <tbody>
-                {paginatedUsers?.map((user, index) => (
-                    <tr
-                        key={user?.id}
-                        className="text-left border-b border-gray-300 hover:bg-gray-100 transition duration-200"
-                    >
-                        <td className="text-color-2 pl-5 py-3">{convertRomanToKhmerWithIndex(startIndex + index + 1)}</td>
-                        <td className="text-color-2 pl-5 py-3">
-                            <div className="text-sm opacity-50">{formatDateToKhmer(new Date().toISOString())}</div>
-                        </td>
-                        <td className="text-color-2 py-3">
-                            <div className="flex items-center">
-                                <div className="avatar mr-2">
-                                    <Image
-                                        src={user?.profileImage && user.profileImage.includes("default.jpg")
-                                            ? "/man.png"
-                                            : getImageUrl(user?.profileImage) || "/man.png"
-                                        }
-                                        width={100}
-                                        height={100}
-                                        alt="Avatar"
-                                        className="w-12 h-12 object-cover rounded-full"
-                                    />
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <div className="text-sm opacity-50">{user?.fullName || "No Name"}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td className="text-color-2 pl-5 py-3">
-        <span className={`px-3 py-2.5 rounded ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-          {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
-        </span>
-                        </td>
-                        <td className="pl-5 flex gap-2 py-3">
-                            {!user.deleted ? (
-                                <button
-                                    onClick={() => handleStatusClick(user, 'suspend')}
-                                    className="px-3 py-2 bg-red-500 text-white rounded"
-                                >
-                                    ផ្អាក
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={() => handleStatusClick(user, 'approve')}
-                                    className="px-3 py-2 bg-green-500 text-white rounded"
-                                >
-                                    អនុម័ត
-                                </button>
-                            )}
-                        </td>
+            <div className="min-w-[600px] md:min-w-0">
+                <table className="table shadow-md w-full rounded-lg overflow-hidden">
+                    <thead>
+                    <tr className="text-lg text-left bg-[#F9FAFB] h-[55px] text-color-2">
+                        <th className="font-light px-5">លេខរៀង</th>
+                        <th className="font-light px-5 hidden md:table-cell">កាលបរិច្ឆេទបង្កើតគណនី</th>
+                        <th className="font-light px-5">ឈ្មោះអ្នកប្រើប្រាស់</th>
+                        <th className="font-light px-5 hidden sm:table-cell">ស្ថានភាពអ្នកប្រើប្រាស់</th>
+                        <th className="font-light px-5">សកម្មភាព</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {paginatedUsers?.map((user, index) => (
+                        <tr
+                            key={user?.id}
+                            className="text-left border-b border-gray-300 hover:bg-gray-100 transition duration-200"
+                        >
+                            <td className="text-color-2 pl-5 py-3">{convertRomanToKhmerWithIndex(startIndex + index + 1)}</td>
+                            <td className="text-color-2 pl-5 py-3 hidden md:table-cell">
+                                <div className="text-sm opacity-50">{formatDateToKhmer(new Date().toISOString())}</div>
+                            </td>
+                            <td className="text-color-2 py-3">
+                                <div className="flex items-center">
+                                    <div className="avatar mr-2">
+                                        <Image
+                                            src={user?.profileImage && user.profileImage.includes("default.jpg")
+                                                ? "/man.png"
+                                                : getImageUrl(user?.profileImage) || "/man.png"
+                                            }
+                                            width={100}
+                                            height={100}
+                                            alt="Avatar"
+                                            className="w-12 h-12 object-cover rounded-full"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col items-center">
+                                        <div className="text-sm opacity-50">{user?.fullName || "No Name"}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="text-color-2 pl-5 py-3 hidden sm:table-cell">
+                                <span className={`px-3 py-2.5 rounded ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                    {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
+                                </span>
+                            </td>
+                            <td className="pl-5 flex gap-2 py-3">
+                                {!user.deleted ? (
+                                    <button
+                                        onClick={() => handleStatusClick(user, 'suspend')}
+                                        className="px-3 py-2 bg-red-500 text-white rounded"
+                                    >
+                                        ផ្អាក
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => handleStatusClick(user, 'approve')}
+                                        className="px-3 py-2 bg-green-500 text-white rounded"
+                                    >
+                                        អនុម័ត
+                                    </button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Confirmation Popup */}
             {showConfirmation && selectedUser && (
