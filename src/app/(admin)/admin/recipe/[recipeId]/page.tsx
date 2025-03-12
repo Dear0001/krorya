@@ -3,7 +3,7 @@ import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState} from "react";
 import { useParams } from "next/navigation";
-import { useGetRecipeByIdQuery } from "@/redux/services/recipe";
+import {useDeleteRecipeMutation, useGetRecipeByIdQuery} from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
 import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
@@ -11,19 +11,25 @@ import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm
 import {useGetAllFoodQuery} from "@/redux/services/food";
 import {useGetAllCategoriesQuery} from "@/redux/services/category";
 import {Skeleton} from "../components/recipeListUi/Skeleton";
-import {ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
 
 export default function FoodDetailPage() {
     // const [groceryList, ] = useState<any[]>([]);
     // const [selectedItems, setSelectedItems] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [, setIsModalOpen] = useState<boolean>(false);
+    const [deleteRecipe] = useDeleteRecipeMutation();
 
+    const router = useRouter();
     const params = useParams();
     const recipeId = params?.recipeId as string;
     console.log("recipeId:", recipeId);
     const { data: recipes, isLoading: isRecipeLoading } = useGetRecipeByIdQuery({ id: Number(recipeId) });
     const { data: cuisinesData, isLoading: isCuisinesLoading } = useGetAllFoodQuery({ page: 0, pageSize: 10 });
     const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 })
+    // delete recipe by id
+    useDeleteRecipeMutation();
 
     // Show skeleton if any API is still loading
     if (isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
@@ -75,6 +81,23 @@ export default function FoodDetailPage() {
         }
     };
 
+    const handleDeleteRecipe = async (recipeId: string) => {
+        try {
+            const response = await deleteRecipe({ id: Number(recipeId) }).unwrap();
+            if (response.statusCode === "200") {
+                toast.success(response.message || "Recipe deleted successfully");
+                router.push("/admin/recipe");
+            } else {
+                toast.error("Failed to delete the recipe");
+            }
+        } catch (error) {
+            toast.error("Failed to delete the recipe");
+            console.error("Failed to delete the recipe", error);
+        }
+    };
+
+
+
     return (
         <main className={"h-screen overflow-auto scrollbar-hide z-10"}>
             <section className={"flex flex-col gap-6 relative"}>
@@ -87,7 +110,7 @@ export default function FoodDetailPage() {
                     {/* Recipe Name and Logo */}
                     <div className="flex flex-col items-center pt-8 px-4 sm:pt-14 sm:px-14 gap-4">
         <span className="font-moulpali text-3xl sm:text-4xl lg:text-5xl text-center text-secondary">
-            {recipeData?.name}
+            {recipeData?.name || 'មិនមានឈ្មោះ'}
         </span>
                         <Image
                             className="pt-3"
@@ -156,12 +179,49 @@ export default function FoodDetailPage() {
                                         />
                                         <span className="text-slate-700 text-sm">ចាប់ផ្ដើមចម្អិន</span>
                                     </button>
-                                    <dialog id="my_modal_1" className="modal">
-                                        <div className="modal-box max-w-full sm:max-w-fit flex flex-col items-center bg-white text-slate-700 p-4 sm:p-8 rounded-lg hide-scrollbar">
+                                    <dialog id="my_modal_1" className="modal rounded-lg">
+                                        <div className="modal-box lg:w-[950px] sm:max-w-fit flex flex-col items-center bg-white text-slate-700 p-4 sm:p-8 rounded-lg hide-scrollbar">
                                             <CookingStep cookingSteps={recipeData?.cookingSteps} image={recipeData?.photo} />
                                         </div>
                                     </dialog>
                                 </div>
+
+                                {/* Delete Recipe Button */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <button
+                                        className="flex flex-col items-center gap-2"
+                                        onClick={() =>
+                                            (document.getElementById("delete_modal") as HTMLDialogElement)?.showModal()
+                                        }
+                                    >
+                                        <Image
+                                            src="/icons/delete3.svg"
+                                            alt="Delete Icon"
+                                            width={20}
+                                            height={20}
+                                        />
+                                        <span className="text-slate-700 text-[#AC1927] text-sm">លុបរូបមន្ត</span>
+                                    </button>
+                                    <dialog id="delete_modal" className="modal bg-white p-6 rounded-lg shadow-lg">
+                                        <div className="modal-box bg-white">
+                                            <h1 className="text-secondary text-h2 font-bold">{recipeData?.name || 'មិនមានឈ្មោះ'}</h1>
+                                            <p className="pt-3 text-lg font-semibold mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
+                                            <div className="modal-action">
+                                                <form method="dialog" className={"flex justify-end gap-5"}>
+                                                    <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">ថយក្រោយ</button>
+                                                    <button
+                                                        disabled={isLoading}
+                                                        className="px-4 py-2 bg-primary text-white rounded"
+                                                        onClick={() => handleDeleteRecipe(recipeId)}
+                                                    >
+                                                        {isLoading ? 'កំពុងដំណើរការ...' : 'បាទ/ចាស'}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </dialog>
+                                </div>
+
                             </div>
 
                             {/* Edit Recipe Button */}

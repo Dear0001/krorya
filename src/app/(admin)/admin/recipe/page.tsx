@@ -7,6 +7,7 @@ import {ToastContainer} from "react-toastify";
 const RecipeList = () => {
     return (
         <main>
+            <ToastContainer />
             <section className="bg-gray-50 overflow-auto scrollbar-hide ">
                 <ExploreFood />
             </section>

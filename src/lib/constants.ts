@@ -13,9 +13,9 @@ export const getImageUrl = (photoFileName?: string): string =>
 
 //  Background color mapping for levels
 export const levelBgColors: { [key: string]: string } = {
-        Easy: "bg-[#FFEBBB] text-[12px] text-[#AE7C00]",
-        Medium: "bg-[#ddd6fe] text-[12px] text-[##8b5cf6]",
-        Hard: "bg-[#f4d4d4] text-[12px] text-[#cf6464]",
+        Easy: "bg-[#FFEBBB] text-[12px] font-medium text-[#AE7C00]",
+        Medium: "bg-[#ddd6fe] text-[12px] font-medium text-[#8b5cf6]",
+        Hard: "bg-[#f4d4d4] text-[12px] font-medium text-[#cf6464]",
     };
 
 // convert number to khmer

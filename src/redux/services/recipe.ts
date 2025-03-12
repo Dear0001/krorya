@@ -27,7 +27,14 @@ export const RecipeApi = kroryaApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "recipe", id: "LIST" }],
         }),
-
+        //delete recipe by id
+        deleteRecipe: builder.mutation<any, { id: number }>({
+            query: ({ id }) => ({ // Destructure `id` here
+                url: `api/v1/food-recipe/delete/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: [{type: "recipe", id: "LIST"}],
+        }),
         // fetch guest recipe by name
         getRecipeByName: builder.query<any, { name: string }>({
             query: ({ name }) => `/api/v1/guest-user/foods/search?name=${name}`,
@@ -51,4 +58,4 @@ export const RecipeApi = kroryaApi.injectEndpoints({
     }),
 });
 
-export const { useGetAllRecipesQuery, useGetRecipeByNameQuery, useGetRecipeByIdQuery, useGetDashboardCountQuery , usePostRecipeMutation, useUpdateRecipeMutation, useGetRecipePopularQuery } = RecipeApi;
+export const { useGetAllRecipesQuery, useGetRecipeByNameQuery, useGetRecipeByIdQuery, useGetDashboardCountQuery , usePostRecipeMutation, useUpdateRecipeMutation, useGetRecipePopularQuery, useDeleteRecipeMutation } = RecipeApi;
