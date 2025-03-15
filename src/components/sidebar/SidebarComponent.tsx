@@ -17,14 +17,18 @@ export function SidebarComponent({ isOpen, onClose }: { isOpen: boolean; onClose
     const pathname = usePathname();
     const [menuList, setMenuList] = useState<MenuItem[]>(MenuList);
 
+    // Automatically close the sidebar on mobile screens
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 1024) {
-                onClose();
+                onClose(); // Close the sidebar on mobile screens
             }
         };
 
+        // Add event listener for window resize
         window.addEventListener("resize", handleResize);
+
+        // Cleanup the event listener
         return () => window.removeEventListener("resize", handleResize);
     }, [onClose]);
 
@@ -39,6 +43,11 @@ export function SidebarComponent({ isOpen, onClose }: { isOpen: boolean; onClose
                         <li key={item.href}>
                             <Link
                                 href={item.href}
+                                onClick={() => {
+                                    if (window.innerWidth < 1024) {
+                                        onClose(); // Close the sidebar on mobile screens when a menu item is clicked
+                                    }
+                                }}
                                 className={`list-item items-center gap-4 text-[18px] font-medium px-7 py-4 transition-all duration-100 ${
                                     pathname === item.href ? "active bg-custom-gradient" : ""
                                 }`}

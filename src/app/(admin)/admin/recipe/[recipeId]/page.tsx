@@ -10,9 +10,9 @@ import CookingStep from "../components/ui/CookingStep";
 import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
 import {useGetAllFoodQuery} from "@/redux/services/food";
 import {useGetAllCategoriesQuery} from "@/redux/services/category";
-import {Skeleton} from "../components/recipeListUi/Skeleton";
 import {toast} from "react-toastify";
 import {useRouter} from "next/navigation";
+import Skeleton from "@/app/(admin)/admin/recipe/components/recipeListUi/Skeleton";
 
 export default function FoodDetailPage() {
     // const [groceryList, ] = useState<any[]>([]);
@@ -102,16 +102,16 @@ export default function FoodDetailPage() {
         <main className={"h-screen overflow-auto scrollbar-hide z-10"}>
             <section className={"flex flex-col gap-6 relative"}>
                 <div
-                    className="relative lg:mx-20 lg:h-[444px] md:h-[344px] sm:h-[244px] h-full sm:mx-5 rounded-lg bg-cover bg-center"
+                    className="relative lg:mx-20 mx-5 h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] rounded-lg bg-cover bg-center object-cover"
                     style={{ backgroundImage: `url(${recipeImageUrl})` }}
                 ></div>
 
                 <div className="bg-white self-center w-full lg:w-2/3 md:w-2/3 absolute top-3/4 rounded-md">
                     {/* Recipe Name and Logo */}
                     <div className="flex flex-col items-center pt-8 px-4 sm:pt-14 sm:px-14 gap-4">
-        <span className="font-moulpali text-3xl sm:text-4xl lg:text-5xl text-center text-secondary">
-            {recipeData?.name || 'មិនមានឈ្មោះ'}
-        </span>
+                              <span className="font-moulpali text-2xl md:text-4xl lg:text-5xl text-center text-secondary">
+                        {recipeData?.name || 'មិនមានឈ្មោះ'}
+                    </span>
                         <Image
                             className="pt-3"
                             src="/icons/Kbach.svg"

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
-import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
+import { convertRomanToKhmer, getImageUrl, levelBgColors } from "@/lib/constants";
 
 type CardRecipePopularProps = {
     recipe: FoodRecipe;
@@ -28,20 +28,19 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     const levelClass = bgColor[recipe?.level] || "bg-gray-100 text-gray-800";
 
     return (
-        <div className="card shadow-md p-2 rounded-lg overflow-hidden mx-0 w-full sm:w-[14rem] max-w-[14rem] min-w-[10rem]">
+        <div className="card shadow-md p-2 rounded-lg overflow-hidden w-full">
             <div className="w-full h-32 sm:h-40">
                 <Link href={`/admin/recipe/${recipe.id}`}>
                     <div
-                        className="w-[200px] h-[160px] bg-cover bg-center rounded-md"
+                        className="w-full h-full bg-cover bg-center rounded-md"
                         style={{ backgroundImage: `url(${imageUrl})` }}
                     >
                     </div>
                 </Link>
-
             </div>
 
-            <div className="card-body p-2 bg-white md:col-span-1">
-                <div className="card-title text-slate-700 text-[18px] sm:text-[20px] py-1 truncate">{recipe?.name}</div>
+            <div className="card-body p-2 bg-white">
+                <div className="card-title text-slate-700 text-[14px] sm:text-[16px] py-1 truncate">{recipe?.name}</div>
                 <div className="flex items-center gap-2">
                     <svg
                         width="13"
@@ -58,7 +57,7 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
                     <span className="text-xs">{convertRomanToKhmer(recipe?.durationInMinutes.toString())} នាទី</span>
                 </div>
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className={`badge rounded-md border-none py-[1px] px-2 text-base ${levelClass}`}>
+                    <div className={`badge rounded-md border-none py-[1px] px-2 text-sm ${levelClass}`}>
                         {recipe?.level}
                     </div>
                 </div>

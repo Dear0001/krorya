@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import {usePathname, useRouter} from "next/navigation";
 import { useGetUserProfileQuery } from "@/redux/services/user";
 import { toast, ToastContainer } from "react-toastify";
 import { getImageUrl } from "@/lib/constants";
@@ -16,6 +16,14 @@ export function NavbarComponent() {
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+    // Automatically close the sidebar on mobile screens when the route changes
+    const pathname = usePathname();
+    useEffect(() => {
+        if (window.innerWidth < 1024) {
+            setIsSidebarOpen(false); // Close the sidebar on mobile screens
+        }
+    }, [pathname]);
 
     const handleSignOut = async () => {
         try {
@@ -73,7 +81,6 @@ export function NavbarComponent() {
                                 backgroundPosition: "center",
                             }}
                         />
-
                     </button>
 
                     {/* Dropdown Menu */}
