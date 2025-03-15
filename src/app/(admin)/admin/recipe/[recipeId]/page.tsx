@@ -287,13 +287,10 @@ export default function FoodDetailPage() {
                                         <span className="text-secondary text-lg">បង្កើតដោយ៖</span>
                                     </div>
                                     <div className="flex gap-2 items-center">
-                                        <Image
-                                            className="w-10 h-10 rounded-full object-cover"
-                                            src={imageUrl}
-                                            alt="User Avatar"
-                                            width={40}
-                                            height={40}
-                                        />
+                                        <div
+                                            className="w-10 h-10 rounded-full bg-cover bg-center"
+                                            style={{ backgroundImage: `url(${imageUrl})` }}
+                                        ></div>
                                         <div className="text-slate-700 text-sm sm:text-base font-semibold">
                                             {recipeData?.user?.fullName}
                                         </div>
