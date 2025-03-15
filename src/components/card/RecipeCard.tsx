@@ -37,12 +37,11 @@ export default function CardFood({ food }: CardFoodProps) {
             {/* Image Section */}
             <figure className="relative w-full h-40">
                 <Link href={`/admin/recipe/${food.id}`}>
-                    <Image
-                        src={imageUrl}
-                        fill
-                        alt={food?.name || "Food Image"}
-                        className="w-full h-full object-cover rounded-md"
-                    />
+                    <div
+                        className="w-full h-full bg-cover bg-center rounded-md"
+                        style={{ backgroundImage: `url(${imageUrl})` }}
+                    >
+                    </div>
                 </Link>
                 <div className="absolute top-2 right-2 flex space-x-2">
                     <button
