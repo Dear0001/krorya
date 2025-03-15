@@ -13,7 +13,7 @@ type User = {
     deleted: boolean;
 };
 
-export default function Table({ users: initialUsers }: { users: User[] }) {
+export default function Table({ users: initialUsers = [] }: { users: User[] }) {
     const pageSize = 8;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -32,7 +32,7 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
     };
 
     const startIndex = (currentPage - 1) * pageSize;
-    const paginatedUsers = users.slice(startIndex, startIndex + pageSize);
+    const paginatedUsers = users?.slice(startIndex, startIndex + pageSize) || [];
 
     const handleStatusClick = (user: User, type: 'suspend' | 'approve') => {
         setSelectedUser(user);
@@ -41,17 +41,17 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
     };
 
     const handleConfirm = async () => {
-        if (selectedUser && confirmType) {
-            const newStatus = confirmType === 'suspend';
-            try {
-                await updateUserStatus({ id: selectedUser.id, deleted: newStatus }).unwrap();
-                setUsers(users.map((u) => (u.id === selectedUser.id ? { ...u, deleted: newStatus } : u)));
-                setShowConfirmation(false);
-                setSelectedUser(null);
-                setConfirmType(null);
-            } catch (error) {
-                console.error("Failed to update user status:", error);
-            }
+        if (!selectedUser || !confirmType) return;
+
+        const newStatus = confirmType === 'suspend';
+        try {
+            await updateUserStatus({ id: selectedUser.id, deleted: newStatus }).unwrap();
+            setUsers(users.map((u) => (u.id === selectedUser.id ? { ...u, deleted: newStatus } : u)));
+            setShowConfirmation(false);
+            setSelectedUser(null);
+            setConfirmType(null);
+        } catch (error) {
+            console.error("Failed to update user status:", error);
         }
     };
 
@@ -158,7 +158,13 @@ export default function Table({ users: initialUsers }: { users: User[] }) {
                     </div>
                 </div>
             )}
-            <Pagination className="mt-4 flex" onPageChange={handlePageChange} pageSize={pageSize} totalCount={users.length} currentPage={currentPage} />
+            <Pagination
+                className="mt-4 flex"
+                onPageChange={handlePageChange}
+                pageSize={pageSize}
+                totalCount={users.length || 0}
+                currentPage={currentPage}
+            />
         </div>
     );
 }
