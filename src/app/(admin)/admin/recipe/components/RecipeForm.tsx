@@ -112,23 +112,19 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                 id: 0,
                 photo: [{ photo: fileName }],
             };
-
             toast.success("Recipe created successfully!");
             try {
                 await createRecipe(finalData).unwrap();
-
                 toast.success("Recipe created successfully!");
-                setIsFormOpen(false); // Close the form
+                setIsFormOpen(false);
                 if (onSuccess) {
                     onSuccess();
                 }
             } catch (recipeError) {
-                console.error("Recipe creation failed:", recipeError);
                 throw new Error("Failed to create recipe, please try again.");
             }
         } catch (error) {
-            console.error("Error submitting recipe:", error);
-            toast.error("Failed to create recipe. Please try again."); // Show error toast
+            toast.error("Failed to create recipe. Please try again.");
         }
     };
 
@@ -138,8 +134,9 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
     return (
         <>
+            <ToastContainer/>
             <div className="max-h-[700px] no-scrollbar overflow-y-auto sm:max-h-[500px] md:max-h-[600px] lg:max-h-[700px]">
-                <ToastContainer/>
+
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>

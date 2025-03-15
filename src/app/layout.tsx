@@ -23,7 +23,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SessionProvider>
             <StoreProvider>
                 {children}
-                <ToastContainer position="top-right" autoClose={3000} />
             </StoreProvider>
         </SessionProvider>
         </body>

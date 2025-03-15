@@ -24,11 +24,11 @@ const ExploreFood: React.FC = () => {
     };
 
     const openModal = () => {
-        setIsModalOpen(true); // Open the modal
+        setIsModalOpen(true);
     };
 
     const closeModal = () => {
-        setIsModalOpen(false); // Close the modal
+        setIsModalOpen(false);
     };
 
     return (
