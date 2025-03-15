@@ -22,17 +22,17 @@ const Page = () => {
                     <section className={"flex justify-between"}>
                         {/* Profile Image - Always Rounded */}
                         <div className={"flex gap-5 text-start justify-center items-center"}>
-                            <Image
+                            <div
                                 className="w-[140px] h-[140px] rounded-full object-cover border-2 border-gray-300"
-                                src={
-                                    imageUrl && imageUrl.startsWith("https")
-                                        ? imageUrl
-                                        : "/assets/images/profile.png"
-                                }
-                                alt="profile"
-                                width={140}
-                                height={140}
-                            />
+                                style={{
+                                    backgroundImage: `url(${
+                                        imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/images/profile.png"
+                                    })`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            ></div>
+
                             <div>
                                 <h1 className={"text-h3 font-bold py-3"}>{userProfile?.payload?.fullName ? `${userProfile?.payload?.fullName}` : "Admin"}</h1>
                                 {/* Special Styling or Badge for Admin */}

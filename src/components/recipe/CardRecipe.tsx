@@ -37,15 +37,12 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
             className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md sha  carousel-item m-0"
             style={{ margin: 0 }}
         >
-            <div className="w-[90px] h-[90px]">
-                <Image
-                    src={imageUrl}
-                    alt="recipe-image"
-                    width={100} // Explicit width
-                    height={100} // Explicit height
-                    className="w-full h-full rounded-l-lg object-cover"
-                />
+            <div
+                className="w-[90px] h-[90px] bg-cover bg-center rounded-l-lg"
+                style={{ backgroundImage: `url(${imageUrl})` }}
+            >
             </div>
+
             <section className="flex flex-grow items-center justify-between p-3">
                 <div className="flex flex-col gap-1">
                     <h1 className="text-xs font-medium text-slate-700 truncate">

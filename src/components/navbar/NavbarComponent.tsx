@@ -63,17 +63,17 @@ export function NavbarComponent() {
                 {/* User Avatar with Dropdown */}
                 <div className="relative">
                     <button onClick={toggleDropdown} className="focus:outline-none">
-                        <Image
-                            width={100}
-                            height={100}
+                        <div
                             className="w-[50px] h-[50px] rounded-full object-cover border-2"
-                            src={
-                                imageUrl && imageUrl.startsWith("https")
-                                    ? imageUrl
-                                    : "/assets/images/profile.png"
-                            }
-                            alt="User avatar"
+                            style={{
+                                backgroundImage: `url(${
+                                    imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/images/profile.png"
+                                })`,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                            }}
                         />
+
                     </button>
 
                     {/* Dropdown Menu */}

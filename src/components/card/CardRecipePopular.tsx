@@ -31,14 +31,13 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
         <div className="card shadow-md p-2 rounded-lg overflow-hidden mx-0 w-full sm:w-[14rem] max-w-[14rem] min-w-[10rem]">
             <div className="w-full h-32 sm:h-40">
                 <Link href={`/admin/recipe/${recipe.id}`}>
-                    <Image
-                        src={imageUrl}
-                        alt={recipe?.name || "Food Image"}
-                        width={200} // Set explicit width
-                        height={160} // Set explicit height
-                        className="w-full h-full object-cover rounded-md"
-                    />
+                    <div
+                        className="w-[200px] h-[160px] bg-cover bg-center rounded-md"
+                        style={{ backgroundImage: `url(${imageUrl})` }}
+                    >
+                    </div>
                 </Link>
+
             </div>
 
             <div className="card-body p-2 bg-white md:col-span-1">
