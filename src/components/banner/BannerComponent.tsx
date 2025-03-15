@@ -5,8 +5,8 @@ const BannerComponent = () => {
     return (
         <section className="w-full h-auto lg:h-[268px] bg-white rounded-[15px] grid grid-cols-1 lg:grid-cols-2">
             {/* Left Column (Text) */}
-            <div className="flex flex-col gap-3 w-full lg:w-[400px] sm:text-3xl md:w-[300px] p-6 lg:p-[40px] justify-center order-2 lg:order-1">
-                <h1 className="gradient-text md:text-4xl font-bold sm:text-3xl text-slate-700" style={styles.typingText}>
+            <div className="flex flex-col gap-3 w-full lg:w-[400px] md:w-[300px] p-6 lg:p-[40px] justify-center order-2 lg:order-1">
+                <h1 className="gradient-text text-3xl md:text-4xl font-bold text-slate-700" style={styles.typingText}>
                     ស្វាគមន៍មកកាន់ក្រយ៉ា
                 </h1>
                 <p className="text-[18px] lg:w-[400px] md:w-[300px] leading-loose pb-1">

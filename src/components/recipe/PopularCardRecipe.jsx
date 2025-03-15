@@ -14,7 +14,7 @@ const RecipeComponent = () => {
         <main className="w-full my-5 px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
                 <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                <h1 className="text-h1 md:text-h2 sm:text-[17px]">រូបមន្តអាហារ ពេញនិយម</h1>
+                <h1 className="text-[29px] md:text-h2 lg:text-h1">រូបមន្តអាហារ ពេញនិយម</h1>
             </div>
 
             {/* Horizontal Scrolling Container */}

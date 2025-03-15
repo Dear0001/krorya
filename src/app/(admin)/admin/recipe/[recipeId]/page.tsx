@@ -274,7 +274,8 @@ export default function FoodDetailPage() {
 
                         {/* Author and Details Section */}
                         <div className="bg-gray-50 p-4 rounded-md mt-4">
-                            <div className="flex flex-col sm:flex-row justify-between gap-4">
+                            {/* Grid container */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 {/* Author */}
                                 <div>
                                     <div className="flex items-center gap-2 mb-2">
@@ -297,52 +298,52 @@ export default function FoodDetailPage() {
                                     </div>
                                 </div>
 
-                                {/* Difficulty, Duration, and Category */}
-                                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Image
-                                                src="/icons/Romdol.svg"
-                                                alt="Romdol Icon"
-                                                width={20}
-                                                height={20}
-                                            />
-                                            <span className="text-secondary text-lg">ភាពលំបាក</span>
-                                        </div>
-                                        <span className="text-slate-700 text-sm sm:text-base font-semibold">
-                            {recipeData?.level}
-                        </span>
+                                {/* Difficulty */}
+                                <div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Image
+                                            src="/icons/Romdol.svg"
+                                            alt="Romdol Icon"
+                                            width={20}
+                                            height={20}
+                                        />
+                                        <span className="text-secondary text-lg">ភាពលំបាក</span>
                                     </div>
+                                    <span className="text-slate-700 text-sm sm:text-base font-semibold">
+                {recipeData?.level}
+            </span>
+                                </div>
 
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Image
-                                                src="/icons/Romdol.svg"
-                                                alt="Romdol Icon"
-                                                width={20}
-                                                height={20}
-                                            />
-                                            <span className="text-secondary text-lg">រយះពេលចំអិន</span>
-                                        </div>
-                                        <span className="text-slate-700 text-sm sm:text-base font-semibold">
-                            {recipeData?.durationInMinutes} នាទី
-                        </span>
+                                {/* Duration */}
+                                <div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Image
+                                            src="/icons/Romdol.svg"
+                                            alt="Romdol Icon"
+                                            width={20}
+                                            height={20}
+                                        />
+                                        <span className="text-secondary text-lg">រយះពេលចំអិន</span>
                                     </div>
+                                    <span className="text-slate-700 text-sm sm:text-base font-semibold">
+                {recipeData?.durationInMinutes} នាទី
+            </span>
+                                </div>
 
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Image
-                                                src="/icons/Romdol.svg"
-                                                alt="Romdol Icon"
-                                                width={20}
-                                                height={20}
-                                            />
-                                            <span className="text-secondary text-lg">ប្រភេទ</span>
-                                        </div>
-                                        <p className="bg-[#FFEBBB] rounded-md font-bold p-1 text-primary px-2 text-sm sm:text-base">
-                                            # {recipeData?.categoryName}
-                                        </p>
+                                {/* Category */}
+                                <div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Image
+                                            src="/icons/Romdol.svg"
+                                            alt="Romdol Icon"
+                                            width={20}
+                                            height={20}
+                                        />
+                                        <span className="text-secondary text-lg">ប្រភេទ</span>
                                     </div>
+                                    <p className="bg-[#FFEBBB] rounded-md font-bold p-1 text-primary px-2 text-sm sm:text-base">
+                                        # {recipeData?.categoryName}
+                                    </p>
                                 </div>
                             </div>
                         </div>

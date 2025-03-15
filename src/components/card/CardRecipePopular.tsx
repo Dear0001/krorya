@@ -12,7 +12,6 @@ type CardRecipePopularProps = {
 
 export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     const [minus, setMinus] = useState(false);
-    console.log("recipes dashboard:", recipe);
 
     // Get recipe image or default
     const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
