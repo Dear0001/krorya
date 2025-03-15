@@ -68,7 +68,7 @@ export function NavbarComponent() {
                             height={100}
                             className="w-[50px] h-[50px] rounded-full object-cover border-2"
                             src={
-                                imageUrl && imageUrl.startsWith("http")
+                                imageUrl && imageUrl.startsWith("https")
                                     ? imageUrl
                                     : "/assets/images/profile.png"
                             }

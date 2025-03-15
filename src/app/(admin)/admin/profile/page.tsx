@@ -25,7 +25,7 @@ const Page = () => {
                             <Image
                                 className="w-[140px] h-[140px] rounded-full object-cover border-2 border-gray-300"
                                 src={
-                                    imageUrl && imageUrl.startsWith("http")
+                                    imageUrl && imageUrl.startsWith("https")
                                         ? imageUrl
                                         : "/assets/images/profile.png"
                                 }
