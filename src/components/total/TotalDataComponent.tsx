@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import TotalUi from "@/components/totalUI/TotalUI";
 import Image from "next/image";
 import { useGetDashboardCountQuery } from "@/redux/services/recipe";
@@ -43,7 +43,8 @@ const TotalDataComponent = () => {
             <main className="my-5 w-full px-5 h-auto bg-white rounded-[15px]">
                 <div className="flex gap-3 justify-start items-center text-center">
                     <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt="Dashboard Icon" />
-                    <span className="py-5 text-h1 md:text-h2 sm:text-h3">តារាងសង្ខេបទិន្នន័យសរុប</span>
+                    <h1 className="py-5 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">តារាងសង្ខេបទិន្នន័យសរុប</h1>
+
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-5">
                     {/* Render skeleton placeholders */}
@@ -68,7 +69,8 @@ const TotalDataComponent = () => {
         <main className="my-5 w-full px-5 h-auto bg-white rounded-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
                 <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt="Dashboard Icon" />
-                <span className="py-5 text-h1 md:text-h2 sm:text-h3">តារាងសង្ខេបទិន្នន័យសរុប</span>
+                <h1 className="py-5 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">តារាងសង្ខេបទិន្នន័យសរុប</h1>
+
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-5">
                 {dashboardItems?.map((item) => (
