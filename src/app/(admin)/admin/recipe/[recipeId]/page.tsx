@@ -15,9 +15,7 @@ import {useRouter} from "next/navigation";
 import Skeleton from "@/app/(admin)/admin/recipe/components/recipeListUi/Skeleton";
 
 export default function FoodDetailPage() {
-    // const [groceryList, ] = useState<any[]>([]);
-    // const [selectedItems, setSelectedItems] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, ] = useState<boolean>(false);
     const [, setIsModalOpen] = useState<boolean>(false);
     const [deleteRecipe] = useDeleteRecipeMutation();
 
