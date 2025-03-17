@@ -4,6 +4,7 @@ export type RecipeType = {
     name: string;
     description: string;
     level: string;
+    isFavorite: boolean;
     durationInMinutes?: string;
 }
 

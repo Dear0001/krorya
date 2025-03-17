@@ -1,11 +1,9 @@
 
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import Skeleton from "@/components/Skeleton";
-import React from "react";
+import React, {useState} from "react";
 import {getImageUrl, levelBgColors} from "@/lib/constants";
 import {convertRomanToKhmer} from "@/app/(admin)/admin/recipe/components/ui/CookingStep";
+import {useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 
 // Define the props for the component
 type RecipeProps = {
@@ -15,12 +13,35 @@ type RecipeProps = {
         photo: { photo: string; photoId: number }[];
         description: string;
         level: string;
+        isFavorite: boolean;
         durationInMinutes?: string | number;
     };
     isLoading: boolean;
 };
 
 const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
+console.log("recipes", recipe);
+    const [favorite, setFavorite] = useState(recipe?.isFavorite || false);
+    // add favorite with RTK Query
+    const [addFavorite] = useAddFavoriteMutation();
+    //remove favorite with RTK Query
+    const [removeFavorite] = useRemoveFavoriteMutation();
+
+    // Handle favorite toggle with API call
+    const handleFavorite = async () => {
+        try {
+            if (favorite) {
+                await removeFavorite({ id: recipe.id }).unwrap();
+                setFavorite(false);
+            } else {
+                await addFavorite({ id: recipe.id }).unwrap();
+                setFavorite(true);
+            }
+        } catch (error) {
+            console.error("Error updating favorite:", error);
+        }
+    };
+
     const photoFileName = recipe.photo?.[0]?.photo;
     // Use the getImageUrl function to construct the full image URL
     const imageUrl = getImageUrl(photoFileName);
@@ -32,16 +53,15 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
     const levelClass = bgColor[recipe.level] || "bg-gray-100 text-gray-800";
 
     return (
-        <Link
-            href={`/admin/recipe/${recipe.id}`}
-            className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md sha  carousel-item m-0"
+        <div
+            onClick={() => window.location.href = `/admin/recipe/${recipe.id}`}
+            className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md sha carousel-item m-0 cursor-pointer"
             style={{ margin: 0 }}
         >
             <div
                 className="w-[90px] h-[90px] bg-cover bg-center rounded-l-lg"
                 style={{ backgroundImage: `url(${imageUrl})` }}
-            >
-            </div>
+            ></div>
 
             <section className="flex flex-grow items-center justify-between p-3">
                 <div className="flex flex-col gap-1">
@@ -62,33 +82,39 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
                             />
                         </svg>
                         <span className="text-xs">
-                          {typeof recipe.durationInMinutes === "number"
-                              ? `${convertRomanToKhmer(recipe.durationInMinutes.toString())} នាទី`
-                              : recipe.durationInMinutes || "N/A"}
-                        </span>
-
+                        {typeof recipe.durationInMinutes === "number"
+                            ? `${convertRomanToKhmer(recipe.durationInMinutes.toString())} នាទី`
+                            : recipe.durationInMinutes || "N/A"}
+                    </span>
                     </div>
                     <div className={`text-center rounded-[4px] py-[2px] w-[70px] ${levelClass}`}>
                         <span className={"text-xs"}> {recipe.level}</span>
                     </div>
                 </div>
-                <div className="w-[19px] h-[17px] self-start">
-                    <svg
-                        width="19"
-                        height="17"
-                        viewBox="0 0 34 34"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+
+                <div className="flex justify-center items-center w-[19px] h-[17px]">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleFavorite();
+                        }}
+                        className="bg-white p-1 rounded-full shadow-md hover:bg-gray-100"
                     >
-                        <path
-                            d="M6.96448 0.012619C4.69873 0.235142 2.90364 1.34775 1.61752 3.31708C-0.270608 6.21544 -0.522358 10.0428 0.949834 13.6477C2.72851 18.0203 6.67989 21.97 12.7493 25.4358C13.718 25.9921 13.9095 26.0589 14.216 25.9643C14.6155 25.8419 16.5967 24.6737 18.047 23.7001C25.7527 18.5376 29.2718 11.9899 27.5861 5.9651C27.3125 4.986 26.9349 4.16266 26.3547 3.2837C25.6269 2.16553 24.5159 1.18086 23.3885 0.641245C22.4252 0.185074 21.6262 0.012619 20.4277 0.012619C18.1838 0.0181828 16.1534 0.891582 14.3966 2.61057L13.9971 2.99998L13.603 2.61057C12.2239 1.26431 10.6641 0.42985 8.92376 0.118317C8.4312 0.0293083 7.35853 -0.0263214 6.96448 0.012619ZM8.67748 2.01532C10.3029 2.31017 11.9776 3.38384 13.0174 4.79685C13.4279 5.35316 13.6195 5.48667 13.9971 5.48667C14.3528 5.48667 14.5553 5.35316 14.9165 4.88586C16.3176 3.06118 17.9594 2.10989 19.9953 1.92631C22.2611 1.72604 24.1437 2.87203 25.2656 5.14733C26.0647 6.75505 26.3164 8.70769 25.9826 10.6659C25.3094 14.6546 22.1297 18.6823 16.8703 22.2037C15.9618 22.8156 14.6921 23.6 14.2269 23.8392L13.9971 23.956L13.7672 23.8392C13.2856 23.5889 11.786 22.6599 10.9487 22.0869C5.68931 18.5042 2.64094 14.5656 1.97325 10.5157C1.84738 9.72017 1.84738 8.23483 1.97873 7.48938C2.31257 5.57568 3.25937 3.84001 4.45792 2.93879C5.7112 1.99863 7.01921 1.70935 8.67748 2.01532Z"
-                            fill="#D7AD45"
-                        />
-                    </svg>
+                        {favorite ? (
+                            <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
+                                <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
+                            </svg>
+                        ) : (
+                            <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
+                                <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
+                            </svg>
+                        )}
+                    </button>
                 </div>
             </section>
-        </Link>
+        </div>
     );
+
 }
 
 export default CardRecipe;

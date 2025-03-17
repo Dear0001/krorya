@@ -63,6 +63,7 @@ export const kroryaApi = createApi({
         "category",
         "food",
         "user",
+        "favorite"
     ],
     reducerPath: "kroryaApi",
     baseQuery: baseQueryWithReAuth,

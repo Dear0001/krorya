@@ -51,14 +51,14 @@ const RecipeComponent: React.FC = () => {
     // Show skeleton while loading
     if (isLoading || isDataLoading) {
         return (
-            <main className="w-full my-5 h-[600px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
+            <main className="w-full my-5  h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
                 <div className="flex gap-3 justify-start items-center text-center">
                     <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                    <h1 className="py-5 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                    <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
                 </div>
 
                 {/* Skeleton Loading State */}
-                <div className="mt-4 h-[calc(100%-70px)] overflow-y-scroll no-scrollbar">
+                <div className="my-3 h-[calc(100%-70px)] overflow-y-scroll no-scrollbar">
                     {Array.from({ length: 10 }).map((_, index) => (
                         <CardRecipeSkeleton key={index} />
                     ))}
@@ -69,10 +69,10 @@ const RecipeComponent: React.FC = () => {
 
     // ✅ Show recipes when loaded
     return (
-        <main className="w-full my-5 h-[600px] px-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
+        <main className="w-full my-5  h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
                 <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                <h1 className="py-5 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
             </div>
 
             {/* Infinite Scrolling Container */}

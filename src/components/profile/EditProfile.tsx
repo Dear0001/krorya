@@ -60,7 +60,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                 fullName: userData.fullName,
                 phoneNumber: userData.phoneNumber,
             });
-            setImagePreview(getImageUrl(userData?.profileImage) || "/assets/man.png");
+            setImagePreview(getImageUrl(userData?.profileImage) || "/man.png");
         }
     }, [userData]);
 
@@ -177,7 +177,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                         />
                                     ) : (
                                         <Image
-                                            src="/assets/images/profile.png"
+                                            src="/man.png.png"
                                             alt="Default Profile"
                                             width={150}
                                             height={150}

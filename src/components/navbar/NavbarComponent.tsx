@@ -21,7 +21,7 @@ export function NavbarComponent() {
     const pathname = usePathname();
     useEffect(() => {
         if (window.innerWidth < 1024) {
-            setIsSidebarOpen(false); // Close the sidebar on mobile screens
+            setIsSidebarOpen(false);
         }
     }, [pathname]);
 
@@ -49,7 +49,7 @@ export function NavbarComponent() {
 
             {/* Left Section */}
             <div>
-                <div className="sm:text-base flex justify-start items-center font-normal leading-snug flex gap-2">
+                <div className="sm:text-base flex justify-start items-center font-normal leading-snug gap-2">
                     <h1>សួរស្តី</h1>
                     <span className="text-secondary text-[24px] font-semibold">
                         {userProfile?.payload?.fullName
@@ -75,7 +75,7 @@ export function NavbarComponent() {
                             className="w-[50px] h-[50px] rounded-full object-cover border-2"
                             style={{
                                 backgroundImage: `url(${
-                                    imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/man.png"
+                                    imageUrl ? imageUrl : "/man.png"
                                 })`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
