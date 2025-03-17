@@ -1,19 +1,18 @@
 "use client";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import {useDeleteRecipeMutation, useGetRecipeByIdQuery} from "@/redux/services/recipe";
+import { useDeleteRecipeMutation, useGetRecipeByIdQuery } from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
 import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
 import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
-import {useGetAllFoodQuery} from "@/redux/services/food";
-import {useGetAllCategoriesQuery} from "@/redux/services/category";
-import {toast} from "react-toastify";
-import {useRouter} from "next/navigation";
+import { useGetAllFoodQuery } from "@/redux/services/food";
+import { useGetAllCategoriesQuery } from "@/redux/services/category";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import Skeleton from "@/app/(admin)/admin/recipe/components/recipeListUi/Skeleton";
-import {useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 
 export default function FoodDetailPage() {
     const [isLoading, ] = useState<boolean>(false);
@@ -29,8 +28,10 @@ export default function FoodDetailPage() {
     const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 })
     // delete recipe by id
     useDeleteRecipeMutation();
-
-    const [favorite, setFavorite] = useState(recipes?.payload?.isFavorite || false);
+    const [favorite, setFavorite] = useState<boolean>(recipes?.payload?.isFavorite || false);
+    useEffect(() => {
+        setFavorite(recipes?.payload?.isFavorite || false);
+    }, [recipes?.payload?.isFavorite]);
 
     // Show skeleton if any API is still loading
     if (isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
@@ -98,7 +99,6 @@ export default function FoodDetailPage() {
     };
 
 
-
     return (
         <main className={"h-screen overflow-auto scrollbar-hide z-10"}>
             <section className={"flex flex-col gap-6 relative"}>
@@ -143,28 +143,19 @@ export default function FoodDetailPage() {
                         <div className="flex gap-2 my-2 p-4 border-t mt-4 border-b justify-between">
                             <div className="flex gap-4">
                                 {/* Save Button */}
-                                <div className="flex flex-col items-center gap-2">
+                                <div
+                                    className="flex flex-col items-center gap-2 cursor-pointer"
+                                >
                                     {favorite ? (
                                         <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
                                             <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
-                                    </svg>
+                                        </svg>
                                     ) : (
                                         <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
                                             <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
                                         </svg>
                                     )}
                                     <span className="text-slate-700 text-sm">រក្សាទុក</span>
-                                </div>
-
-                                {/* Restart Button */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <Image
-                                        src="/icons/iconamoon_restart-thin.svg"
-                                        alt="Restart Icon"
-                                        width={20}
-                                        height={20}
-                                    />
-                                    <span className="text-slate-700 text-sm">បង្កើតម្តងទៀត</span>
                                 </div>
 
                                 {/* Start Cooking Button */}
