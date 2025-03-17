@@ -75,7 +75,7 @@ export function NavbarComponent() {
                             className="w-[50px] h-[50px] rounded-full object-cover border-2"
                             style={{
                                 backgroundImage: `url(${
-                                    imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/images/profile.png"
+                                    imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/man.png"
                                 })`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",

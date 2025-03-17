@@ -60,7 +60,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                 fullName: userData.fullName,
                 phoneNumber: userData.phoneNumber,
             });
-            setImagePreview(getImageUrl(userData?.profileImage) || "/assets/images/profile.png");
+            setImagePreview(getImageUrl(userData?.profileImage) || "/assets/man.png");
         }
     }, [userData]);
 

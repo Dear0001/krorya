@@ -26,7 +26,7 @@ const Page = () => {
                                 className="w-[140px] h-[140px] rounded-full object-cover border-2 border-gray-300"
                                 style={{
                                     backgroundImage: `url(${
-                                        imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/images/profile.png"
+                                        imageUrl && imageUrl.startsWith("https") ? imageUrl : "/assets/man.png"
                                     })`,
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
