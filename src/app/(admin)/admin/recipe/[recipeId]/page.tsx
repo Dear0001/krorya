@@ -22,7 +22,6 @@ export default function FoodDetailPage() {
     const router = useRouter();
     const params = useParams();
     const recipeId = params?.recipeId as string;
-    console.log("recipeId:", recipeId);
     const { data: recipes, isLoading: isRecipeLoading } = useGetRecipeByIdQuery({ id: Number(recipeId) });
     const { data: cuisinesData, isLoading: isCuisinesLoading } = useGetAllFoodQuery({ page: 0, pageSize: 10 });
     const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 })
@@ -38,7 +37,6 @@ export default function FoodDetailPage() {
         return <Skeleton />;
     }
     const recipeData = recipes?.payload;
-    console.log("data from url:", recipeData);
 
     // Check if the user profile data is loaded and if there's a profile image
     const recipeImage = recipeData?.photo?.[0]?.photo || "";

@@ -95,7 +95,7 @@ const Login = () => {
                             <div className="h-3 flex justify-between items-center mt-2">
                                 {errors.password && <p className="text-red-500 pl-4 text-xs">{errors.password.message}</p>}
                                 <p className="ml-auto pr-4">
-                                    <Link href="/auth/forgetpassword" className="text-primary text-xs">
+                                    <Link href="/auth/forgetpassword" className="text-xs pointer-events-none text-gray-400">
                                         ភ្លេចពាក្យសម្ងាត់?
                                     </Link>
                                 </p>
@@ -112,11 +112,12 @@ const Login = () => {
                     </div>
                     <div className="mt-4">
                         <span>តើអ្នកមានគណនីឬនៅ?</span>
-                        <Link className="text-primary" href="/register">
+                        <Link className="pointer-events-none text-gray-400" href="/register">
                             {" "}
                             បង្កើតគណនី
                         </Link>
                     </div>
+
                 </div>
                 <div className="md:h-[600px] rounded-lg overflow-hidden lg:w-1/2 mt-0" style={{ margin: 0 }}>
                     <div className="relative w-full h-full bg-cover bg-center" style={{ backgroundImage: "url('/assets/images/signin-image.png')" }}>

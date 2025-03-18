@@ -141,7 +141,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
     return (
         <div>
             <button onClick={() => setIsOpen(true)}>
-                <Image src="/icons/pancel.svg" width={25} height={25} alt="Edit Profile" />
+                <Image className={"w-[25px] h-[25px] sm:w-[15px] md:w-[17px]"} src="/icons/pancel.svg" width={25} height={25} alt="Edit Profile" />
             </button>
             {isOpen && (
                 <div className="bg-black/50 fixed inset-0 flex items-center justify-center z-50">

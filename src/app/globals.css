@@ -8,18 +8,26 @@
   font-family: "Kantumruy Pro", sans-serif;
 }
 
-/* globals.css or your custom CSS file */
-@media (max-width: 1024px) {
-  .lg\:translate-x-0 {
-    transform: translateX(0);
-  }
-  .transform {
-    transition: transform 0.3s ease-in-out;
-  }
-  .-translate-x-full {
-    transform: translateX(-100%);
-  }
+/* Sidebar styles */
+.aside {
+  width: 16rem; /* 64 * 0.25rem = 16rem */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
 }
+
+.aside.open {
+  transform: translateX(0);
+}
+
+/* Backdrop for mobile */
+.backdrop {
+  display: none;
+}
+
+.backdrop.open {
+  display: block;
+}
+
 
 @media (min-width: 640px) and (max-width: 1023px) {
   .card-container {
