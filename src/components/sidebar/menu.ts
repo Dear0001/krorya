@@ -7,8 +7,8 @@ export const MenuList = [
     },
     {
         href: "/admin/recipe",
-        label: "រូបមន្តម្ហូបទាំងអស់",
-        icon: "order.svg",
+        label: "រុករកមុខម្ហូប",
+        icon: "explore-food.svg",
     },
     {
         href: "/admin/user",

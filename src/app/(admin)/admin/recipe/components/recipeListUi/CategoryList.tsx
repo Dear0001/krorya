@@ -1,6 +1,6 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { categoryIconMap } from "@/lib/constants";
+import CategoryItem from "@/app/(admin)/admin/recipe/components/CategoryItem";
 
 type CategoryListProps = {
     categories: { id: string | number; categoryName: string }[];
@@ -10,30 +10,34 @@ type CategoryListProps = {
 
 const CategoryList: React.FC<CategoryListProps> = ({ categories, activeCategoryId, onCategoryClick }) => {
     return (
-        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-3 px-2">
-            <button
-                key="all"
-                className={`px-4 py-2 rounded-md whitespace-nowrap ${activeCategoryId === "all" ? "bg-primary text-white" : "bg-gray-200"}`}
-                onClick={() => onCategoryClick("all")}
-            >
-                ទាំងអស់
-            </button>
+        <section className="flex gap-4 overflow-x-auto scrollbar-hide pb-3 px-2">
+            {/* "All" Category */}
+            <CategoryItem
+                id="all"
+                name="ទាំងអស់"
+                icon="all.svg"
+                isActive={activeCategoryId === "all"}
+                onClick={onCategoryClick}
+            />
+
+            {/* Mapped Categories */}
             {categories.map((category, index) => {
                 if (!category.id) return null;
 
                 const categoryIdStr = category.id.toString();
-
+                const categoryIcon = categoryIconMap[category.categoryName] || "nham.svg";
                 return (
-                    <button
+                    <CategoryItem
                         key={categoryIdStr || `category-${index}`}
-                        className={`px-4 py-2 rounded-md whitespace-nowrap ${activeCategoryId === categoryIdStr ? "bg-primary text-white" : "bg-gray-200"}`}
-                        onClick={() => onCategoryClick(categoryIdStr)}
-                    >
-                        {category.categoryName}
-                    </button>
+                        id={categoryIdStr}
+                        name={category.categoryName}
+                        icon={categoryIcon}
+                        isActive={activeCategoryId === categoryIdStr}
+                        onClick={onCategoryClick}
+                    />
                 );
             })}
-        </div>
+        </section>
     );
 };
 

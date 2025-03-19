@@ -52,8 +52,9 @@ export function SidebarComponent({ isOpen, onClose }: { isOpen: boolean; onClose
                                         alt={`${item.label}-icon`}
                                         width={25}
                                         height={25}
+                                        className={`${pathname === item.href ? "filter-secondary" : ""}`}
                                     />
-                                    <span className="text-normal">{item.label}</span>
+                                    <span className={`${pathname === item.href ? "text-secondary" : ""}`}>{item.label}</span>
                                 </Link>
                             </li>
                         ))}

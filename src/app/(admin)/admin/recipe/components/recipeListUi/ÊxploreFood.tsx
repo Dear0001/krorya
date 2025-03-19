@@ -7,7 +7,7 @@ import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/Cat
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm from "../RecipeForm";
 import CategorySkeleton from "@/app/(admin)/admin/recipe/components/CategorySkeleton";
-import {ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
@@ -55,7 +55,7 @@ const ExploreFood: React.FC = () => {
                         onCategoryClick={handleCategoryClick}
                     />
                 )}
-        </div>
+            </div>
 
             {/* Food List Section */}
             <div className="bg-white p-5 md:p-6 lg:p-8 rounded-md h-full">

@@ -7,7 +7,7 @@ import { useGetAllFoodQuery } from "@/redux/services/food";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import { useUploadFileMutation } from "@/redux/services/file";
 import { usePostRecipeMutation } from "@/redux/services/recipe";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { getRecipeSchema } from "@/lib/constants";
 import type { FormData } from "@/lib/definition";
 
