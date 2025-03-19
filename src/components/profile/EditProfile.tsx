@@ -6,7 +6,7 @@ import { useUpdateUserProfileMutation } from "@/redux/services/user";
 import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
 import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 type UserProfile = {
     id: string;
@@ -40,7 +40,7 @@ type EditProfileProps = {
 
 const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
     const [updateProfile, { isLoading: isUpdating }] = useUpdateUserProfileMutation();
-    const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
+    const [uploadFile] = useUploadFileMutation();
     const [isOpen, setIsOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -63,7 +63,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
             setImagePreview(getImageUrl(userData?.profileImage) || "/man.png");
         }
     }, [userData]);
-    console.log("User Data profile:", (getImageUrl(userData?.profileImage)));
 
     const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -123,24 +122,20 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                     profileImage: formData.profileImage,
                 },
             }).unwrap();
-
             if (response.statusCode === "200") {
-                toast.success(response.message || "Profile updated successfully", { autoClose: 3000 });
+                toast.success(response.message);
                 setIsOpen(false);
             } else {
-                toast.error(response.message || "Failed to update profile", { autoClose: 3000 });
+                toast.error(response.message || "Failed to update profile");
             }
-
-            console.log("Profile Update Response:", response);
         } catch (error: any) {
             console.error("Update Profile Error:", error);
-            toast.dismiss();
-            toast.error(error?.data?.message || "An error occurred while updating the profile", { autoClose: 3000 });
+            toast.error(error?.data?.message || "An error occurred while updating the profile");
         }
     };
 
     return (
-        <div>
+            <section>
             <button onClick={() => setIsOpen(true)}>
                 <Image className={"w-[25px] h-[25px] sm:w-[15px] md:w-[17px]"} src="/icons/pancel.svg" width={25} height={25} alt="Edit Profile" />
             </button>
@@ -238,17 +233,18 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                             <div className={"mt-6 text-center text-sm text-slate-600 flex justify-end"}>
                                 <button
                                     type="submit"
-                                    disabled={isUpdating || isUploading}
+                                    disabled={isUpdating}
                                     className="btn bg-primary py-2.5 rounded-md border-none text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
                                 >
-                                    {isUpdating || isUploading ? "Updating..." : "Update Profile"}
+                                    {isUpdating ? "Updating..." : "Update Profile"}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
-        </div>
+        </section>
+
     );
 };
 
