@@ -63,6 +63,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
             setImagePreview(getImageUrl(userData?.profileImage) || "/man.png");
         }
     }, [userData]);
+    console.log("User Data profile:", (getImageUrl(userData?.profileImage)));
 
     const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];

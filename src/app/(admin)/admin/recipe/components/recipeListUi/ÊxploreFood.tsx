@@ -39,7 +39,7 @@ const ExploreFood: React.FC = () => {
                 <ul className="grid gap-2 list-none">
                     <li className="flex items-center">
                         <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
-                        <span className="font-moulpali text-lg px-5 text-color-2">របបអាហារ</span>
+                        <span className="font-moulpali text-lg px-5 text-color-2">ប្រភេទអាហារ</span>
                     </li>
                 </ul>
 
