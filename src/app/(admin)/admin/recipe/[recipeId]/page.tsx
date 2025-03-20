@@ -13,6 +13,7 @@ import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Skeleton from "@/app/(admin)/admin/recipe/components/recipeListUi/Skeleton";
+import {RiCloseLargeLine} from "react-icons/ri";
 
 export default function FoodDetailPage() {
     const [isLoading, ] = useState<boolean>(false);
@@ -141,15 +142,13 @@ export default function FoodDetailPage() {
                         <div className="flex gap-2 my-2 p-4 border-t mt-4 border-b justify-between">
                             <div className="flex gap-4">
                                 {/* Save Button */}
-                                <div
-                                    className="flex flex-col items-center gap-2 cursor-pointer"
-                                >
+                                <div className="flex flex-col items-center gap-2 pointer-events-none" >
                                     {favorite ? (
-                                        <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
+                                        <svg width="20" height="20" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
                                             <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
                                         </svg>
                                     ) : (
-                                        <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
+                                        <svg width="20" height="20" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
                                             <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
                                         </svg>
                                     )}
@@ -195,19 +194,48 @@ export default function FoodDetailPage() {
                                         />
                                         <span className="text-sm text-secondary">លុបរូបមន្ត</span>
                                     </button>
-                                    <dialog id="delete_modal" className="modal bg-white p-6 rounded-lg shadow-lg">
+                                    <dialog id="delete_modal" className="modal w-[330px] bg-white p-5 rounded-lg shadow-lg">
                                         <div className="modal-box bg-white">
-                                            <h1 className="text-secondary text-h2 font-bold">{recipeData?.name || 'មិនមានឈ្មោះ'}</h1>
-                                            <p className="pt-3 text-lg font-semibold mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
+                                            <form method="dialog" className="flex justify-end">
+                                                <button
+                                                    className="text-2xl text-slate-400 hover:shadow-custome"
+                                                >
+                                                    <RiCloseLargeLine />
+                                                </button>
+                                            </form>
+
+                                            <article className="flex gap-2 items-center justify-start text-center pb-2">
+                                                <Image
+                                                    src="/icons/flower.png"
+                                                    alt="border"
+                                                    width={35}
+                                                    height={35}
+                                                />
+                                                <h3 className="text-xl pr-2 font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
+                                                    {recipeData?.name || 'មិនមានឈ្មោះ'}
+                                                </h3>
+                                            </article>
+                                            <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
+                                                <Image
+                                                    src="/icons/Kbach.svg"
+                                                    alt="border"
+                                                    width={100}
+                                                    height={13}
+                                                />
+                                            </p>
+                                            <p className="pt-5 text-lg font-kantumruy mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
                                             <div className="modal-action">
                                                 <form method="dialog" className={"flex justify-end gap-5"}>
-                                                    <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">ថយក្រោយ</button>
+                                                    <button className="px-4 rounded-lg py-2 text-primary border border-amber-300 hover:bg-primary hover:text-white">
+                                                        ថយក្រោយ
+                                                    </button>
+
                                                     <button
                                                         disabled={isLoading}
-                                                        className="px-4 py-2 bg-primary text-white rounded"
+                                                        className="px-4 py-2 bg-secondary rounded-lg text-white"
                                                         onClick={() => handleDeleteRecipe(recipeId)}
                                                     >
-                                                        {isLoading ? 'កំពុងដំណើរការ...' : 'បាទ/ចាស'}
+                                                        {isLoading ? 'កំពុងដំណើរការ...' : 'យល់ព្រម'}
                                                     </button>
                                                 </form>
                                             </div>

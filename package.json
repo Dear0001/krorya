@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-progress": "^1.1.2",
+    "@react-three/fiber": "^9.1.0",
     "@reduxjs/toolkit": "^2.5.1",
     "admin_dashboard": "file:",
     "classnames": "^2.5.1",
@@ -29,10 +30,12 @@
     "react-select": "^5.10.0",
     "react-toastify": "^11.0.3",
     "tailwind-scrollbar-hide": "^2.0.0",
+    "three": "^0.174.0",
     "yup": "^1.6.1",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

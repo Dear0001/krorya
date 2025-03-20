@@ -33,13 +33,18 @@ const Login = () => {
             });
 
             const data = await response.json();
+
             if (response.ok) {
-                toast.success("ការចូលគណនីបានជោគជ័យ!");
-                dispatch(setAccessToken(data?.accessToken));
-                console.log("Token from login page:", data?.accessToken);
-                router.push("/admin/dashboard");
-            }
-            else {
+                if (data?.user?.role === ("ROLE_ADMIN")) {
+                    toast.success("ការចូលគណនីបានជោគជ័យ!");
+                    dispatch(setAccessToken(data?.payload?.access_token));
+                    router.push("/admin/dashboard");
+                } else {
+                    toast.warning("អ្នកមិនមានសិទ្ធិចូលទៅកាន់ផ្នែកគ្រប់គ្រងទេ។");
+                }
+            } else if (response.status === 404 && data.detail === "You have been banned") {
+                toast.error(data.detail || "គណនីរបស់អ្នកត្រូវបានហាម");
+            } else {
                 toast.error(data?.message || "ការចូលគណនីមិនបានសម្រេច");
             }
         } catch (error) {

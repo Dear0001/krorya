@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
         // Parse the response
         const data = await response.json();
-        const user = data?.user || null;
+        const user = data?.payload || null;
         const accessToken = data?.payload?.access_token || null;
         const refreshToken = data?.payload?.refresh_token || null;
 

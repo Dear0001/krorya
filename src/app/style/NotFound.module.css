@@ -1,0 +1,51 @@
+/* Flower Falling Animation */
+.fallingImage {
+    animation: fall 5s linear infinite, rotate 4s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.5s);
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.2;
+    }
+}
+
+/* Rotate Effect */
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(20deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Rain Drop Animation */
+.rainDrop {
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background-color: currentColor; /* Uses the inherited text-primary color */
+    border-radius: 50%;
+    animation: rain-fall 2s linear infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes rain-fall {
+    from {
+        transform: translateY(-10vh);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}

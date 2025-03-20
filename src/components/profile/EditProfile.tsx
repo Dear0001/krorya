@@ -6,7 +6,7 @@ import { useUpdateUserProfileMutation } from "@/redux/services/user";
 import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
 import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 type UserProfile = {
     id: string;
@@ -40,7 +40,7 @@ type EditProfileProps = {
 
 const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
     const [updateProfile, { isLoading: isUpdating }] = useUpdateUserProfileMutation();
-    const [uploadFile] = useUploadFileMutation();
+    const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
     const [isOpen, setIsOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -79,7 +79,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
             // slit the fileUrl to get the file name this f15d73ac-0c4c-4600-a146-b612cb6c6735.jpg from  http://localhost:8080/api/v1/fileView/f15d73ac-0c4c-4600-a146-b612cb6c6735.jpg
             const fileName = fileUrl.split("/").pop();
 
-          setFormData((prevFormData) => ({
+            setFormData((prevFormData) => ({
                 ...prevFormData,
                 profileImage: fileName || ""
             }));
@@ -122,22 +122,26 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                     profileImage: formData.profileImage,
                 },
             }).unwrap();
+
             if (response.statusCode === "200") {
-                toast.success(response.message);
+                toast.success(response.message || "Profile updated successfully", { autoClose: 3000 });
                 setIsOpen(false);
             } else {
-                toast.error(response.message || "Failed to update profile");
+                toast.error(response.message || "Failed to update profile", { autoClose: 3000 });
             }
+
+            console.log("Profile Update Response:", response);
         } catch (error: any) {
             console.error("Update Profile Error:", error);
-            toast.error(error?.data?.message || "An error occurred while updating the profile");
+            toast.dismiss();
+            toast.error(error?.data?.message || "An error occurred while updating the profile", { autoClose: 3000 });
         }
     };
 
     return (
-            <section>
+        <div>
             <button onClick={() => setIsOpen(true)}>
-                <Image className={"w-[25px] h-[25px] sm:w-[15px] md:w-[17px]"} src="/icons/pancel.svg" width={25} height={25} alt="Edit Profile" />
+                <Image src="/icons/pancel.svg" width={25} height={25} alt="Edit Profile" />
             </button>
             {isOpen && (
                 <div className="bg-black/50 fixed inset-0 flex items-center justify-center z-50">
@@ -173,7 +177,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                         />
                                     ) : (
                                         <Image
-                                            src="/man.png.png"
+                                            src="/assets/images/profile.png"
                                             alt="Default Profile"
                                             width={150}
                                             height={150}
@@ -233,18 +237,17 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                             <div className={"mt-6 text-center text-sm text-slate-600 flex justify-end"}>
                                 <button
                                     type="submit"
-                                    disabled={isUpdating}
+                                    disabled={isUpdating || isUploading}
                                     className="btn bg-primary py-2.5 rounded-md border-none text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
                                 >
-                                    {isUpdating ? "Updating..." : "Update Profile"}
+                                    {isUpdating || isUploading ? "Updating..." : "Update Profile"}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
-        </section>
-
+        </div>
     );
 };
 

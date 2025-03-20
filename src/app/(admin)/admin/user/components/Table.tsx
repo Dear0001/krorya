@@ -4,6 +4,7 @@ import Pagination from "@/app/(admin)/admin/user/components/Pagination";
 import { convertRomanToKhmerWithIndex, getImageUrl } from "@/lib/constants";
 import Image from "next/image";
 import { useDeleteUserByIdMutation } from "@/redux/services/user";
+import { RiCloseLargeLine } from "react-icons/ri";
 
 type User = {
     id: number;
@@ -134,8 +135,36 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
             {/* Confirmation Popup */}
             {showConfirmation && selectedUser && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4">
+                    <div className="bg-white w-[310px] p-5 rounded-lg shadow-lg">
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleCancel}
+                                className="text-2xl text-slate-400 hover:shadow-custome"
+                            >
+                                <RiCloseLargeLine />
+                            </button>
+                        </div>
+
+                        <article className="flex gap-2 items-center justify-start text-center">
+                                <Image
+                                    src="/icons/flower.png"
+                                    alt="border"
+                                    width={35}
+                                    height={35}
+                                />
+                                <h3 className="text-xl font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
+                                    {selectedUser?.fullName || 'មិនមានឈ្មោះ'}
+                                </h3>
+                            </article>
+                        <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
+                            <Image
+                                src="/icons/Kbach.svg"
+                                alt="border"
+                                width={100}
+                                height={13}
+                            />
+                        </p>
+                        <h2 className="text-lg font-kantumruy py-4">
                             {confirmType === 'suspend'
                                 ? 'តើអ្នកចង់ផ្អាកដំណើរការអ្នកប្រើប្រាស់នេះមែនទេ?'
                                 : 'តើអ្នកចង់អនុម័តអ្នកប្រើប្រាស់នេះមែនទេ?'}
@@ -143,16 +172,16 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                         <div className="flex justify-end gap-4">
                             <button
                                 onClick={handleCancel}
-                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                                className="px-4 rounded-lg py-2 text-primary border border-amber-300 hover:bg-primary hover:text-white"
                             >
                                 ទេ
                             </button>
                             <button
                                 onClick={handleConfirm}
-                                className="px-4 py-2 bg-primary text-white rounded"
+                                className="px-4 py-2 bg-primary text-white rounded-lg"
                                 disabled={isLoading}
                             >
-                                {isLoading ? 'កំពុងដំណើរការ...' : 'បាទ/ចាស'}
+                                {isLoading ? 'កំពុងដំណើរការ...' : 'បញ្ជាក់'}
                             </button>
                         </div>
                     </div>
