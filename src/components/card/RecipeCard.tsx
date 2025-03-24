@@ -50,12 +50,12 @@ export default function CardFood({ food }: CardFoodProps) {
     const levelClass = bgColor[food?.level] || "bg-gray-100 text-gray-800";
 
     return (
-        <div className="card shadow-md p-2  rounded-lg mx-0 w-full sm:w-48 md:w-43 lg:w-[13.5rem]">
+        <div className="card p-2 shadow-card rounded-[20px] mx-0 w-full sm:w-48 md:w-43 lg:w-[13.5rem] hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
             {/* Image Section */}
             <figure className="relative w-full h-40">
                 <Link href={`/admin/recipe/${food.id}`}>
                     <div
-                        className="w-full h-full bg-cover bg-center rounded-md"
+                        className="w-full h-full bg-cover bg-center rounded-[18px]"
                         style={{ backgroundImage: `url(${imageUrl})` }}
                     >
                     </div>
@@ -97,7 +97,7 @@ export default function CardFood({ food }: CardFoodProps) {
                     <span className="text-xs">{convertRomanToKhmer(food?.durationInMinutes.toString())} នាទី</span>
                 </div>
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className={`badge rounded-md border-none py-[1px] px-2 text-sm ${levelClass}`}>
+                    <div className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] ${levelClass}`}>
                         {food?.level}
                     </div>
                 </div>

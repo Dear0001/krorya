@@ -66,16 +66,23 @@ const ExploreFood: React.FC = () => {
                         <span className="font-moulpali text-lg px-5 text-color-2">បញ្ជីមុខម្ហូប</span>
                     </li>
                     {/* Search */}
-                    <li className="pt-5 lg:pt-0 md:my-2 sm:my-2">
-                        <div className="lg:justify-center flex items-center rounded-md text-sm border gap-4 ps-2">
-                            <Image src="/icons/search.svg" alt="Search Icon" width={20} height={20} />
-                            <input
-                                id="search"
-                                type="text"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                className="border-none focus:outline-none bg-white border-b-gray-300 p-3"
-                                placeholder="ស្វែងរក"
+                    <li className="input input-bordered flex items-center mt-4 w-fit dark:bg-white text-black">
+                        <input
+                            id="search"
+                            type="text"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            className="w-full  py-2 pl-5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-white text-black placeholder:text-gray-500"
+                            placeholder="ស្វែងរក..."
+                        />
+                        {/* Search Icon */}
+                        <div className="left-0 flex items-center pointer-events-none ml-[-38px]">
+                            <Image
+                                src="/icons/search.svg"
+                                alt="Search Icon"
+                                width={20}
+                                height={20}
+                                className="text-gray-500"
                             />
                         </div>
                     </li>

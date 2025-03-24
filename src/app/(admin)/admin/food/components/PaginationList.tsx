@@ -1,6 +1,7 @@
 "use clinet"
 import React, { useState } from "react";
 import Modal from "./Modal";
+import {convertRomanToKhmerWithIndex} from "@/lib/constants";
 
 type Item = {
     id: number;
@@ -31,7 +32,6 @@ const PaginatedList: React.FC<PaginatedListProps> = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCreate = (name: string) => {
-        console.log("Creating item with name:", name); // Log the data being created
         onCreate(name);
     };
 
@@ -46,30 +46,33 @@ const PaginatedList: React.FC<PaginatedListProps> = ({
                     បង្កើត
                 </button>
             </div>
-
+            {/*Listing items */}
             <ul>
                 {items.map((item) => (
                     <li key={item.id} className="border-b py-2">
-                        {item.id}. {item.name || item.cuisineName || item.categoryName}
+                        {convertRomanToKhmerWithIndex(item.id)}. {item.name || item.cuisineName || item.categoryName}
                     </li>
                 ))}
             </ul>
-
+            {/*Show Prev and Next button*/}
             <div className="flex justify-center mt-4 space-x-2">
                 <button
-                    className="px-3 py-1 border rounded disabled:opacity-50"
+                    className="px-3 py-1 border rounded-md disabled:opacity-50 "
                     onClick={() => setCurrentPage(Math.max(currentPage - 1, 0))}
                     disabled={currentPage === 0}
                 >
-                    Prev
+                    ថយ
                 </button>
-                <span className="px-3 py-1 border">{currentPage + 1} / {totalPages}</span>
+                <span className="px-3 py-1 border rounded-md">
+                  {convertRomanToKhmerWithIndex(currentPage + 1)} / {convertRomanToKhmerWithIndex(totalPages)}
+                </span>
+
                 <button
-                    className="px-3 py-1 border rounded disabled:opacity-50"
+                    className="border border-primary text-primary px-3 py-1 rounded-md hover:bg-primary hover:text-white disabled:opacity-50"
                     onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages - 1))}
                     disabled={currentPage === totalPages - 1}
                 >
-                    Next
+                    បន្ទាប់
                 </button>
             </div>
 

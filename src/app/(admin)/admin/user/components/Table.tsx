@@ -105,7 +105,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 </div>
                             </td>
                             <td className="text-color-2 pl-5 py-3 hidden sm:table-cell">
-                                <span className={`px-3 py-2.5 rounded ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                <span className={`px-3 py-2.5 rounded-lg ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
                                     {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
                                 </span>
                             </td>
@@ -113,14 +113,14 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 {!user.deleted ? (
                                     <button
                                         onClick={() => handleStatusClick(user, 'suspend')}
-                                        className="px-3 py-2 bg-red-500 text-white rounded"
+                                        className="px-3 py-2 bg-red-500 text-white rounded-lg"
                                     >
                                         ផ្អាក
                                     </button>
                                 ) : (
                                     <button
                                         onClick={() => handleStatusClick(user, 'approve')}
-                                        className="px-3 py-2 bg-green-500 text-white rounded"
+                                        className="px-3 py-2 bg-green-500 text-white rounded-lg"
                                     >
                                         អនុម័ត
                                     </button>

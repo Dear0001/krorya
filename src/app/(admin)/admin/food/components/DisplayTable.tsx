@@ -62,18 +62,20 @@ export default function CuisineCategoryLayout() {
     return (
         <div className="flex flex-col md:flex-row gap-4 p-6">
             <ToastContainer />
+            {/* Cuisines List */}
             <PaginatedList
                 items={cuisinesData?.payload || []}
-                title="Cuisines"
+                title="ម្ហូប"
                 onCreate={handleAddCuisine}
                 currentPage={cuisinePage}
                 setCurrentPage={setCuisinePage}
                 totalPages={cuisinesData?.paginationMeta?.totalPages || 1}
                 isLoading={isCreatingCuisine}
             />
+            {/* Categories List */}
             <PaginatedList
                 items={categoriesData?.payload || []}
-                title="Categories"
+                title="ប្រភេទអាហារ"
                 onCreate={handleAddCategory}
                 currentPage={categoryPage}
                 setCurrentPage={setCategoryPage}

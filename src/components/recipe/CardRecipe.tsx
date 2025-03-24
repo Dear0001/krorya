@@ -55,7 +55,7 @@ console.log("recipes", recipe);
     return (
         <div
             onClick={() => window.location.href = `/admin/recipe/${recipe.id}`}
-            className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md sha carousel-item m-0 cursor-pointer"
+            className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md carousel-item m-0 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
             style={{ margin: 0 }}
         >
             <div
@@ -82,12 +82,12 @@ console.log("recipes", recipe);
                             />
                         </svg>
                         <span className="text-xs">
-                        {typeof recipe.durationInMinutes === "number"
-                            ? `${convertRomanToKhmer(recipe.durationInMinutes.toString())} នាទី`
-                            : recipe.durationInMinutes || "N/A"}
-                    </span>
+                    {typeof recipe.durationInMinutes === "number"
+                        ? `${convertRomanToKhmer(recipe.durationInMinutes.toString())} នាទី`
+                        : recipe.durationInMinutes || "N/A"}
+                </span>
                     </div>
-                    <div className={`text-center rounded-[4px] py-[2px] w-[70px] ${levelClass}`}>
+                    <div className={`text-center rounded-[8px] text-[13px] py-[2px] w-[70px] ${levelClass}`}>
                         <span className={"text-xs"}> {recipe.level}</span>
                     </div>
                 </div>
@@ -98,7 +98,7 @@ console.log("recipes", recipe);
                             e.stopPropagation();
                             handleFavorite();
                         }}
-                        className="bg-white p-1 rounded-full shadow-md hover:bg-gray-100"
+                        className="hover:bg-gray-100"
                     >
                         {favorite ? (
                             <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
