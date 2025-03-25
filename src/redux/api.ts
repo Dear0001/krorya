@@ -60,6 +60,7 @@ export const kroryaApi = createApi({
     tagTypes: [
         "recipe",
         "file",
+        "auth",
         "category",
         "food",
         "user",

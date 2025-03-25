@@ -33,7 +33,7 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     return (
         <div className="card shadow-card p-2 rounded-[20px] overflow-hidden w-full hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
             <div className="w-full h-32 sm:h-40">
-                <Link href={`/admin/recipe/${recipe.id}`}>
+                <Link href={`/recipe/${recipe.id}`}>
                     <div
                         className="w-full h-full bg-cover bg-center rounded-[17px]"
                         style={{ backgroundImage: `url(${imageUrl})` }}

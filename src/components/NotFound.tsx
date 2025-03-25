@@ -30,7 +30,7 @@ function NotFound() {
                     <p className='text-paragraph16_regular text-placeholder_color'>The page you were looking for doesn’t exist. You may have mistypes the address or the page may have moved. </p>
                     <div className='ml-[35%] mt-10'>
                         <div>
-                            <Link className='bg-red-700 ' href={"/admin/dashboard"}>
+                            <Link className='bg-red-700 ' href={"/dashboard"}>
                                 <div className='bg-primary w-[150px] py-[13px] px-[28px] rounded-[50px] text-white text-paragraph14_medium'>
                                     &#10094;&emsp;Back
                                 </div>

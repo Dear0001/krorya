@@ -27,13 +27,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en" className={`${kantumruyPro.className} rounded-lg overflow-auto scrollbar-hide h-full`}>
-        <body>
         <SessionProvider>
-            <StoreProvider>
-                {children}
-            </StoreProvider>
+            <body>
+                <StoreProvider>
+                    {children}
+                </StoreProvider>
+
+            </body>
         </SessionProvider>
-        </body>
         </html>
     );
 }

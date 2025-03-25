@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileUi from "@/app/(admin)/admin/profile/ui/ProfileUi";
+import ProfileUi from "@/app/(admin)/profile/ui/ProfileUi";
 
 const Page = () => {
     return (

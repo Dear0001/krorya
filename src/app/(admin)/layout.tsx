@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Kantumruy_Pro } from "next/font/google";
-import "../../globals.css";
+import "../globals.css";
 import React from "react";
 import LayoutClient from "@/components/layout/LayoutClient";
 

@@ -1,4 +1,5 @@
 import { kroryaApi } from "../api";
+import { GoogleLoginType } from "@/lib/definition";
 
 export const authApi = kroryaApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -7,7 +8,7 @@ export const authApi = kroryaApi.injectEndpoints({
             query: ({ email }) => ({
                 url: `/api/v1/auth/send-otp?email=${email}`,
                 method: "POST",
-                invalidatesTags: [{ type: "email", id: "LIST" }],
+                invalidatesTags: [{ type: "auth", id: "LIST" }],
             }),
         }),
 
@@ -16,16 +17,16 @@ export const authApi = kroryaApi.injectEndpoints({
             query: ({ email, otp }) => ({
                 url: `/api/v1/auth/validate-otp?email=${email}&otp=${otp}`,
                 method: "POST",
-                invalidatesTags: [{ type: "email", id: "LIST" }],
+                invalidatesTags: [{ type: "auth", id: "LIST" }],
             }),
         }),
-    // Register by email and set new password
+        // Register by email and set new password
         postRegister: builder.mutation<any, { email: string; newPassword: string }>({
             query: ({ email, newPassword }) => ({
                 url: `/api/v1/auth/register`,
                 method: "POST",
                 body: { email, newPassword },
-                invalidatesTags: [{ type: "email", id: "LIST" }],
+                invalidatesTags: [{ type: "auth", id: "LIST" }],
             }),
         }),
     }),

@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { DOTS, usePagination } from "@/app/(admin)/admin/user/components/UsePagination";
+import { DOTS, usePagination } from "@/app/(admin)/user/components/UsePagination";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 type PaginationProps = {

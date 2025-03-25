@@ -2,7 +2,7 @@
 "use client";
 import React, {useState} from "react";
 import {getImageUrl, levelBgColors} from "@/lib/constants";
-import {convertRomanToKhmer} from "@/app/(admin)/admin/recipe/components/ui/CookingStep";
+import {convertRomanToKhmer} from "@/app/(admin)/recipe/components/ui/CookingStep";
 import {useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 
 // Define the props for the component
@@ -54,7 +54,7 @@ console.log("recipes", recipe);
 
     return (
         <div
-            onClick={() => window.location.href = `/admin/recipe/${recipe.id}`}
+            onClick={() => window.location.href = `/recipe/${recipe.id}`}
             className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md carousel-item m-0 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
             style={{ margin: 0 }}
         >

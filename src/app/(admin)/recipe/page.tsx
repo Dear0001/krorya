@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import ExploreFood from "@/app/(admin)/admin/recipe/components/recipeListUi/ÊxploreFood";
+import ExploreFood from "@/app/(admin)/recipe/components/recipeListUi/ÊxploreFood";
 import {ToastContainer} from "react-toastify";
 
 

@@ -1,5 +1,5 @@
 'use server'
-import AdminUsersPage from "@/app/(admin)/admin/user/components/ui/AdminUsersPage";
+import AdminUsersPage from "@/app/(admin)/user/components/ui/AdminUsersPage";
 
 export default async function Page() {
 

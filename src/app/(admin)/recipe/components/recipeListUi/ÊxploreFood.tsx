@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import FoodList from "@/app/(admin)/admin/recipe/components/recipeListUi/FoodList";
-import CategoryList from "@/app/(admin)/admin/recipe/components/recipeListUi/CategoryList";
+import FoodList from "@/app/(admin)/recipe/components/recipeListUi/FoodList";
+import CategoryList from "@/app/(admin)/recipe/components/recipeListUi/CategoryList";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm from "../RecipeForm";
-import CategorySkeleton from "@/app/(admin)/admin/recipe/components/CategorySkeleton";
+import CategorySkeleton from "@/app/(admin)/recipe/components/CategorySkeleton";
 import { ToastContainer } from "react-toastify";
 
 const ExploreFood: React.FC = () => {

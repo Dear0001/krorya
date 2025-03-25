@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
     } else {
         // If the user has a session and is on "/" or "/login", redirect to dashboard
         if (currentPath === "/" || currentPath === "/login") {
-            return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+            return NextResponse.redirect(new URL("/dashboard", request.url));
         }
     }
 }

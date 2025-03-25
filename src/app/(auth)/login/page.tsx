@@ -7,7 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {useAppDispatch} from "@/redux/hooks";
-import { setAccessToken} from "@/redux/features/auth/authSlice";
+import {setAccessToken, setUserProfile} from "@/redux/features/auth/authSlice";
+import {GoogleSignInButton} from "@/components/SignUpWithGoogle";
+import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
 
 type ValueTypes = { email: string; password: string };
 
@@ -35,10 +37,12 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                if (data?.user?.role === ("ROLE_ADMIN")) {
+                // if (data?.user?.role === ("ROLE_ADMIN")) {
+                if (data?.user?.role === "ROLE_ADMIN" || data?.user?.role === "ROLE_USER") {
                     toast.success("ការចូលគណនីបានជោគជ័យ!");
                     dispatch(setAccessToken(data?.payload?.access_token));
-                    router.push("/admin/dashboard");
+                    dispatch(setUserProfile(data?.payload));
+                    router.push("/dashboard");
                 } else {
                     toast.warning("អ្នកមិនមានសិទ្ធិចូលទៅកាន់ផ្នែកគ្រប់គ្រងទេ។");
                 }
@@ -115,9 +119,20 @@ const Login = () => {
                         <span>ឬភ្ជាប់ជាមួយ</span>
                         <Image src="/icons/group-2.svg" alt="line" width={100} height={70} />
                     </div>
+
+                    {/*google*/}
+                    <div className={"w-full my-2"}>
+                        <GoogleSignInButton />
+                    </div>
+
+                    {/*facebook*/}
+                    <div className={"w-full my-2"}>
+                        <FacebookSignInButton />
+                    </div>
                     <div className="mt-4">
                         <span>តើអ្នកមានគណនីឬនៅ?</span>
-                        <Link className="pointer-events-none text-gray-400" href="/register">
+                        <Link className="text-gray-400" href="/register">
+                        {/*<Link className="pointer-events-none text-gray-400" href="/register">*/}
                             {" "}
                             បង្កើតគណនី
                         </Link>

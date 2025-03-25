@@ -5,15 +5,16 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useDeleteRecipeMutation, useGetRecipeByIdQuery } from "@/redux/services/recipe";
 import { getImageUrl } from "@/lib/constants";
-import IngredientsGroupedByType from "@/app/(admin)/admin/recipe/components/ui/IngredientsGroupedByType";
+import IngredientsGroupedByType from "@/app/(admin)/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
-import EditRecipeForm from "@/app/(admin)/admin/recipe/components/EditRecipeForm";
+import EditRecipeForm from "@/app/(admin)/recipe/components/EditRecipeForm";
 import { useGetAllFoodQuery } from "@/redux/services/food";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Skeleton from "@/app/(admin)/admin/recipe/components/recipeListUi/Skeleton";
+import Skeleton from "@/app/(admin)/recipe/components/recipeListUi/Skeleton";
 import {RiCloseLargeLine} from "react-icons/ri";
+import {useGetUserProfileQuery} from "@/redux/services/user";
 
 export default function FoodDetailPage() {
     const [isLoading, ] = useState<boolean>(false);
@@ -32,6 +33,9 @@ export default function FoodDetailPage() {
     useEffect(() => {
         setFavorite(recipes?.payload?.isFavorite || false);
     }, [recipes?.payload?.isFavorite]);
+
+    const { data: users } = useGetUserProfileQuery();
+    const isAdmin = users?.payload?.role == "ROLE_ADMIN";
 
     // Show skeleton if any API is still loading
     if (isRecipeLoading || isCuisinesLoading || isCategoriesLoading) {
@@ -87,7 +91,7 @@ export default function FoodDetailPage() {
             const response = await deleteRecipe({ id: Number(recipeId) }).unwrap();
             if (response.statusCode === "200") {
                 toast.success(response.message || "Recipe deleted successfully");
-                router.push("/admin/recipe");
+                router.push("/recipe");
             } else {
                 toast.error("Failed to delete the recipe");
             }
@@ -179,118 +183,126 @@ export default function FoodDetailPage() {
                                 </div>
 
                                 {/* Delete Recipe Button */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <button
-                                        className="flex flex-col items-center gap-2"
-                                        onClick={() =>
-                                            (document.getElementById("delete_modal") as HTMLDialogElement)?.showModal()
-                                        }
-                                    >
-                                        <Image
-                                            src="/icons/delete3.svg"
-                                            alt="Delete Icon"
-                                            width={20}
-                                            height={20}
-                                        />
-                                        <span className="text-sm text-secondary">លុបរូបមន្ត</span>
-                                    </button>
-                                    <dialog id="delete_modal" className="modal w-[330px] bg-white p-5 rounded-lg shadow-lg">
-                                        <div className="modal-box bg-white">
-                                            <form method="dialog" className="flex justify-end">
-                                                <button
-                                                    className="text-2xl text-slate-400 hover:shadow-custome"
-                                                >
-                                                    <RiCloseLargeLine />
-                                                </button>
-                                            </form>
-
-                                            <article className="flex gap-2 items-center justify-start text-center pb-2">
-                                                <Image
-                                                    src="/icons/flower.png"
-                                                    alt="border"
-                                                    width={35}
-                                                    height={35}
-                                                />
-                                                <h3 className="text-xl pr-2 font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
-                                                    {recipeData?.name || 'មិនមានឈ្មោះ'}
-                                                </h3>
-                                            </article>
-                                            <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
-                                                <Image
-                                                    src="/icons/Kbach.svg"
-                                                    alt="border"
-                                                    width={100}
-                                                    height={13}
-                                                />
-                                            </p>
-                                            <p className="pt-5 text-lg font-kantumruy mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
-                                            <div className="modal-action">
-                                                <form method="dialog" className={"flex justify-end gap-5"}>
-                                                    <button className="px-4 rounded-lg py-2 text-primary border border-amber-300 hover:bg-primary hover:text-white">
-                                                        ថយក្រោយ
-                                                    </button>
-
+                                { isAdmin ? (
+                                    <div className="flex flex-col items-center gap-2">
+                                        <button
+                                            className="flex flex-col items-center gap-2"
+                                            onClick={() =>
+                                                (document.getElementById("delete_modal") as HTMLDialogElement)?.showModal()
+                                            }
+                                        >
+                                            <Image
+                                                src="/icons/delete3.svg"
+                                                alt="Delete Icon"
+                                                width={20}
+                                                height={20}
+                                            />
+                                            <span className="text-sm text-secondary">លុបរូបមន្ត</span>
+                                        </button>
+                                        <dialog id="delete_modal" className="modal w-[330px] bg-white p-5 rounded-lg shadow-lg">
+                                            <div className="modal-box bg-white">
+                                                <form method="dialog" className="flex justify-end">
                                                     <button
-                                                        disabled={isLoading}
-                                                        className="px-4 py-2 bg-secondary rounded-lg text-white"
-                                                        onClick={() => handleDeleteRecipe(recipeId)}
+                                                        className="text-2xl text-slate-400 hover:shadow-custome"
                                                     >
-                                                        {isLoading ? 'កំពុងដំណើរការ...' : 'យល់ព្រម'}
+                                                        <RiCloseLargeLine />
                                                     </button>
                                                 </form>
+
+                                                <article className="flex gap-2 items-center justify-start text-center pb-2">
+                                                    <Image
+                                                        src="/icons/flower.png"
+                                                        alt="border"
+                                                        width={35}
+                                                        height={35}
+                                                    />
+                                                    <h3 className="text-xl pr-2 font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
+                                                        {recipeData?.name || 'មិនមានឈ្មោះ'}
+                                                    </h3>
+                                                </article>
+                                                <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
+                                                    <Image
+                                                        src="/icons/Kbach.svg"
+                                                        alt="border"
+                                                        width={100}
+                                                        height={13}
+                                                    />
+                                                </p>
+                                                <p className="pt-5 text-lg font-kantumruy mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
+                                                <div className="modal-action">
+                                                    <form method="dialog" className={"flex justify-end gap-5"}>
+                                                        <button className="px-4 rounded-lg py-2 text-primary border border-amber-300 hover:bg-primary hover:text-white">
+                                                            ថយក្រោយ
+                                                        </button>
+
+                                                        <button
+                                                            disabled={isLoading}
+                                                            className="px-4 py-2 bg-secondary rounded-lg text-white"
+                                                            onClick={() => handleDeleteRecipe(recipeId)}
+                                                        >
+                                                            {isLoading ? 'កំពុងដំណើរការ...' : 'យល់ព្រម'}
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </dialog>
-                                </div>
+                                        </dialog>
+                                    </div>
+                                ) : (
+                                    ""
+                                )}
+
 
                             </div>
 
                             {/* Edit Recipe Button */}
-                            <div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar">
-                                <button
-                                    className="flex flex-col items-center gap-2"
-                                    onClick={() =>
-                                        (document.getElementById("my_modal_3kjy") as HTMLDialogElement)?.showModal()
-                                    }
-                                >
-                                    <Image
-                                        src="/icons/pancel.svg"
-                                        alt="Edit Icon"
-                                        width={20}
-                                        height={20}
-                                    />
-                                    <span className="text-slate-700 text-sm">កែប្រែរូបមន្ដ</span>
-                                </button>
-                                <dialog id="my_modal_3kjy" className="modal rounded-lg hide-scrollbar">
-                                    <div className="modal-box max-w-full sm:max-w-[650px] w-[95%] mx-auto py-5 px-5 flex flex-col items-center text-slate-700">
-                                        {/* Close Button */}
-                                        <form method="dialog">
-                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                        </form>
-
-                                        {/* Modal Title */}
-                                        <h3 className="font-bold mb-5 text-lg font-moulpali text-secondary text-center">
-                                            កែប្រែរូបមន្ដ
-                                        </h3>
-
-                                        {/* Image */}
+                            { isAdmin ? (
+                                <div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar">
+                                    <button
+                                        className="flex flex-col items-center gap-2"
+                                        onClick={() =>
+                                            (document.getElementById("my_modal_3kjy") as HTMLDialogElement)?.showModal()
+                                        }
+                                    >
                                         <Image
-                                            src="/icons/Kbach.svg"
-                                            width={80}
-                                            height={80}
-                                            alt="image"
-                                            className="mb-5"
+                                            src="/icons/pancel.svg"
+                                            alt="Edit Icon"
+                                            width={20}
+                                            height={20}
                                         />
+                                        <span className="text-slate-700 text-sm">កែប្រែរូបមន្ដ</span>
+                                    </button>
+                                    <dialog id="my_modal_3kjy" className="modal rounded-lg hide-scrollbar">
+                                        <div className="modal-box max-w-full sm:max-w-[650px] w-[95%] mx-auto py-5 px-5 flex flex-col items-center text-slate-700">
+                                            {/* Close Button */}
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                            </form>
 
-                                        {/* Edit Recipe Form */}
-                                        <EditRecipeForm
-                                            editRecipeData={transformedRecipe}
-                                            recipeId={recipeId}
-                                            onSuccess={closeModal}
-                                        />
-                                    </div>
-                                </dialog>
-                            </div>
+                                            {/* Modal Title */}
+                                            <h3 className="font-bold mb-5 text-lg font-moulpali text-secondary text-center">
+                                                កែប្រែរូបមន្ដ
+                                            </h3>
+
+                                            {/* Image */}
+                                            <Image
+                                                src="/icons/Kbach.svg"
+                                                width={80}
+                                                height={80}
+                                                alt="image"
+                                                className="mb-5"
+                                            />
+
+                                            {/* Edit Recipe Form */}
+                                            <EditRecipeForm
+                                                editRecipeData={transformedRecipe}
+                                                recipeId={recipeId}
+                                                onSuccess={closeModal}
+                                            />
+                                        </div>
+                                    </dialog>
+                                </div>
+                            ): "" }
+
                         </div>
 
                         {/* Author and Details Section */}

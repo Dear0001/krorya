@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatDateToKhmer } from '@/components/ConvertDateToKhmer';
-import Pagination from "@/app/(admin)/admin/user/components/Pagination";
+import Pagination from "@/app/(admin)/user/components/Pagination";
 import { convertRomanToKhmerWithIndex, getImageUrl } from "@/lib/constants";
 import Image from "next/image";
 import { useDeleteUserByIdMutation } from "@/redux/services/user";

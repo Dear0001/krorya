@@ -4,7 +4,7 @@ import PaginatedList from "./PaginationList";
 import { useGetAllCategoriesQuery, usePostCategoryMutation } from "@/redux/services/category";
 import { useGetAllFoodQuery, usePostFoodMutation } from "@/redux/services/food";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CuisineCategoryLayout() {
     const pageSize = 4;

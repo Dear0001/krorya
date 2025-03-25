@@ -1,12 +1,8 @@
 import React from "react";
 import { categoryIconMap } from "@/lib/constants";
-import CategoryItem from "@/app/(admin)/admin/recipe/components/CategoryItem";
+import CategoryItem from "@/app/(admin)/recipe/components/CategoryItem";
+import {CategoryListProps } from "@/lib/definition"
 
-type CategoryListProps = {
-    categories: { id: string | number; categoryName: string }[];
-    activeCategoryId: string;
-    onCategoryClick: (categoryId: string) => void;
-};
 
 const CategoryList: React.FC<CategoryListProps> = ({ categories, activeCategoryId, onCategoryClick }) => {
     return (

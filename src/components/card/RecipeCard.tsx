@@ -53,7 +53,7 @@ export default function CardFood({ food }: CardFoodProps) {
         <div className="card p-2 shadow-card rounded-[20px] mx-0 w-full sm:w-48 md:w-43 lg:w-[13.5rem] hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
             {/* Image Section */}
             <figure className="relative w-full h-40">
-                <Link href={`/admin/recipe/${food.id}`}>
+                <Link href={`/recipe/${food.id}`}>
                     <div
                         className="w-full h-full bg-cover bg-center rounded-[18px]"
                         style={{ backgroundImage: `url(${imageUrl})` }}

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import "@/app/globals.css";
-import { MenuList } from "@/components/sidebar/menu";
 import { IoMdClose } from "react-icons/io";
+import {useMenuItems} from "@/components/sidebar/menu";
 
 type MenuItem = {
     href: string;
@@ -15,7 +15,7 @@ type MenuItem = {
 
 export function SidebarComponent({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const pathname = usePathname();
-    const [menuList] = useState<MenuItem[]>(MenuList);
+    const menuList = useMenuItems();
 
     return (
         <>

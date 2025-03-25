@@ -108,3 +108,27 @@ export type PopularType = {
         deleted: boolean;
     };
 }
+
+export type GoogleLoginType = {
+    email: string;
+    fullName: string;
+}
+
+export type CategoryListProps = {
+    categories: { id: string | number; categoryName: string }[];
+    activeCategoryId: string;
+    onCategoryClick: (categoryId: string) => void;
+};
+
+export type UserProfileState = {
+    id: number | null;
+    fullName: string;
+    email: string;
+    profileImage: string;
+    phoneNumber: string;
+    role: string;
+    createdAt: string;
+    emailVerifiedAt: string;
+    emailVerified: boolean;
+    deleted: boolean;
+}
