@@ -41,9 +41,9 @@ export type User = {
 
 export type FoodRecipe = {
     id: number;
-    name: string; // ✅ Added missing field
-    categoryId: number; // ✅ Added missing field
-    photo: Photo[]; // Array of images
+    name: string;
+    categoryId: number;
+    photo: Photo[];
     description: string;
     level: string;
     durationInMinutes: number;

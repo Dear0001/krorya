@@ -20,6 +20,8 @@ export default function CardFood({ food }: CardFoodProps) {
     //remove favorite with RTK Query
     const [removeFavorite] = useRemoveFavoriteMutation();
 
+    console.log("explore page", food)
+
 
     // Get food image or default
     const photoFileName = food?.photo?.length > 0 ? food.photo[0].photo : "/assets/default-food.jpg";

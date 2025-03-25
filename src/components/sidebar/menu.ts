@@ -6,7 +6,9 @@ const allMenuItems = [
     { href: "/dashboard", label: "ផ្ទាំងបង្ហាញ", icon: "home.svg" },
     { href: "/food", label: "ម្ហូប & ប្រភេទ", icon: "explore-recipe.svg" },
     { href: "/recipe", label: "រុករកមុខម្ហូប", icon: "explore-food.svg" },
+    { href: "/favorite", label: "ចំណង់ចំណូលចិត្ត", icon: "Vector.svg"},
     { href: "/user", label: "អ្នកប្រើប្រាស់ទាំងអស់", icon: "users.svg" },
+    { href: "/setting", label: "ការកំណត់ផ្សេងៗ", icon: "setting.svg" },
 ];
 
 export function useMenuItems() {

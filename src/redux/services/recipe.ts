@@ -6,7 +6,7 @@ export const RecipeApi = kroryaApi.injectEndpoints({
         // Fetch all recipes
         getAllRecipes: builder.query<any, { page: number; pageSize: number }>({
             query: ({ page = 0, pageSize = 10 }) =>
-                `/api/v1/food-recipe/list?page=${page}&size=${pageSize}`,
+                `/api/v1/guest-user/food-recipe/list?page=${page}&size=${pageSize}`,
             providesTags: [{ type: "recipe", id: "LIST" }],
         }),
         // post recipe

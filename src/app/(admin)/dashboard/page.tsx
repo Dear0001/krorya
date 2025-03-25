@@ -19,6 +19,7 @@ function Dashboard() {
     // Get the user role from Redux store
     const isAdmin = userProfile?.payload?.role == "ROLE_ADMIN";
 
+
     return (
         <main className="w-full overflow-auto scrollbar-hide p-4">
             {/* Banner Section */}

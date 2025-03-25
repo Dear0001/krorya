@@ -8,11 +8,14 @@ import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import RecipeForm from "../RecipeForm";
 import CategorySkeleton from "@/app/(admin)/recipe/components/CategorySkeleton";
 import { ToastContainer } from "react-toastify";
+import {useGetUserProfileQuery} from "@/redux/services/user";
 
 const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
     const [query, setQuery] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const { data: users } = useGetUserProfileQuery();
+    const isAdmin = users?.payload?.role == "ROLE_ADMIN";
 
     // Fetch categories
     const { data: categoriesData, error, isLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 });
@@ -87,14 +90,17 @@ const ExploreFood: React.FC = () => {
                         </div>
                     </li>
                     {/* Create recipe button */}
-                    <li>
-                        <button
-                            onClick={openModal}
-                            className="border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition duration-300 md:m-2 sm:m-2"
-                        >
-                            បង្កើតម្ហូប
-                        </button>
-                    </li>
+                    { isAdmin ? (
+                        <li>
+                            <button
+                                onClick={openModal}
+                                className="border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition duration-300 md:m-2 sm:m-2"
+                            >
+                                បង្កើតម្ហូប
+                            </button>
+                        </li>
+                    ): "" }
+
                 </ul>
 
                 {/* Food List */}

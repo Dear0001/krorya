@@ -1,28 +1,43 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { toast, ToastContainer } from "react-toastify";
+import { useState, useEffect, useRef } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useAppDispatch} from "@/redux/hooks";
 import {setAccessToken} from "@/redux/features/auth/authSlice";
-import {setUserProfile} from "@/redux/features/auth/authSlice";
 
 export function GoogleSignInButton() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const dispatch = useAppDispatch();
+  const isMounted = useRef(true);
+  const isProcessing = useRef(false);
 
   useEffect(() => {
-    if (session?.user) {
-      handlePostGoogleLogin(session.user);
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user && !isProcessing.current) {
+      isProcessing.current = true;
+      handlePostGoogleLogin(session.user)
+          .finally(() => {
+            if (isMounted.current) {
+              isProcessing.current = false;
+            }
+          });
     }
-  }, [session]);
+  }, [session, status]);
 
   const handleSignIn = async () => {
+    if (isProcessing.current) return;
+
     setError(null);
     setIsLoading(true);
     try {
@@ -41,6 +56,8 @@ export function GoogleSignInButton() {
   };
 
   const handlePostGoogleLogin = async (user: any) => {
+    if (!isMounted.current) return;
+
     setIsLoading(true);
     try {
       const { email, name } = user;
@@ -63,56 +80,26 @@ export function GoogleSignInButton() {
 
       const data = await response.json();
 
-      // Validate response structure
-      if (!data?.payload?.access_token) {
-        throw new Error("Invalid response format: Missing access token");
-      }
-      console.log("sdddddd",data);
-
-      // Store token in localStorage and Redux
-      localStorage.setItem('access_token', data.payload.access_token);
       dispatch(setAccessToken(data.payload.access_token));
-      dispatch(setUserProfile(data.payload));
 
-      // Dispatch user profile data to Redux
-      if (data.payload) {
-        dispatch(setUserProfile({
-          id: data.payload.id || null,
-          fullName: data.payload.full_name || name || "",
-          email: data.payload.email || email || "",
-          profileImage: data.payload.profile_image || "",
-          phoneNumber: data.payload.phone_number || "",
-          role: data.payload.role || "ROLE_USER",
-          createdAt: data.payload.created_date || "",
-          emailVerifiedAt: data.payload.email_verified_at || "",
-          emailVerified: Boolean(data.payload.email_verified_at),
-          deleted: data.payload.deleted || false,
-        }));
-      }
-
-      toast.success(data.message || "Logged in successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.success(data.message || "Logged in successfully!");
 
       setTimeout(() => router.push("/dashboard"), 1000);
     } catch (error) {
+      if (!isMounted.current) return;
+
       console.error("Google login error:", error);
       toast.error(
-          error instanceof Error ? error.message : "Failed to authenticate with Google. Please try again.",
-          {
-            position: "top-right",
-            autoClose: 5000,
-          }
-      );
+          error instanceof Error ? error.message : "Failed to authenticate with Google. Please try again.");
     } finally {
-      setIsLoading(false);
+      if (isMounted.current) {
+        setIsLoading(false);
+      }
     }
   };
 
   return (
       <div>
-        <ToastContainer />
         <button
             onClick={handleSignIn}
             disabled={isLoading}

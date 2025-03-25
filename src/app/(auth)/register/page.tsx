@@ -9,6 +9,7 @@ import { GoogleSignInButton } from "@/components/SignUpWithGoogle";
 import { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutation } from "@/redux/services/auth";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
 
 type EmailFormData = {
     email: string;
@@ -294,10 +295,19 @@ const SignUpPage = React.memo(() => {
                             height={70}
                         />
                     </div>
-                    <GoogleSignInButton />
+                    {/*google*/}
+                    <div className={"w-full my-2"}>
+                        <GoogleSignInButton />
+                    </div>
+
+                    {/*facebook*/}
+                    <div className={"w-full my-2"}>
+                        <FacebookSignInButton />
+                    </div>
                     <div className={"mt-2"}>
                         <span>តើអ្នកមានគណនីឬនៅ?</span>
                         <Link href={"/login"} className={"text-primary"}>
+                            {" "}
                             ចូលគណនី
                         </Link>
                     </div>

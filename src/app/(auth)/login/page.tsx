@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {useAppDispatch} from "@/redux/hooks";
-import {setAccessToken, setUserProfile} from "@/redux/features/auth/authSlice";
+import {setAccessToken} from "@/redux/features/auth/authSlice";
 import {GoogleSignInButton} from "@/components/SignUpWithGoogle";
 import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
 
@@ -37,15 +37,9 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // if (data?.user?.role === ("ROLE_ADMIN")) {
-                if (data?.user?.role === "ROLE_ADMIN" || data?.user?.role === "ROLE_USER") {
-                    toast.success("ការចូលគណនីបានជោគជ័យ!");
-                    dispatch(setAccessToken(data?.payload?.access_token));
-                    dispatch(setUserProfile(data?.payload));
-                    router.push("/dashboard");
-                } else {
-                    toast.warning("អ្នកមិនមានសិទ្ធិចូលទៅកាន់ផ្នែកគ្រប់គ្រងទេ។");
-                }
+                toast.success("ការចូលគណនីបានជោគជ័យ!");
+                dispatch(setAccessToken(data?.payload?.access_token));
+                router.push("/dashboard");
             } else if (response.status === 404 && data.detail === "You have been banned") {
                 toast.error(data.detail || "គណនីរបស់អ្នកត្រូវបានហាម");
             } else {

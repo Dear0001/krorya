@@ -1,5 +1,4 @@
 import { kroryaApi } from "../api";
-import { GoogleLoginType } from "@/lib/definition";
 
 export const authApi = kroryaApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -29,7 +28,16 @@ export const authApi = kroryaApi.injectEndpoints({
                 invalidatesTags: [{ type: "auth", id: "LIST" }],
             }),
         }),
+    //     Reset Password
+        postResetPassword: builder.mutation<any, { email: string; newPassword: string }>({
+            query: ({ email, newPassword }) => ({
+                url: `/api/v1/auth/reset-password`,
+                method: "POST",
+                body: { email, newPassword },
+                invalidatesTags: [{ type: "auth", id: "LIST" }],
+            }),
+        }),
     }),
 });
 
-export const { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutation } = authApi;
+export const { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutation, usePostResetPasswordMutation  } = authApi;
