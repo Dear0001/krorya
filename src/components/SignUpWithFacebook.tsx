@@ -41,7 +41,7 @@ export function FacebookSignInButton() {
     setError(null);
     setIsLoading(true);
     try {
-      const result = await signIn("google", { redirect: false });
+      const result = await signIn("facebook", { redirect: false });
       if (result?.error) {
         setError(result.error === "AccessDenied"
             ? "Access denied. Please try another account."
