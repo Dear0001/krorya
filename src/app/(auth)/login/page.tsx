@@ -125,7 +125,7 @@ const Login = () => {
                     </div>
                     <div className="mt-4">
                         <span>តើអ្នកមានគណនីឬនៅ?</span>
-                        <Link className="text-gray-400" href="/register">
+                        <Link className="text-primary" href="/register">
                         {/*<Link className="pointer-events-none text-gray-400" href="/register">*/}
                             {" "}
                             បង្កើតគណនី
