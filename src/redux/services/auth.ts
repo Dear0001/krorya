@@ -37,7 +37,17 @@ export const authApi = kroryaApi.injectEndpoints({
                 invalidatesTags: [{ type: "auth", id: "LIST" }],
             }),
         }),
+
+    //     with facebook
+        postFacebook: builder.mutation<any, { email: string; fullName: string }>({
+            query: ({ email, fullName }) => ({
+                url: `/api/v1/oauth2/facebook`,
+                method: "POST",
+                body: { email, fullName },
+                invalidatesTags: [{ type: "auth", id: "LIST" }],
+            }),
+        }),
     }),
 });
 
-export const { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutation, usePostResetPasswordMutation  } = authApi;
+export const { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutation, usePostResetPasswordMutation, usePostFacebookMutation  } = authApi;

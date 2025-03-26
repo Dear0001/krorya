@@ -1,4 +1,5 @@
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 
 export const authOptions = {
     providers: [
@@ -6,6 +7,10 @@ export const authOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         }),
+        FacebookProvider({
+            clientId: process.env.FACEBOOK_CLIENT_ID as string,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string
+        })
     ],
     callbacks: {
         async jwt({ token, user }: any) {
@@ -20,7 +25,6 @@ export const authOptions = {
             return token;
         },
         async session({ session, token }: any) {
-            // Only pass basic user info to the session
             session.user = token.user;
             return session;
         },

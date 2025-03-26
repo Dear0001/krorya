@@ -2,21 +2,17 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-    const cookies = request.cookies;
-    const session = cookies.get("krorya-refresh-token")?.value || null;
+    const session = request.cookies.get("krorya-refresh-token")?.value;
     const currentPath = request.nextUrl.pathname;
 
-    // If session is "null" (as a string) or undefined, redirect to login
-    if (!session || session === "null") {
-        // Only redirect to login if the user is not already on the login page
-        if (currentPath !== "/login") {
-            return NextResponse.redirect(new URL("/login", request.url));
-        }
-    } else {
-        // If the user has a session and is on "/" or "/login", redirect to dashboard
-        if (currentPath === "/" || currentPath === "/login") {
-            return NextResponse.redirect(new URL("/dashboard", request.url));
-        }
+    // If no session and NOT on /login, redirect to login
+    if (!session && currentPath !== "/login") {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    // If user has a session and is on "/" or "/login", redirect to dashboard
+    if (session && (currentPath === "/" || currentPath === "/login")) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 }
 

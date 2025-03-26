@@ -7,12 +7,16 @@ import { toast, ToastContainer } from "react-toastify";
 import { getImageUrl } from "@/lib/constants";
 import { SidebarComponent } from "@/components/sidebar/SidebarComponent";
 import { FaBars } from "react-icons/fa";
+import {signOut} from "next-auth/react";
+import { useAppDispatch } from "@/redux/hooks";
+import { clearAccessToken } from "@/redux/features/auth/authSlice";
 
 export function NavbarComponent() {
     const { data: userProfile } = useGetUserProfileQuery();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -27,7 +31,21 @@ export function NavbarComponent() {
 
     const handleSignOut = async () => {
         try {
-            await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, { method: "POST" });
+            // Clear client-side state first
+            dispatch(clearAccessToken());
+
+            // Sign out from NextAuth
+            await signOut({
+                redirect: false,
+                callbackUrl: "/login"
+            });
+
+            // Clear cookies by calling your backend logout endpoint
+            await fetch(`${process.env.NEXT_PUBLIC_URL}/api/logout`, {
+                method: "POST",
+                credentials: "include"
+            });
+
             toast.success("ការចេញពីគណនីបានជោគជ័យ!");
             router.push("/login");
         } catch (error) {
@@ -36,7 +54,8 @@ export function NavbarComponent() {
         }
     };
 
-    const photoFileName = userProfile?.payload?.profileImage;
+
+            const photoFileName = userProfile?.payload?.profileImage;
     const imageUrl = getImageUrl(photoFileName);
 
     return (

@@ -61,10 +61,7 @@ export function GoogleSignInButton() {
     setIsLoading(true);
     try {
       const { email, name } = user;
-      const userData = {
-        email,
-        fullName: name,
-      };
+      const userData = { email, fullName: name };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/google`, {
         method: "POST",
@@ -79,24 +76,29 @@ export function GoogleSignInButton() {
       }
 
       const data = await response.json();
+      console.log("Google API Response:", data); // Debugging
 
-      dispatch(setAccessToken(data.payload.access_token));
+      if (!data.accessToken) {
+        throw new Error("Access token is missing in API response.");
+      }
 
+      dispatch(setAccessToken(data.accessToken));
       toast.success(data.message || "Logged in successfully!");
 
       setTimeout(() => router.push("/dashboard"), 1000);
     } catch (error) {
       if (!isMounted.current) return;
-
       console.error("Google login error:", error);
       toast.error(
-          error instanceof Error ? error.message : "Failed to authenticate with Google. Please try again.");
+          error instanceof Error ? error.message : "Failed to authenticate with Google. Please try again."
+      );
     } finally {
       if (isMounted.current) {
         setIsLoading(false);
       }
     }
   };
+
 
   return (
       <div>
