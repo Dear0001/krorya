@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import {usePathname, useRouter} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useGetUserProfileQuery } from "@/redux/services/user";
 import { toast, ToastContainer } from "react-toastify";
 import { getImageUrl } from "@/lib/constants";
 import { SidebarComponent } from "@/components/sidebar/SidebarComponent";
 import { FaBars } from "react-icons/fa";
-import {signOut} from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useAppDispatch } from "@/redux/hooks";
 import { clearAccessToken } from "@/redux/features/auth/authSlice";
 
@@ -54,8 +54,7 @@ export function NavbarComponent() {
         }
     };
 
-
-            const photoFileName = userProfile?.payload?.profileImage;
+    const photoFileName = userProfile?.payload?.profileImage;
     const imageUrl = getImageUrl(photoFileName);
 
     return (
@@ -73,7 +72,7 @@ export function NavbarComponent() {
                     <span className="text-secondary text-[24px] font-semibold">
                         {userProfile?.payload?.fullName
                             ? userProfile.payload.fullName.split(" ").pop()
-                            : "Admin"}
+                            : "ភ្ញៀវ"}
                     </span>
                 </div>
             </div>
@@ -81,11 +80,13 @@ export function NavbarComponent() {
             {/* Right Section */}
             <div className="ml-auto flex items-center space-x-4 relative">
                 {/* Notification Icon */}
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 rounded-full flex items-center justify-center">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#F7F9FB] rounded-full relative">
-                        <Image src="/icons/notification.svg" alt="notification" fill />
+                {userProfile && (
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#F7F9FB] rounded-full relative">
+                            <Image src="/icons/notification.svg" alt="notification" fill />
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* User Avatar with Dropdown */}
                 <div className="relative">
@@ -106,24 +107,39 @@ export function NavbarComponent() {
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                             <ul className="py-1">
-                                {/* Profile Option */}
-                                <li
-                                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                                    onClick={() => {
-                                        setIsDropdownOpen(false);
-                                        router.push("/profile");
-                                    }}
-                                >
-                                    Profile
-                                </li>
+                                {userProfile ? (
+                                    <>
+                                        {/* Profile Option */}
+                                        <li
+                                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => {
+                                                setIsDropdownOpen(false);
+                                                router.push("/profile");
+                                            }}
+                                        >
+                                            Profile
+                                        </li>
 
-                                {/* Sign Out Option */}
-                                <li
-                                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                                    onClick={handleSignOut}
-                                >
-                                    Sign Out
-                                </li>
+                                        {/* Sign Out Option */}
+                                        <li
+                                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                            onClick={handleSignOut}
+                                        >
+                                            Sign Out
+                                        </li>
+                                    </>
+                                ) : (
+                                    /* Create Account Option for non-logged in users */
+                                    <li
+                                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => {
+                                            setIsDropdownOpen(false);
+                                            router.push("/register");
+                                        }}
+                                    >
+                                        បង្កើតគណនី
+                                    </li>
+                                )}
                             </ul>
                         </div>
                     )}

@@ -38,8 +38,12 @@ const Login = () => {
 
             if (response.ok) {
                 toast.success("ការចូលគណនីបានជោគជ័យ!");
-                dispatch(setAccessToken(data?.payload?.access_token));
-                router.push("/dashboard");
+                if(data?.payload?.role === "ROLE_USER") {
+                    router.push("/home");
+                } else {
+                    dispatch(setAccessToken(data?.payload?.access_token));
+                    router.push("/dashboard");
+                }
             } else if (response.status === 404 && data.detail === "You have been banned") {
                 toast.error(data.detail || "គណនីរបស់អ្នកត្រូវបានហាម");
             } else {
@@ -114,15 +118,11 @@ const Login = () => {
                         <Image src="/icons/group-2.svg" alt="line" width={100} height={70} />
                     </div>
 
-                    {/*google*/}
-                    <div className={"w-full my-2"}>
+                    <div className="flex flex-col gap-4 w-full">
                         <GoogleSignInButton />
-                    </div>
-
-                    {/*facebook*/}
-                    <div className={"w-full my-2"}>
                         <FacebookSignInButton />
                     </div>
+
                     <div className="mt-4">
                         <span>តើអ្នកមានគណនីឬនៅ?</span>
                         <Link className="text-primary" href="/register">

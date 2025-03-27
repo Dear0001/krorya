@@ -85,13 +85,10 @@ export function GoogleSignInButton() {
       dispatch(setAccessToken(data.accessToken));
       toast.success(data.message || "Logged in successfully!");
 
-      setTimeout(() => router.push("/dashboard"), 1000);
+      setTimeout(() => router.push("/home"), 1000);
     } catch (error) {
       if (!isMounted.current) return;
       console.error("Google login error:", error);
-      toast.error(
-          error instanceof Error ? error.message : "Failed to authenticate with Google. Please try again."
-      );
     } finally {
       if (isMounted.current) {
         setIsLoading(false);

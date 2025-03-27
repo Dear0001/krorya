@@ -15,53 +15,30 @@ function Dashboard() {
 
     const categories = categoriesData?.payload || [];
 
-    const { data: userProfile, } = useGetUserProfileQuery();
-    // Get the user role from Redux store
-    const isAdmin = userProfile?.payload?.role == "ROLE_ADMIN";
-
 
     return (
-        <main className="w-full overflow-auto scrollbar-hide p-4">
-            {/* Banner Section */}
-            <BannerComponent/>
-
-            {/* Main Content Section */}
-            <section className="flex flex-col lg:flex-row gap-5">
-                {/* Left Column: Total Data & Popular Recipes */}
-                <div className="w-full lg:w-2/3 ">
-                    {isAdmin ? (
-                        <TotalDataComponent/>
-                    ) : (
-                        <div className="bg-white md:p-6 my-5 flex flex-col gap-5 p-2 rounded-lg">
-                            <ul className="grid gap-2 list-none">
-                                <li className="flex items-center">
-                                    <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
-                                    <span className="font-moulpali text-lg px-5 text-color-2">ប្រភេទអាហារ</span>
-                                </li>
-                            </ul>
-
-                            {/* Category List */}
-                            {isLoading ? (
-                                <CategorySkeleton />
-                            ) : error ? (
-                                <p className="text-red-500 text-center">Failed to load categories</p>
-                            ) : (
-                                <CategoryList
-                                    categories={categories}
-                                    activeCategoryId="all"
-                                    onCategoryClick={() => {}}
-                                />
-                            )}
-                        </div>
-                    )}
-                    <PopularCardRecipe />
+        <main className="w-full h-screen bg-white rounded-lg overflow-auto scrollbar-hide px-16 py-10">
+            <section className="flex flex-row lg:flex-row gap-5">
+                <div className={"w-full flex justify-between mx-[40px] ml-[120px]"}>
+                    <h1 className={"font-moulpali mt-16 text-secondary text-h1"}>របាយការណ៍សរុប</h1>
+                    <div>
+                        <Image
+                            width={350}
+                            height={350}
+                            src={"/icons/Cooking-dashboard.svg"} alt={"dashboard"}/>
+                    </div>
                 </div>
 
-                {/* Right Column: RecipeComponent */}
-                <div className="w-full lg:w-1/3">
-                    <RecipeComponent/>
-                </div>
             </section>
+            {/* Main grid container with 12 columns */}
+            <div className="grid grid-cols-12">
+                <div className="col-span-8">
+                    <TotalDataComponent/>
+                </div>
+                {/* Empty space spanning 2 columns */}
+                <div className="col-span-2"></div>
+            </div>
+
         </main>
     );
 }

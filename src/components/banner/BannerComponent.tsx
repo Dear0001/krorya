@@ -13,7 +13,7 @@ const BannerComponent = () => {
                     ម្ហូបខ្មែរ មានច្រើនសណ្ឋានដូចជា ស្ល ឆា ចៀន ស្ងោរ ជាដើម និងមានរសជាតិប្លែកៗពីគ្នា។
                 </p>
 
-                <Link href={"/admin/recipe"} data-layer="Button"
+                <Link href={"/recipe"} data-layer="Button"
                       className="text-white text-[17px] font-medium font-['Kantumruy Pro'] leading-normal w-[165px] h-12 p-3 bg-[#d6ad45] rounded-lg justify-center items-center gap-2 inline-flex overflow-hidden">
                     ស្វែងរកមុខម្ហូប
                 </Link>

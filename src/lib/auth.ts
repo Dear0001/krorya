@@ -1,7 +1,8 @@
+import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -9,23 +10,24 @@ export const authOptions = {
         }),
         FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID as string,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string
-        })
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+        }),
     ],
     callbacks: {
-        async jwt({ token, user }: any) {
-            // Only store basic user info in the token
+        async jwt({ token, user, account }) {
             if (user) {
                 token.user = {
                     email: user.email,
                     name: user.name,
-                    image: user.image
+                    image: user.image,
                 };
+            }
+            if (account) {
+                token.provider = account.provider;
             }
             return token;
         },
-        async session({ session, token }: any) {
-            session.user = token.user;
+        async session({ session, token }) {
             return session;
         },
     },

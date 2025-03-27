@@ -1,12 +1,11 @@
 "use client";
 import Image from "next/image";
-import {signIn, useSession} from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import {useEffect, useRef, useState} from "react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import {usePostFacebookMutation} from "@/redux/services/auth";
-import {useAppDispatch} from "@/redux/hooks";
-import {setAccessToken} from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { setAccessToken } from "@/redux/features/auth/authSlice";
 
 export function FacebookSignInButton() {
   const router = useRouter();
@@ -15,7 +14,6 @@ export function FacebookSignInButton() {
   const { data: session, status } = useSession();
   const dispatch = useAppDispatch();
   const isMounted = useRef(true);
-  const isProcessing = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -24,19 +22,13 @@ export function FacebookSignInButton() {
   }, []);
 
   useEffect(() => {
-    if (status === "authenticated" && session?.user && !isProcessing.current) {
-      isProcessing.current = true;
-      handlePostFacebookLogin(session.user)
-          .finally(() => {
-            if (isMounted.current) {
-              isProcessing.current = false;
-            }
-          });
+    if (status === "authenticated" && session?.user) {
+      handlePostFacebookLogin(session.user);
     }
   }, [session, status]);
 
   const handleSignIn = async () => {
-    if (isProcessing.current) return;
+    if (isLoading) return;
 
     setError(null);
     setIsLoading(true);
@@ -49,16 +41,17 @@ export function FacebookSignInButton() {
       }
     } catch (error) {
       setError("An unexpected error occurred.");
-      console.error("Google sign-in error:", error);
+      console.error("Facebook sign-in error:", error);
     } finally {
-      setIsLoading(false);
+      if (isMounted.current) {
+        setIsLoading(false);
+      }
     }
   };
 
   const handlePostFacebookLogin = async (user: any) => {
     if (!isMounted.current) return;
 
-    setIsLoading(true);
     try {
       const { email, name } = user;
       const userData = { email, fullName: name };
@@ -76,31 +69,23 @@ export function FacebookSignInButton() {
       }
 
       const data = await response.json();
-      console.log("Google API Response:", data);
 
-      if (!data.accessToken) {
+      if (!data?.payload?.access_token) {
         throw new Error("Access token is missing in API response.");
       }
 
-      dispatch(setAccessToken(data.accessToken));
-      toast.success(data.message || "Logged in successfully!");
+      dispatch(setAccessToken(data.payload.access_token));
+      toast.success("Logged in successfully!");
 
-      setTimeout(() => router.push("/dashboard"), 1000);
+      setTimeout(() => router.push("/home"), 1000);
     } catch (error) {
       if (!isMounted.current) return;
-      console.error("Google login error:", error);
-      toast.error(
-          error instanceof Error ? error.message : "Failed to authenticate with Google. Please try again."
-      );
-    } finally {
-      if (isMounted.current) {
-        setIsLoading(false);
-      }
+      console.error("Facebook login error:", error);
     }
   };
 
   return (
-      <div>
+      <div className="w-full">
         <button
             onClick={handleSignIn}
             disabled={isLoading}
