@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -10,6 +10,7 @@ import { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutati
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
+import {convertRomanToKhmerWithIndex} from "@/lib/constants";
 
 type EmailFormData = {
     email: string;
@@ -24,6 +25,12 @@ type PasswordFormData = {
     confirmPassword: string;
 };
 
+// Add this type
+type OtpInputs = {
+    [key: number]: string;
+};
+
+
 const SignUpPage = React.memo(() => {
     const [showPassword, setShowPassword] = useState(false);
     const [step, setStep] = useState<"email" | "otp" | "password">("email");
@@ -34,6 +41,93 @@ const SignUpPage = React.memo(() => {
     const [postVerifyEmail, { isLoading: isOtpLoading }] = usePostVerifyEmailMutation();
     const [postRegister, { isLoading: isRegisterLoading }] = usePostRegisterMutation();
 
+    // handle OTP input
+    const [otp, setOtp] = useState<OtpInputs>({ 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" });
+    const [timeLeft, setTimeLeft] = useState<number>(180); // 3 minutes in seconds
+    const [canResend, setCanResend] = useState<boolean>(false);
+    const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+    // Countdown timer effect
+    useEffect(() => {
+        if (timeLeft <= 0) {
+            setCanResend(true);
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setTimeLeft(timeLeft - 1);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [timeLeft]);
+
+    // Auto submit when all OTP fields are filled
+    // Auto submit when all OTP fields are filled
+    useEffect(() => {
+        const allFilled = Object.values(otp).every(val => val.length === 1);
+        if (allFilled) {
+            onSubmitOtp({ otp: Object.values(otp).join("") });
+        }
+    }, [otp]);
+
+    // Format time to mm:ss and convert to Khmer numerals
+    const formatTimeWithKhmerNumerals = (seconds: number) => {
+        // First format to mm:ss (Roman numerals)
+        const formatToRoman = (sec: number) => {
+            const mins = Math.floor(sec / 60);
+            const secs = sec % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        };
+
+        // Convert Roman numerals to Khmer
+        const convertToKhmer = (timeString: string) => {
+            const khmerNumbers = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"];
+            return timeString.split('').map(char => {
+                // Handle colon separator
+                if (char === ':') return ':';
+                // Convert digits
+                const digit = parseInt(char);
+                return khmerNumbers[digit] || char;
+            }).join('');
+        };
+
+        const romanTime = formatToRoman(seconds);
+        return convertToKhmer(romanTime);
+    };
+
+
+    const handleOtpChange = (index: number, value: string) => {
+        if (!/^[0-9]*$/.test(value)) return;
+
+        const newOtp = { ...otp, [index]: value };
+        setOtp(newOtp);
+
+        // Move to next input if a digit was entered
+        if (value.length === 1 && index < 5) {
+            otpInputRefs.current[index + 1]?.focus();
+        }
+
+        // Move to previous input if backspace was pressed and current input is empty
+        if (value.length === 0 && index > 0) {
+            otpInputRefs.current[index - 1]?.focus();
+        }
+    };
+
+    // handle resend OTP request when timer expires
+    const handleResendOtp = async () => {
+        try {
+            const response = await postEmail({ email }).unwrap();
+            console.log("OTP resent successfully", response);
+            setTimeLeft(180);
+            setCanResend(false);
+            setOtp({ 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" });
+            otpInputRefs.current[0]?.focus();
+            toast.success("OTP resent successfully!");
+        } catch (error: any) {
+            console.error("Failed to resend OTP:", error);
+            toast.error(error.data?.message || "Failed to resend OTP. Please try again.");
+        }
+    };
     // Separate form hooks for each step
     const {
         register: registerEmail,
@@ -184,30 +278,52 @@ const SignUpPage = React.memo(() => {
                     {/* OTP Verification Step */}
                     {step === "otp" && (
                         <div className="w-full">
-                            <p className="text-center mb-4">We've sent a verification code to <strong>{email}</strong></p>
+                            <p className="text-center mb-4">
+                                យើងបានផ្ញើលេខកូដផ្ទៀងផ្ទាត់ទៅ <strong className={"text-secondary"}>{email}</strong>
+                            </p>
                             <form
                                 onSubmit={handleSubmitOtp(onSubmitOtp)}
-                                className="flex flex-col items-center gap-3 w-full"
+                                className="flex flex-col items-center gap-2 px-1 w-full"
                             >
-                                <div className="relative w-full">
-                                    <input
-                                        type="text"
-                                        {...registerOtp("otp", {
-                                            required: "លេខកូដ OTP ត្រូវបានទាមទារ",
-                                        })}
-                                        placeholder="បញ្ចូលលេខកូដ OTP"
-                                        className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
-                                    />
-                                    {otpErrors.otp && (
-                                        <div className="h-2 text-xs pl-4 text-red-500">
-                                            {otpErrors.otp.message}
-                                        </div>
+                                <div className="flex justify-center gap-2 mb-4">
+                                    {[0, 1, 2, 3, 4, 5].map((index) => (
+                                        <input
+                                            key={index}
+                                            ref={(el: HTMLInputElement | null) => {
+                                                otpInputRefs.current[index] = el;
+                                            }}
+                                            type="text"
+                                            maxLength={1}
+                                            value={otp[index]}
+                                            onChange={(e) => handleOtpChange(index, e.target.value)}
+                                            className="w-10 h-10 lg:w-12 lg:h-12 md:w-12 md:h-12 text-center border rounded-lg bg-background-1 shadow-inner outline-none text-xl"
+                                            inputMode="numeric"
+                                        />
+                                    ))}
+                                </div>
+
+                                <div className="text-center mb-4">
+                                    {canResend ? (
+                                        <button
+                                            type="button"
+                                            onClick={handleResendOtp}
+                                            className="text-primary  py-1.5 px-3 rounded-lg border border-primary"
+                                        >
+                                            ផ្ញើ OTP ម្តងទៀត
+                                        </button>
+                                    ) : (
+                                        <p>ផ្ញើ OTP ឡើងវិញ <span className={"text-secondary font-bold"}>{formatTimeWithKhmerNumerals(timeLeft)} </span> នារទី</p>
                                     )}
                                 </div>
+
+                                {timeLeft <= 0 && (
+                                    <p className="text-red-500 text-sm mb-2">OTP has expired. Please request a new one.</p>
+                                )}
+
                                 <button
                                     type="submit"
-                                    disabled={isOtpLoading}
-                                    className="w-full text-white px-4 py-3 border-black rounded-3xl bg-primary hover:bg-opacity-70"
+                                    disabled={isOtpLoading || Object.values(otp).some(val => val.length !== 1)}
+                                    className="w-full text-white px-4 py-3 border-black rounded-3xl bg-primary hover:bg-opacity-70 disabled:opacity-50"
                                 >
                                     {isOtpLoading ? "កំពុងផ្ទៀងផ្ទាត់..." : "ផ្ទៀងផ្ទាត់ OTP"}
                                 </button>
@@ -295,13 +411,9 @@ const SignUpPage = React.memo(() => {
                             height={70}
                         />
                     </div>
-                    {/*google*/}
-                    <div className={"w-full my-2"}>
-                        <GoogleSignInButton />
-                    </div>
 
-                    {/*facebook*/}
-                    <div className={"w-full my-2"}>
+                    <div className="flex flex-col gap-4 w-full">
+                        <GoogleSignInButton />
                         <FacebookSignInButton />
                     </div>
                     <div className={"mt-2"}>

@@ -3,12 +3,11 @@ import React from 'react';
 import BannerComponent from "@/components/banner/BannerComponent";
 import RecipeComponent from "@/components/recipe/RecipeComponent";
 import PopularCardRecipe from "@/components/recipe/PopularCardRecipe";
-import {useGetUserProfileQuery} from "@/redux/services/user";
-import TotalDataComponent from "@/components/total/TotalDataComponent";
 import CategoryList from "@/app/(admin)/recipe/components/recipeListUi/CategoryList";
 import CategorySkeleton from "@/app/(admin)/recipe/components/CategorySkeleton";
 import {useGetAllCategoriesQuery} from "@/redux/services/category";
 import Image from "next/image";
+import {ToastContainer} from "react-toastify";
 
 function Dashboard() {
     const { data: categoriesData, error, isLoading } = useGetAllCategoriesQuery({ page: 0, pageSize: 10 });
@@ -18,6 +17,18 @@ function Dashboard() {
 
     return (
         <main className="w-full overflow-auto scrollbar-hide p-4">
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             {/* Banner Section */}
             <BannerComponent/>
 

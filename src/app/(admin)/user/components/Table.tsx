@@ -15,7 +15,7 @@ type User = {
 };
 
 export default function Table({ users: initialUsers = [] }: { users: User[] }) {
-    const pageSize = 8;
+    const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -89,7 +89,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 <div className="flex items-center">
                                     <div className="avatar mr-2">
                                         <Image
-                                            src={user?.profileImage && user.profileImage.includes("default.jpg")
+                                            src={user?.profileImage && user.profileImage.includes("default.jpg") && user.profileImage !== "string"
                                                 ? "/man.png"
                                                 : getImageUrl(user?.profileImage) || "/man.png"
                                             }

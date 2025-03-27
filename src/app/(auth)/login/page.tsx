@@ -57,8 +57,19 @@ const Login = () => {
     };
 
     return (
-        <div className="w-10/12 z-40 h-fit flex justify-center items-center">
-            <ToastContainer />
+        <div className="w-11/12 z-40 h-fit flex justify-center items-center">
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <div className="mx-auto flex flex-col-reverse sm:flex-row gap-10 max-w-[1000px] lg:w-full lg:px-16 md:px-14 md:py-16 w-full rounded-3xl bg-white p-4 space-y-8">
                 <div className="flex flex-col items-center py-4 md:w-1/2 lg:w-1/2">
                     <h1 className="font-moulpali text-center font-bold text-2xl md:text-[30px] sm:text-3xl text-secondary mb-8">

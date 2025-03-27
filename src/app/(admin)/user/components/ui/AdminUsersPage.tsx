@@ -21,7 +21,7 @@ export default function AdminUsersPage() {
 
     const { data, error, isLoading } = useGetUsersQuery({
         page: 0,
-        pageSize: 10,
+        pageSize: 100,
     });
 
     useEffect(() => {

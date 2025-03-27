@@ -97,7 +97,7 @@ export function FacebookSignInButton() {
               <span>Loading...</span>
           ) : (
               <>
-                <Image src="/facebook.png" alt="Facebook Logo" width={25} height={25} />
+                <Image src="/facebook.png" alt="Facebook Logo" width={22} height={22} />
                 <span className="ml-4">Continue with Facebook</span>
               </>
           )}

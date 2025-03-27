@@ -67,8 +67,8 @@ export default function SettingsPage() {
         <>
             <ToastContainer/>
             {token ? (
-                <div className="bg-white rounded-md flex flex-col gap-4 overflow-hidden bg-gray-500 h-screen">
-                    <div className="border border-primary h-[350px] flex flex-col md:flex-row lg:justify-around md:justify-around justify-start items-center bg-white h-full rounded-md my-8 mx-7 p-5">
+                <div className="bg-white rounded-md flex flex-col gap-4 overflow-hidden h-screen">
+                    <div className="border border-primary h-[350px] flex flex-col md:flex-row lg:justify-around md:justify-around justify-start items-center bg-white rounded-md my-8 mx-7 p-5">
                         <div className="md:self-start">
                             <span className={"bg-yellow-100"}>
                                <Image src={"/reset.svg"} className={"p-2"} width={44} height={44} alt={"password"} />

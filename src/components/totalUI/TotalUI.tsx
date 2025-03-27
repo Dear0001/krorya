@@ -6,7 +6,6 @@ type TotalUiType = {
 }
 
 const TotalUi: React.FC<TotalUiType> = ({ title, count = 0 }) => {
-    // Define a mapping for background colors based on the title
     const getBackgroundColor = (title: string): string => {
         switch (title.toLowerCase()) {
             case 'recipes':
@@ -21,7 +20,7 @@ const TotalUi: React.FC<TotalUiType> = ({ title, count = 0 }) => {
                 return 'bg-gray-200';
         }
     };
-    // Convert title to Khmer
+
     const getKhmerTitle = (title: string): string => {
         switch (title.toLowerCase()) {
             case 'recipes':
@@ -46,12 +45,12 @@ const TotalUi: React.FC<TotalUiType> = ({ title, count = 0 }) => {
 
     return (
         <div
-            className={`flex flex-col gap-2 self-stretch p-4 rounded-2xl flex-[1_0_0] ${backgroundColor} min-w-[170px] max-md:min-w-[150px] max-sm:p-3 max-sm:min-w-full`}
+            className={`flex flex-col gap-2 self-stretch p-4 rounded-2xl ${backgroundColor} w-full min-h-[120px] sm:min-h-[140px]`}
         >
-            <span className="text-lg font-bold tracking-normal leading-5 max-sm:text-sm max-sm:leading-5">
+            <span className="text-base sm:text-lg font-bold tracking-normal leading-5">
                 {khmerTitle}
             </span>
-            <span className="text-5xl">{count}</span>
+            <span className="text-3xl sm:text-4xl md:text-5xl">{count}</span>
         </div>
     );
 };
