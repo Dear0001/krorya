@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         title: "Krorya dashboard web",
         description:
             "krorya is a web application for selling products the same as advertising about culture of khmer.",
-        images: "http://localhost:8080/api/v1/fileView/16e8cb88-b356-4f65-80b8-1f84709d5a6c.png",
+        images: "http://krorya-api.up.railway.app/api/v1/fileView/3a0e04d1-b004-455d-95c7-4acf283a8ef1.png",
     },
 };
 
