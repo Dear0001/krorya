@@ -62,7 +62,8 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
         setConfirmType(null);
     };
 
-    console.log("user profile", users.map((user) => user.profileImage));
+    console.log("user profiles", users.map((user) => getImageUrl(user.profileImage)));
+
     return (
         <div className="overflow-x-auto w-full">
             <div className="min-w-[600px] md:min-w-0">
@@ -90,16 +91,16 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 <div className="flex items-center">
                                     <div className="avatar mr-2">
                                         <Image
-                                            src={user?.profileImage === "default.jpg"
+                                            src={user?.profileImage === "default.jpg" || !user?.profileImage
                                                 ? "/man.png"
-                                                : getImageUrl(user?.profileImage)
-                                            }
+                                                : getImageUrl(user.profileImage)}
                                             width={100}
                                             height={100}
                                             alt="Avatar"
                                             className="w-12 h-12 object-cover rounded-full"
                                         />
                                     </div>
+
                                     <div className="flex flex-col items-center">
                                         <div className="text-sm opacity-50">{user?.fullName || "No Name"}</div>
                                     </div>
