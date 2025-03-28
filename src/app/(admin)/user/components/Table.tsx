@@ -62,6 +62,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
         setConfirmType(null);
     };
 
+    console.log("user profile", users.map((user) => user.profileImage));
     return (
         <div className="overflow-x-auto w-full">
             <div className="min-w-[600px] md:min-w-0">
