@@ -89,7 +89,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 <div className="flex items-center">
                                     <div className="avatar mr-2">
                                         <Image
-                                            src={user?.profileImage && user.profileImage.includes("default.jpg") && user.profileImage !== "string"
+                                            src={user?.profileImage && user?.profileImage.includes("default.jpg") && user?.profileImage !== "string"
                                                 ? "/man.png"
                                                 : getImageUrl(user?.profileImage) || "/man.png"
                                             }
@@ -105,8 +105,8 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 </div>
                             </td>
                             <td className="text-color-2 pl-5 py-3 hidden sm:table-cell">
-                                <span className={`px-3 py-2.5 rounded-lg ${user.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-                                    {user.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
+                                <span className={`px-3 py-2.5 rounded-lg ${user?.deleted ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                    {user?.deleted ? 'ផ្អាកដំណើរការ' : 'ធម្មតា'}
                                 </span>
                             </td>
                             <td className="pl-5 flex gap-2 py-3">

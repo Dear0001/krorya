@@ -2,6 +2,7 @@ import { kroryaApi } from "../api";
 import {FormData} from "@/lib/definition";
 
 export const RecipeApi = kroryaApi.injectEndpoints({
+    overrideExisting: true,
     endpoints: (builder) => ({
         // Fetch all recipes
         getAllRecipes: builder.query<any, { page: number; pageSize: number }>({

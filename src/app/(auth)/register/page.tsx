@@ -10,7 +10,7 @@ import { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutati
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
-import {convertRomanToKhmerWithIndex} from "@/lib/constants";
+import {checkEmailExist, checkEmailExistUrl} from "@/lib/constants";
 
 type EmailFormData = {
     email: string;
@@ -31,6 +31,8 @@ type OtpInputs = {
 };
 
 
+
+
 const SignUpPage = React.memo(() => {
     const [showPassword, setShowPassword] = useState(false);
     const [step, setStep] = useState<"email" | "otp" | "password">("email");
@@ -40,6 +42,10 @@ const SignUpPage = React.memo(() => {
     const [postEmail, { isLoading: isEmailLoading }] = usePostEmailMutation();
     const [postVerifyEmail, { isLoading: isOtpLoading }] = usePostVerifyEmailMutation();
     const [postRegister, { isLoading: isRegisterLoading }] = usePostRegisterMutation();
+
+    // Add this state
+    const [emailChecking, setEmailChecking] = useState(false);
+    const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
 
     // handle OTP input
     const [otp, setOtp] = useState<OtpInputs>({ 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" });
@@ -61,7 +67,33 @@ const SignUpPage = React.memo(() => {
         return () => clearTimeout(timer);
     }, [timeLeft]);
 
-    // Auto submit when all OTP fields are filled
+    // validate email
+    useEffect(() => {
+        const checkEmail = async () => {
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                setEmailAvailable(null);
+                return;
+            }
+
+            setEmailChecking(true);
+            try {
+                const exists = await checkEmailExist(email);
+                setEmailAvailable(!exists);
+            } catch (error) {
+                console.error("Email check failed:", error);
+                setEmailAvailable(null);
+                toast.error("មិនអាចពិនិត្យអ៊ីមែលបានទេ។ សូមព្យាយាមម្តងទៀត។");
+            } finally {
+                setEmailChecking(false);
+            }
+        };
+
+        const timer = setTimeout(checkEmail, 500); // Debounce for 500ms
+        return () => clearTimeout(timer);
+    }, [email]);
+
+
+
     // Auto submit when all OTP fields are filled
     useEffect(() => {
         const allFilled = Object.values(otp).every(val => val.length === 1);
@@ -151,19 +183,27 @@ const SignUpPage = React.memo(() => {
 
     const onSubmitEmail: SubmitHandler<EmailFormData> = async (data) => {
         try {
+            // First check if email exists
+            const emailExists = await checkEmailExist(data.email);
+            if (emailExists) {
+                toast.error("អ៊ីមែលនេះធ្លាប់បានប្រើរួចហើយ។ សូមប្រើអ៊ីមែលផ្សេង ឬចូលគណនី។");
+                return;
+            }
+
+            // If email doesn't exist, proceed with sending OTP
             const response = await postEmail({ email: data.email }).unwrap();
             setEmail(data.email);
             resetEmailForm();
             setStep("otp");
-            toast.success("OTP sent successfully! Check your email.");
+            toast.success("លេខកូដ OTP ត្រូវបានផ្ញើដោយជោគជ័យ! សូមពិនិត្យអ៊ីមែលរបស់អ្នក។");
         } catch (error: any) {
             console.error("Failed to send OTP:", error);
-            let errorMessage = "Failed to send OTP. Please try again.";
+            let errorMessage = "មិនអាចផ្ញើ OTP បានទេ។ សូមព្យាយាមម្តងទៀត។";
 
             if (error.data) {
                 errorMessage = error.data.message || errorMessage;
             } else if (error.status) {
-                errorMessage = `Server error: ${error.status}`;
+                errorMessage = `កំហុសម៉ាស៊ីនបម្រើ: ${error.status}`;
             }
 
             toast.error(errorMessage);
@@ -210,6 +250,7 @@ const SignUpPage = React.memo(() => {
         }
     };
 
+
     return (
         <div className="w-11/12 z-40 h-fit flex justify-center items-center">
             <ToastContainer
@@ -243,6 +284,7 @@ const SignUpPage = React.memo(() => {
                             onSubmit={handleSubmitEmail(onSubmitEmail)}
                             className="flex flex-col items-center gap-3 w-full"
                         >
+                            {/*Then modify your email input to show feedback:*/}
                             <div className="relative w-full">
                                 <input
                                     type="email"
@@ -253,19 +295,40 @@ const SignUpPage = React.memo(() => {
                                             message: "អាសយដ្ឋានអ៊ីមែលមិនត្រឹមត្រូវ",
                                         },
                                     })}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="បញ្ចូលអុីម៉ែល"
                                     className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
                                 />
+                                {emailChecking && (
+                                    <div className="absolute right-3 top-3">
+                                        {/* Loading spinner */}
+                                        <svg className="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+                                )}
+                                {emailAvailable === false && (
+                                    <div className="h-2 text-xs pl-4 text-red-500">
+                                        អ៊ីមែលនេះធ្លាប់បានប្រើរួចហើយ
+                                    </div>
+                                )}
+                                {emailAvailable === true && (
+                                    <div className="h-2 text-xs pl-4 text-green-500">
+                                        អ៊ីមែលនេះអាចប្រើបាន
+                                    </div>
+                                )}
                                 {emailErrors.email && (
                                     <div className="h-2 text-xs pl-4 text-red-500">
                                         {emailErrors.email.message}
                                     </div>
                                 )}
                             </div>
+
                             <button
                                 type="submit"
-                                disabled={isEmailLoading}
-                                className="w-full text-white px-4 py-3 border-black rounded-3xl bg-primary hover:bg-opacity-70"
+                                disabled={isEmailLoading || emailAvailable === false}
+                                className="w-full text-white px-4 py-3 border-black rounded-3xl bg-primary hover:bg-opacity-70 disabled:opacity-50"
                             >
                                 {isEmailLoading ? "កំពុងផ្ញើ..." : "ផ្ញើលេខកូដ OTP"}
                             </button>

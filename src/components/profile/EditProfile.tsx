@@ -76,7 +76,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
 
             const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
             const fileUrl = response.payload[0];
-            // slit the fileUrl to get the file name this f15d73ac-0c4c-4600-a146-b612cb6c6735.jpg from  http://localhost:8080/api/v1/fileView/f15d73ac-0c4c-4600-a146-b612cb6c6735.jpg
+            // slit the fileUrl to get the file name this
             const fileName = fileUrl.split("/").pop();
 
             setFormData((prevFormData) => ({
@@ -176,7 +176,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                         />
                                     ) : (
                                         <Image
-                                            src="/assets/images/profile.png"
+                                            src="/man.png"
                                             alt="Default Profile"
                                             width={150}
                                             height={150}

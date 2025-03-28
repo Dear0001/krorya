@@ -13,7 +13,7 @@ export const GuestApi = kroryaApi.injectEndpoints({
             providesTags: [{ type: "guest", id: "LIST" }]
         }),
     }),
-    overrideExisting: true // Add this to explicitly allow overriding
+    overrideExisting: true
 });
 
 export const { useGetRecipeByNameQuery, useGetDetailFoodByIdQuery } = GuestApi;

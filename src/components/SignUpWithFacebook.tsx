@@ -6,6 +6,7 @@ import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/hooks";
 import { setAccessToken } from "@/redux/features/auth/authSlice";
+import { checkEmailExistUrl } from "@/lib/constants";
 
 export function FacebookSignInButton() {
   const router = useRouter();
@@ -26,6 +27,24 @@ export function FacebookSignInButton() {
       handlePostFacebookLogin(session.user);
     }
   }, [session, status]);
+
+  const checkEmailExist = async (email: string): Promise<boolean> => {
+    try {
+      const response = await fetch(checkEmailExistUrl(email));
+      if (!response.ok) {
+        // If status is 404, email doesn't exist
+        if (response.status === 404) {
+          return false;
+        }
+        throw new Error('Failed to check email');
+      }
+      // If status is 200, email exists
+      return true;
+    } catch (error) {
+      console.error('Error checking email:', error);
+      throw error;
+    }
+  };
 
   const handleSignIn = async () => {
     if (isLoading) return;
@@ -54,6 +73,18 @@ export function FacebookSignInButton() {
 
     try {
       const { email, name } = user;
+
+      // First check if email exists in our database
+      const emailExists = await checkEmailExist(email);
+
+      if (!emailExists) {
+        // If email doesn't exist, redirect to signup page with Facebook data
+        toast.info("Please complete your registration first");
+        router.push(`/signup?email=${(email)}&name=${(name)}`);
+        return;
+      }
+
+      // If email exists, proceed with login
       const userData = { email, fullName: name };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/facebook`, {
@@ -81,6 +112,7 @@ export function FacebookSignInButton() {
     } catch (error) {
       if (!isMounted.current) return;
       console.error("Facebook login error:", error);
+      toast.error(error instanceof Error ? error.message : "Login failed. Please try again.");
     }
   };
 

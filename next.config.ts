@@ -1,14 +1,20 @@
 const nextConfig = {
     images: {
-        domains: ['img.freepik.com', 'aws-kshrd-final-project.s3.eu-central-1.amazonaws.com'],
         remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'img.freepik.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'aws-kshrd-final-project.s3.eu-central-1.amazonaws.com',
+            },
             {
                 protocol: 'http',
                 hostname: 'localhost',
                 port: '8080',
-                pathname: '/api/v1/fileView/*',
+                pathname: '/api/v1/fileView/**',
             },
-
         ],
     },
 };

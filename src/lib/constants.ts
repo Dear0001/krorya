@@ -11,6 +11,29 @@ export const getImageUrl = (photoFileName?: string): string =>
         ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}`
         : "/assets/image_login.png";
 
+// check email exist or not with http://localhost:8080/api/v1/auth/check-email-exist?email=dalenpheass%40gmail.com
+export const checkEmailExistUrl = (email: string): string =>
+    `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/auth/check-email-exist?email=${email}`;
+
+// utils/auth.ts
+export const checkEmailExist = async (email: string): Promise<boolean> => {
+    try {
+        const response = await fetch(checkEmailExistUrl(email));
+        if (!response.ok) {
+            // If status is 404, email doesn't exist (which is good for registration)
+            if (response.status === 404) {
+                return false;
+            }
+            throw new Error('Failed to check email');
+        }
+        // If status is 200, email exists
+        return true;
+    } catch (error) {
+        console.error('Error checking email:', error);
+        throw error;
+    }
+};
+
 //  Background color mapping for levels
 export const levelBgColors: { [key: string]: string } = {
         Easy: "bg-[#FFEBBB] text-[12px] font-medium text-[#AE7C00]",

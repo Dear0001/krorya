@@ -72,7 +72,7 @@ export function NavbarComponent() {
                     <span className="text-secondary text-[24px] font-semibold">
                         {userProfile?.payload?.fullName
                             ? userProfile.payload.fullName.split(" ").pop()
-                            : "ភ្ញៀវ"}
+                            : "Hi there"}
                     </span>
                 </div>
             </div>
@@ -94,9 +94,7 @@ export function NavbarComponent() {
                         <div
                             className="w-[50px] h-[50px] rounded-full object-cover border-2"
                             style={{
-                                backgroundImage: `url(${
-                                    imageUrl ? imageUrl : "/man.png"
-                                })`,
+                                backgroundImage: `url(${imageUrl ? imageUrl : "/man.png"})`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
                             }}

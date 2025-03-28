@@ -2,7 +2,7 @@
 "use client";
 import React, {useState} from "react";
 import {getImageUrl, levelBgColors} from "@/lib/constants";
-import {convertRomanToKhmer} from "@/app/(admin)/recipe/components/ui/CookingStep";
+import {convertRomanToKhmer} from "@/app/(user)/recipe/components/ui/CookingStep";
 import {useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 
 // Define the props for the component

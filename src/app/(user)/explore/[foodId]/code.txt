@@ -1,0 +1,50 @@
+ {/*<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 ps-10 lg:ps-10">*/}
+                    {/*    {currentItems?.map((food, index) => (*/}
+                    {/*        <div className="carousel-item" key={index}>*/}
+                    {/*            <FoodCard key={index} {...food} href={index} />*/}
+                    {/*        </div>*/}
+                    {/*    ))}*/}
+                    {/*</div>*/}
+                    {/*{foodUser?.length > itemsPerPage && (*/}
+                    {/*    <div className="w-full flex justify-center py-5">*/}
+                    {/*        <div className="join gap-1 items-center rounded">*/}
+                    {/*            <button*/}
+                    {/*                className={`w-10 h-10 ${*/}
+                    {/*                    currentPage === 1 ? "bg-gray-200" : "bg-white"*/}
+                    {/*                } text-black rounded-lg `}*/}
+                    {/*                onClick={() => handlePageChange(currentPage - 1)}*/}
+                    {/*                disabled={currentPage === 1}*/}
+                    {/*            >*/}
+                    {/*                ត្រឡប់*/}
+                    {/*            </button>*/}
+                    {/*            {[*/}
+                    {/*                ...Array(Math.ceil(foodUser.length / itemsPerPage)).keys(),*/}
+                    {/*            ].map((number) => (*/}
+                    {/*                <button*/}
+                    {/*                    key={number + 1}*/}
+                    {/*                    className={`w-10 h-10 ${*/}
+                    {/*                        currentPage === number + 1*/}
+                    {/*                            ? "bg-primary text-white"*/}
+                    {/*                            : "bg-white text-black"*/}
+                    {/*                    } rounded-lg border`}*/}
+                    {/*                    onClick={() => handlePageChange(number + 1)}*/}
+                    {/*                >*/}
+                    {/*                    {number + 1}*/}
+                    {/*                </button>*/}
+                    {/*            ))}*/}
+                    {/*            <button*/}
+                    {/*                className={`w-10 h-10 ${*/}
+                    {/*                    currentPage === Math.ceil(foodUser.length / itemsPerPage)*/}
+                    {/*                        ? "bg-gray-200"*/}
+                    {/*                        : "bg-white"*/}
+                    {/*                } text-black rounded-lg `}*/}
+                    {/*                onClick={() => handlePageChange(currentPage + 1)}*/}
+                    {/*                disabled={*/}
+                    {/*                    currentPage === Math.ceil(foodUser.length / itemsPerPage)*/}
+                    {/*                }*/}
+                    {/*            >*/}
+                    {/*                បន្ទាប់*/}
+                    {/*            </button>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}

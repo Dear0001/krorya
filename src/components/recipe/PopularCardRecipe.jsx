@@ -3,7 +3,7 @@ import Image from "next/image";
 import "@/app/globals.css";
 import { useGetRecipePopularQuery } from "@/redux/services/recipe";
 import CardRecipePopular from "@/components/card/CardRecipePopular";
-import LoadingFoodCard from "@/app/(admin)/recipe/components/recipeListUi/LoadingFoodCard";
+import LoadingFoodCard from "@/app/(user)/recipe/components/recipeListUi/LoadingFoodCard";
 import React from "react";
 
 const RecipeComponent = () => {

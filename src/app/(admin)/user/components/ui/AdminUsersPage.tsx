@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
         }
     }, [data]);
 
-    const filteredUsers = users.filter((user) =>
+    const filteredUsers = users?.filter((user) =>
         user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -42,7 +42,7 @@ export default function AdminUsersPage() {
                     <span className="mt-2">
                       អ្នកប្រើប្រាស់{" "}
                                         <span className="text-secondary text-[27px]">
-                        {convertRomanToKhmer(users.length > 99 ? "99+" : users.length.toString())}
+                        {convertRomanToKhmer(users?.length > 99 ? "99+" : users?.length.toString())}
                       </span>{" "}
                         បន្ថែមទៀត
                     </span>
@@ -75,7 +75,7 @@ export default function AdminUsersPage() {
                         <p className="h-screen grid place-content-center font-moulpali text-secondary">
                             កំពុងទាញអ្នកប្រើប្រាស់...
                         </p>
-                ) : filteredUsers.length > 0 ? (
+                ) : filteredUsers?.length > 0 ? (
                     <Table users={filteredUsers} />
                 ) : (
                     <p className="h-screen grid place-content-center font-moulpali text-secondary">
