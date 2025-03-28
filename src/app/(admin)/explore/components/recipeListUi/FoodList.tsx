@@ -5,9 +5,9 @@ import { useGetAllRecipesQuery, useGetRecipeByNameQuery } from "@/redux/services
 import { useGetFoodRecipeByCategoryIdQuery } from "@/redux/services/category";
 import LoadingFoodCard from "./LoadingFoodCard";
 import NotFound from "./NotFound";
+import RecipeCard from "@/components/card/RecipeCard";
 import { FoodRecipe } from "@/lib/definition";
 import { INITIAL_FETCH_COUNT } from "@/lib/constants";
-import FoodCard from "@/app/(admin)/explore/components/FoodCard";
 
 type FoodListProps = {
     activeCategoryId: string;
@@ -90,7 +90,7 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
                         {/* Responsive Grid Layout */}
                         <div className="grid grid-cols-2 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                             {foodData.slice(0, visibleCount).map((food) => (
-                                <FoodCard key={food.id} food={food} />
+                                <RecipeCard key={food.id} food={food} />
                             ))}
                         </div>
                     </div>

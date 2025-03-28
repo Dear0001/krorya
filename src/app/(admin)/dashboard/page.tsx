@@ -25,8 +25,8 @@ function Dashboard() {
             />
 
             <section className="flex flex-col md:flex-row gap-5">
-                <div className="w-full flex md:flex-row justify-between items-center md:items-end gap-4 md:mx-[40px] md:ml-[120px]">
-                    <h1 className="w-full font-moulpali text-secondary text-2xl sm:text-3xl md:text-4xl lg:text-h1 mt-4 md:mt-16">
+                <div className="w-full flex justify-between gap-4 md:mx-[40px] md:ml-[120px]">
+                    <h1 className="w-full font-moulpali text-secondary text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
                         របាយការណ៍សរុប
                     </h1>
                     <div className="w-full md:w-auto flex justify-center">

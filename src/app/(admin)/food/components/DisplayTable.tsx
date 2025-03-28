@@ -33,7 +33,7 @@ export default function CuisineCategoryLayout() {
                 toast.error(response.message || "Failed to create category");
             }
 
-            console.log("Category Created:", response);
+            // console.log("Category Created:", response);
         } catch (error: any) {
             toast.error(error?.data?.message || "Error creating category");
             console.error("Error creating category:", error?.message || error?.data || error);
@@ -52,7 +52,7 @@ export default function CuisineCategoryLayout() {
                 toast.error(response.message || "Failed to create cuisine");
             }
 
-            console.log("Cuisine Created:", response);
+            // console.log("Cuisine Created:", response);
         } catch (error: any) {
             toast.error(error?.data?.message || "Error creating cuisine");
             console.error("Error creating cuisine:", error?.data || error?.message || error);

@@ -117,7 +117,6 @@ const SignUpPage = React.memo(() => {
     const handleResendOtp = async () => {
         try {
             const response = await postEmail({ email }).unwrap();
-            console.log("OTP resent successfully", response);
             setTimeLeft(180);
             setCanResend(false);
             setOtp({ 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" });
@@ -153,7 +152,6 @@ const SignUpPage = React.memo(() => {
     const onSubmitEmail: SubmitHandler<EmailFormData> = async (data) => {
         try {
             const response = await postEmail({ email: data.email }).unwrap();
-            console.log("OTP sent successfully", response);
             setEmail(data.email);
             resetEmailForm();
             setStep("otp");
@@ -175,7 +173,6 @@ const SignUpPage = React.memo(() => {
     const onSubmitOtp: SubmitHandler<OtpFormData> = async (data) => {
         try {
             const response = await postVerifyEmail({ email, otp: data.otp }).unwrap();
-            console.log("OTP verified successfully", response);
             resetOtpForm();
             setStep("password");
             toast.success("Email verified successfully!");
@@ -196,7 +193,7 @@ const SignUpPage = React.memo(() => {
     const onSubmitPassword: SubmitHandler<PasswordFormData> = async (data) => {
         try {
             const response = await postRegister({ email, newPassword: data.newPassword }).unwrap();
-            console.log("Registration successful", response);
+            // console.log("Registration successful", response);
             toast.success("Registration successful! Redirecting to login...");
             setTimeout(() => router.push("/login"), 2000);
         } catch (error: any) {

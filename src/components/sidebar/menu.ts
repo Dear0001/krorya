@@ -8,8 +8,13 @@ const allMenuItems = [
     { href: "/home", label: "ទំព័រដើម", icon: "home.svg" },
     { href: "/dashboard", label: "ផ្ទាំងបង្ហាញ", icon: "dashboard.svg", adminOnly: true },
     { href: "/food", label: "ម្ហូប & ប្រភេទ", icon: "explore-recipe.svg", adminOnly: true },
-    { href: "/recipe", label: "រុករកមុខម្ហូប", icon: "explore-food.svg" },
+    { href: "/explore", label: "រុករកមុខម្ហូប", icon: "explore-food.svg" },
     { href: "/favorite", label: "ចំណង់ចំណូលចិត្ត", icon: "Vector.svg" },
+    {
+        href: "/recipe",
+        label: "រូបមន្តមុខម្ហូប",
+        icon: "explore-recipe.svg",
+    },
     { href: "/user", label: "អ្នកប្រើប្រាស់ទាំងអស់", icon: "users.svg", adminOnly: true },
     { href: "/setting", label: "ការកំណត់ផ្សេងៗ", icon: "setting.svg" },
 ];

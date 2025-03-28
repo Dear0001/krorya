@@ -13,7 +13,7 @@ export default function FavoriteLayout() {
     const { data: favoriteData, isLoading } = useGetFavoriteListQuery({});
     // Extract recipes from the response data
     const recipes = favoriteData?.payload?.favoriteFoodRecipes || [];
-    console.log("fav page:",recipes);
+    // console.log("fav page:",recipes);
 
     return (
         <>

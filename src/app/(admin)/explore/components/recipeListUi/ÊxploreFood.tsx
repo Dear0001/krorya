@@ -1,16 +1,16 @@
 "use client";
 
-import {useState} from "react";
-import {useGetAllCategoriesQuery} from "@/redux/services/category";
-import {useGetUserProfileQuery} from "@/redux/services/user";
-import {ToastContainer} from "react-toastify";
-import CategorySkeleton from "@/app/(admin)/recipe/components/CategorySkeleton";
-import CategoryList from "@/app/(admin)/recipe/components/recipeListUi/CategoryList";
-import FoodList from "@/app/(admin)/recipe/components/recipeListUi/FoodList";
-import RecipeForm from "@/app/(admin)/recipe/components/RecipeForm";
+import React, { useState } from "react";
 import Image from "next/image";
+import FoodList from "@/app/(admin)/recipe/components/recipeListUi/FoodList";
+import CategoryList from "@/app/(admin)/recipe/components/recipeListUi/CategoryList";
+import { useGetAllCategoriesQuery } from "@/redux/services/category";
+import RecipeForm from "../RecipeForm";
+import CategorySkeleton from "@/app/(admin)/recipe/components/CategorySkeleton";
+import { ToastContainer } from "react-toastify";
+import {useGetUserProfileQuery} from "@/redux/services/user";
 
-const ExploreFoodPage = () => {
+const ExploreFood: React.FC = () => {
     const [activeCategoryId, setActiveCategoryId] = useState<string>("all");
     const [query, setQuery] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -131,4 +131,4 @@ const ExploreFoodPage = () => {
     );
 };
 
-export default ExploreFoodPage;
+export default ExploreFood;

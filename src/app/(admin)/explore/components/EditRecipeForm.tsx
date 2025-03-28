@@ -26,7 +26,6 @@ type RecipeFormProps = {
 const schema = getRecipeSchema();
 
 export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProps) {
-    // console.log("Edit Recipe Data:", editRecipeData);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [, setSelectedCategory] = useState<number | null>(null);
     const [, setSelectedCuisine] = useState<number | null>(null);
@@ -78,11 +77,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             const photoUrl = editRecipeData?.photo?.[0]?.photo || "";
             const fileName = photoUrl.split("/").pop();
             const baseUrl = getImageUrl(fileName);
-
-            // console.log("Photo URL:", photoUrl);
-            // console.log("File Name:", fileName);
-            // console.log("Base URL:", baseUrl);
-
             setValue("photo", [{ photo: photoUrl }]);
             setValue("name", editRecipeData?.name);
             setValue("description", editRecipeData?.description);
@@ -108,7 +102,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             // Display preview
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
-            console.log("Selected Image::", imageUrl);
+            // console.log("Selected Image::", imageUrl);
 
             // Upload to API
             const formData = new FormData();
@@ -117,7 +111,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
             const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
             const uploadedFileName = response.payload?.[0] || "";
-            console.log("Uploaded file name::", uploadedFileName);
             // slit
             const fileName = uploadedFileName.split("/").pop();
 
@@ -392,7 +385,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        onClick={() => console.log("Submit button clicked")}
                         className={`btn bg-primary py-2.5 rounded-md border-none text-white normal-case w-32 font-normal transition-opacity ${
                             isUpdateRecipe ? "opacity-50 cursor-not-allowed" : "hover:bg-primary hover:outline-amber-200"
                         }`}

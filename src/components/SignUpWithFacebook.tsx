@@ -70,11 +70,11 @@ export function FacebookSignInButton() {
 
       const data = await response.json();
 
-      if (!data?.payload?.access_token) {
+      if (!data.accessToken) {
         throw new Error("Access token is missing in API response.");
       }
 
-      dispatch(setAccessToken(data.payload.access_token));
+      dispatch(setAccessToken(data.accessToken));
       toast.success("Logged in successfully!");
 
       setTimeout(() => router.push("/home"), 1000);

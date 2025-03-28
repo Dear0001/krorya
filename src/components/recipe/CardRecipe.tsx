@@ -20,7 +20,6 @@ type RecipeProps = {
 };
 
 const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
-console.log("recipes", recipe);
     const [favorite, setFavorite] = useState(recipe?.isFavorite || false);
     // add favorite with RTK Query
     const [addFavorite] = useAddFavoriteMutation();

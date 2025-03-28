@@ -23,4 +23,3 @@ export const { setAccessToken, clearAccessToken } = authSlice.actions;
 export default authSlice.reducer;
 // customize selector for easy component access
 export const selectToken = (state: RootState) => state.auth.token;
-// console.log("Token from Redux store:", selectToken);

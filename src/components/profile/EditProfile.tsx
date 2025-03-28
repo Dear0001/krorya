@@ -130,7 +130,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                 toast.error(response.message || "Failed to update profile", { autoClose: 3000 });
             }
 
-            console.log("Profile Update Response:", response);
         } catch (error: any) {
             console.error("Update Profile Error:", error);
             toast.dismiss();
