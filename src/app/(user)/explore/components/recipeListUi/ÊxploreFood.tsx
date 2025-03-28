@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import FoodList from "@/app/(user)/recipe/components/recipeListUi/FoodList";
+import FoodList from "@/app/(user)/explore/components/recipeListUi/FoodList";
 import CategoryList from "@/app/(user)/recipe/components/recipeListUi/CategoryList";
 import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import CategorySkeleton from "@/app/(user)/recipe/components/CategorySkeleton";
