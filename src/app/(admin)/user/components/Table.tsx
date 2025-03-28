@@ -90,9 +90,9 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 <div className="flex items-center">
                                     <div className="avatar mr-2">
                                         <Image
-                                            src={user?.profileImage && user?.profileImage.includes("default.jpg") && user?.profileImage !== "string"
+                                            src={user?.profileImage === "default.jpg"
                                                 ? "/man.png"
-                                                : getImageUrl(user?.profileImage) || "/man.png"
+                                                : getImageUrl(user?.profileImage)
                                             }
                                             width={100}
                                             height={100}
