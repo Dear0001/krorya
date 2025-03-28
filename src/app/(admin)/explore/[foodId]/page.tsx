@@ -319,14 +319,10 @@ export default function FoodDetailPage() {
                     <div className="w-full px-5 flex flex-col justify-start">
                         <div className="flex gap-3 justify-start">
                             <div className="flex gap-2">
-                                <div className="w-10 h-10 rounded-full overflow-hidden relative">
-                                    <Image
-                                        src={photoFileName || "/man.png"}
-                                        alt="Profile"
-                                        fill
-                                        className="object-cover"
-                                    />
-                                </div>
+                                <div
+                                    className="w-10 h-10 rounded-full bg-cover bg-center"
+                                    style={{ backgroundImage: `url(${photoFileName || "/man.png"})` }}
+                                ></div>
                             </div>
 
                             <input
@@ -356,7 +352,7 @@ export default function FoodDetailPage() {
                                 commentData={{
                                     commentator: {
                                         username: comment.user.fullName,
-                                        profileImage: comment.user.profileImage || "default.jpg"
+                                        profileImage: comment.user.profileImage || "man.png"
                                     },
                                     comment: comment.commentText,
                                     feedbackDate: comment.createdAt,

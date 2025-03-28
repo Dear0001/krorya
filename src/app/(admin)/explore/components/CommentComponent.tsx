@@ -24,7 +24,6 @@ export type CommentDataType = {
 
 export const CommentComponent: React.FC<{ commentData: CommentDataType }> = ({ commentData }) => {
     const [showReplyInput, setShowReplyInput] = useState(false);
-    console.log("fafafa", commentData);
 
     const [replyText, setReplyText] = useState("");
 
@@ -67,19 +66,16 @@ export const CommentComponent: React.FC<{ commentData: CommentDataType }> = ({ c
             <ToastContainer />
             <div className="w-full p-4 bg-white rounded-lg shadow-md mb-4">
                 <div className="flex items-center space-x-4">
-                    <div className="w-14 h-14 border rounded-full overflow-hidden relative">
-                        <Image
-                            className="rounded-full"
-                            fill
-                            src={
+                    <div
+                        className="w-14 h-14 border rounded-full bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url(${
                                 commentData.commentator.profileImage === "default.jpg"
                                     ? "/man.png"
                                     : getImageUrl(commentData.commentator.profileImage)
-                            }
-                            alt={commentData.commentator.username || "Profile Image"}
-                        />
-
-                    </div>
+                            })`,
+                        }}
+                    ></div>
                     <div className="flex flex-col w-full">
                         <div className="flex justify-between items-center">
                             <p className="text-secondary font-medium">
