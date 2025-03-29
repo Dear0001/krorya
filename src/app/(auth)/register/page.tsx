@@ -5,12 +5,10 @@ import {useEffect, useRef, useState} from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { GoogleSignInButton } from "@/components/SignUpWithGoogle";
 import { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutation } from "@/redux/services/auth";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
-import {checkEmailExist, checkEmailExistUrl} from "@/lib/constants";
+import {checkEmailExist} from "@/lib/constants";
 
 type EmailFormData = {
     email: string;
@@ -455,27 +453,6 @@ const SignUpPage = React.memo(() => {
                             </form>
                         </div>
                     )}
-
-                    <div className="text-center flex gap-2">
-                        <Image
-                            src={"/icons/group-1.svg"}
-                            alt={"line"}
-                            width={100}
-                            height={70}
-                        />
-                        <span>ឬភ្ជាប់ជាមួយ</span>
-                        <Image
-                            src={"/icons/group-2.svg"}
-                            alt={"line"}
-                            width={100}
-                            height={70}
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-4 w-full">
-                        <GoogleSignInButton />
-                        <FacebookSignInButton />
-                    </div>
                     <div className={"mt-2"}>
                         <span>តើអ្នកមានគណនីឬនៅ?</span>
                         <Link href={"/login"} className={"text-primary"}>
