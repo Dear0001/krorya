@@ -34,10 +34,10 @@ const ExploreFood: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col">
+        <main className="flex flex-col">
             <ToastContainer />
             {/* Category Section */}
-            <div className="bg-white md:p-6 mb-5 flex flex-col gap-5 p-2 rounded-lg">
+            <section className="bg-white md:p-6 mb-5 flex flex-col gap-5 p-2 rounded-lg">
                 <ul className="grid gap-2 list-none">
                     <li className="flex items-center">
                         <Image src="/icons/Romdol.svg" alt="Romdol Icon" width={33} height={33} />
@@ -57,10 +57,10 @@ const ExploreFood: React.FC = () => {
                         onCategoryClick={handleCategoryClick}
                     />
                 )}
-            </div>
+            </section>
 
             {/* Food List Section */}
-            <div className="bg-white p-5 md:p-6 lg:p-8 rounded-md h-full">
+            <section className="bg-white py-5 px-2 md:bg-white md:py-5 lg:p-8 rounded-md h-full">
                 <ul className="grid grid-cols-1 lg:flex gap-3 lg:justify-between">
                     {/* Header title */}
                     <li className="flex items-center">
@@ -74,7 +74,7 @@ const ExploreFood: React.FC = () => {
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            className="w-full  py-2 pl-5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-white text-black placeholder:text-gray-500"
+                            className="w-full py-2 pl-5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-white text-black placeholder:text-gray-500"
                             placeholder="ស្វែងរក..."
                         />
                         {/* Search Icon */}
@@ -92,8 +92,8 @@ const ExploreFood: React.FC = () => {
 
                 {/* Food List */}
                 <FoodList activeCategoryId={activeCategoryId} query={query} />
-            </div>
-        </div>
+            </section>
+        </main>
     );
 };
 

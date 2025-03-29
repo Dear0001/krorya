@@ -53,32 +53,36 @@ const CookingStep: React.FC<CookingStepProps> = ({cookingSteps = [], image}) => 
         setSelected((prev) => Math.max(prev - 1, 1));
     };
 
-    const imageUrl = getImageUrl(image?.[0].photo);
-    console.log("imageUrl", imageUrl);
+    const currentImage = image?.[0] || { photo: "", photoId: 0 };
 
     return (
-        <div className="shadow-md h-fit w-full p-4">
-            <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+        <main className="shadow-md h-fit w-full p-4">
+            <section className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
                 {/* Image Section */}
-                <div className="w-full h-full hidden rounded-lg lg:block md:block">
-                    <Image
+                <article className="w-full h-full hidden rounded-lg lg:block md:block">
+                    <div
                         className="w-full h-96 rounded-lg"
-                        width={500}
-                        height={500}
-                        src={imageUrl}
-                        alt="Step Image"
+                        style={{
+                            backgroundImage: `url(${
+                                currentImage.photo === "default.jpg" || !currentImage.photo
+                                    ? "/placeholder-recipe.jpg" 
+                                    : getImageUrl(currentImage.photo)
+                            })`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                        }}
                     />
-                </div>
+                </article>
 
                 {/* Steps Section */}
-                <div className="w-full h-full flex flex-col items-center py-4">
-                    <div className="w-full flex justify-between px-2">
+                <article className="w-full h-full flex flex-col items-center py-4">
+                    <section className="w-full flex justify-between px-2">
                         <form method="dialog">
                             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                                 ✕
                             </button>
                         </form>
-                    </div>
+                    </section>
                     <h1 className="text-secondary font-moulpali text-3xl justify-center">
                         ជំហានទី {convertRomanToKhmer(selected.toString())}
                     </h1>
@@ -96,7 +100,7 @@ const CookingStep: React.FC<CookingStepProps> = ({cookingSteps = [], image}) => 
                     </div>
 
                     {/* Navigation and Dropdown */}
-                    <div
+                    <section
                         className="flex justify-between lg:w-full lg:h-full md:w-fit md:h-full w-full h-full items-end px-5 py-5 lg:px-0 lg:py-0 md:px-0 md:py-0">
                         <div className="relative">
                             <button
@@ -139,10 +143,10 @@ const CookingStep: React.FC<CookingStepProps> = ({cookingSteps = [], image}) => 
                                 <Image src="/icons/Expand_right_double_light.svg" alt="Next" width={24} height={24}/>
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </section>
+                </article>
+            </section>
+        </main>
     );
 };
 

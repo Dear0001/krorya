@@ -5,14 +5,7 @@ import { convertRomanToKhmerWithIndex, getImageUrl } from "@/lib/constants";
 import Image from "next/image";
 import { useDeleteUserByIdMutation } from "@/redux/services/user";
 import { RiCloseLargeLine } from "react-icons/ri";
-
-type User = {
-    id: number;
-    fullName: string;
-    profileImage?: string;
-    role: string;
-    deleted: boolean;
-};
+import type { User } from "@/lib/definition";
 
 export default function Table({ users: initialUsers = [] }: { users: User[] }) {
     const pageSize = 6;
@@ -65,11 +58,11 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
     console.log("user profiles", users.map((user) => getImageUrl(user.profileImage)));
 
     return (
-        <div className="overflow-x-auto w-full">
-            <div className="min-w-[600px] md:min-w-0">
+        <main className="overflow-x-auto w-full">
+            <section className="min-w-[600px] md:min-w-0">
                 <table className="table shadow-md w-full rounded-lg overflow-hidden">
                     <thead>
-                    <tr className="text-lg text-left bg-[#F9FAFB] h-[55px] text-color-2">
+                        <tr className="text-lg text-left bg-[#F9FAFB] h-[55px] text-color-2">
                         <th className="font-light px-5">លេខរៀង</th>
                         <th className="font-light px-5 hidden md:table-cell">កាលបរិច្ឆេទបង្កើតគណនី</th>
                         <th className="font-light px-5">ឈ្មោះអ្នកប្រើប្រាស់</th>
@@ -90,17 +83,19 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                             <td className="text-color-2 py-3">
                                 <div className="flex items-center">
                                     <div className="avatar mr-2">
-                                        <Image
-                                            src={user?.profileImage === "default.jpg" || !user?.profileImage
-                                                ? "/man.png"
-                                                : getImageUrl(user.profileImage)}
-                                            width={100}
-                                            height={100}
-                                            alt="Avatar"
-                                            className="w-12 h-12 object-cover rounded-full"
+                                        <div
+                                            className="w-12 h-12 rounded-full border-2"
+                                            style={{
+                                                backgroundImage: `url(${
+                                                    user?.profileImage === "default.jpg" || !user?.profileImage
+                                                        ? "/man.png"
+                                                        : getImageUrl(user.profileImage)
+                                                })`,
+                                                backgroundSize: "cover",
+                                                backgroundPosition: "center",
+                                            }}
                                         />
                                     </div>
-
                                     <div className="flex flex-col items-center">
                                         <div className="text-sm opacity-50">{user?.fullName || "No Name"}</div>
                                     </div>
@@ -132,11 +127,11 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                     ))}
                     </tbody>
                 </table>
-            </div>
+            </section>
 
             {/* Confirmation Popup */}
             {showConfirmation && selectedUser && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white w-[310px] p-5 rounded-lg shadow-lg">
                         <div className="flex justify-end">
                             <button
@@ -187,7 +182,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </section>
             )}
             <Pagination
                 className="mt-4 flex"
@@ -196,6 +191,6 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                 totalCount={users.length || 0}
                 currentPage={currentPage}
             />
-        </div>
+        </main>
     );
 }

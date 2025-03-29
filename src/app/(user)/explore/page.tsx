@@ -8,7 +8,7 @@ const ExplorePage = () => {
     return (
         <main>
             <ToastContainer />
-            <section className="bg-gray-50 py-5 overflow-auto scrollbar-hide ">
+            <section className="py-5 overflow-auto scrollbar-hide">
                 <ExploreFood />
             </section>
         </main>

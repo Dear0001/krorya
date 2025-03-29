@@ -175,8 +175,19 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
     return (
         <main>
-            <ToastContainer autoClose={2000} />
-            <div className="max-h-[700px] no-scrollbar overflow-y-auto mx-2 overflow-y-scroll no-scrollbar">
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+            <div className="max-h-[700px] no-scrollbar mx-2 overflow-y-scroll no-scrollbar">
                 <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>

@@ -6,7 +6,7 @@ import { useUpdateUserProfileMutation } from "@/redux/services/user";
 import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
 import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 type UserProfile = {
     id: string;
@@ -60,7 +60,12 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                 fullName: userData.fullName,
                 phoneNumber: userData.phoneNumber,
             });
-            setImagePreview(getImageUrl(userData?.profileImage) || "/man.png");
+            // Update the image preview logic to match your desired implementation
+            setImagePreview(
+                userData?.profileImage === "default.jpg" || !userData?.profileImage
+                    ? "/man.png"
+                    : getImageUrl(userData.profileImage)
+            );
         }
     }, [userData]);
 
@@ -76,13 +81,14 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
 
             const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
             const fileUrl = response.payload[0];
-            // slit the fileUrl to get the file name this
             const fileName = fileUrl.split("/").pop();
 
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 profileImage: fileName || ""
             }));
+
+            // Use the object URL for immediate preview
             setImagePreview(URL.createObjectURL(file));
             setError(null);
         } catch (error) {
@@ -138,13 +144,26 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
     };
 
     return (
-        <div>
+        <main>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+
             <button onClick={() => setIsOpen(true)}>
                 <Image src="/icons/pancel.svg" width={25} height={25} alt="Edit Profile" />
             </button>
             {isOpen && (
-                <div className="bg-black/50 fixed inset-0 flex items-center justify-center z-50">
-                    <div className="relative py-8 px-4 w-full max-w-md bg-white rounded-lg shadow-lg">
+                <section className="bg-black/50 fixed inset-0 flex items-center justify-center z-50">
+                    <article className="relative py-8 px-4 w-full max-w-md bg-white rounded-lg shadow-lg">
                         <button
                             type="button"
                             className="absolute top-3 right-2.5 text-gray-400 hover:text-gray-900 p-1.5"
@@ -164,25 +183,20 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                             </p>
                         </div>
                         <div className="mt-5 flex flex-col items-center">
-                            <div className="w-[150px] h-[150px] relative">
-                                <div className="w-full h-full bg-gray-200 rounded-full overflow-hidden">
-                                    {imagePreview ? (
-                                        <Image
-                                            src={imagePreview}
-                                            alt="Profile Preview"
-                                            className="w-full h-full object-cover"
-                                            width={130}
-                                            height={130}
-                                        />
-                                    ) : (
-                                        <Image
-                                            src="/man.png"
-                                            alt="Default Profile"
-                                            width={150}
-                                            height={150}
-                                        />
-                                    )}
-                                </div>
+                            <div
+                                className="w-[150px] h-[150px] rounded-full border-2 border-gray-300"
+                                style={{
+                                    backgroundImage: `url(${
+                                        formData.profileImage === "default.jpg" || !formData.profileImage
+                                            ? "/man.png"
+                                            : imagePreview?.startsWith('blob:')
+                                                ? imagePreview
+                                                : getImageUrl(formData.profileImage)
+                                    })`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            >
                                 <input
                                     ref={fileInputRef}
                                     type="file"
@@ -191,7 +205,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                     onChange={handleFileChange}
                                 />
                                 <button
-                                    className="absolute bottom-2 right-2 bg-gray-300 rounded-full p-2"
+                                    className="relative top-[110px] left-[110px] bg-gray-300 rounded-full p-2"
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <Image
@@ -243,10 +257,10 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                 </button>
                             </div>
                         </form>
-                    </div>
-                </div>
+                    </article>
+                </section>
             )}
-        </div>
+        </main>
     );
 };
 

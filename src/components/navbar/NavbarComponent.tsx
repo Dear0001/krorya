@@ -8,8 +8,8 @@ import { getImageUrl } from "@/lib/constants";
 import { SidebarComponent } from "@/components/sidebar/SidebarComponent";
 import { FaBars } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import { useAppDispatch } from "@/redux/hooks";
-import { clearAccessToken } from "@/redux/features/auth/authSlice";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {clearAccessToken, selectToken} from "@/redux/features/auth/authSlice";
 
 export function NavbarComponent() {
     const { data: userProfile } = useGetUserProfileQuery();
@@ -17,6 +17,7 @@ export function NavbarComponent() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const dispatch = useAppDispatch();
+    const token = useAppSelector(selectToken);
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -54,7 +55,9 @@ export function NavbarComponent() {
         }
     };
 
-    const photoFileName = userProfile?.payload?.profileImage === "default.jpg" ? null : userProfile?.payload?.profileImage;
+    const photoFileName = userProfile?.payload?.profileImage === "default.jpg"
+        ? null
+        : userProfile?.payload?.profileImage;
     const imageUrl = getImageUrl(photoFileName);
 
     return (
@@ -72,7 +75,7 @@ export function NavbarComponent() {
                     <span className="text-secondary text-[24px] font-semibold">
                         {userProfile?.payload?.fullName
                             ? userProfile.payload.fullName.split(" ").pop()
-                            : "Hi there"}
+                            : "អ្នកប្រើប្រាស់"}
                     </span>
                 </div>
             </div>
@@ -87,49 +90,53 @@ export function NavbarComponent() {
                         </div>
                     </div>
                 )}
+            </div>
+            {/* User Avatar with Dropdown */}
+            <div className="relative">
+                <button onClick={toggleDropdown} className="focus:outline-none">
+                    <div
+                        className="w-[50px] h-[50px] rounded-full object-cover border-2"
+                        style={{
+                            backgroundImage: `url(${
+                                userProfile?.payload?.profileImage === "default.jpg" || !imageUrl
+                                    ? "/man.png"
+                                    : imageUrl
+                            })`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                        }}
+                    />
+                </button>
 
-                {/* User Avatar with Dropdown */}
-                <div className="relative">
-                    <button onClick={toggleDropdown} className="focus:outline-none">
-                        <div
-                            className="w-[50px] h-[50px] rounded-full object-cover border-2"
-                            style={{
-                                backgroundImage: `url(${imageUrl ? imageUrl : "/man.png"})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            }}
-                        />
-                    </button>
-
-                    {/* Dropdown Menu */}
-                    {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                            <ul className="py-1">
-                                {userProfile ? (
-                                    <>
-                                        {/* Profile Option */}
-                                        <li
-                                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                router.push("/profile");
-                                            }}
-                                        >
-                                            Profile
-                                        </li>
-
-                                        {/* Sign Out Option */}
-                                        <li
-                                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                                            onClick={handleSignOut}
-                                        >
-                                            Sign Out
-                                        </li>
-                                    </>
-                                ) : (
-                                    /* Create Account Option for non-logged in users */
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 rounded-lg w-48 py-2.5 px-3 bg-white border border-gray-200 shadow-lg z-50">
+                        <ul className="py-1">
+                            {userProfile ? (
+                                <>
+                                    {/* Profile Option */}
                                     <li
-                                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                        className="px-4 py-2 mb-2 rounded-lg text-sm bg-[#fef8e7] border border-primary text-primary hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => {
+                                            setIsDropdownOpen(false);
+                                            router.push("/profile");
+                                        }}
+                                    >
+                                        Profile
+                                    </li>
+
+                                    {/* Sign Out Option */}
+                                    <li
+                                        className="ppx-4 rounded-lg py-2 text-sm bg-[##fff1f1] border border-secondary text-secondary hover:bg-gray-100 cursor-pointer"
+                                        onClick={handleSignOut}
+                                    >
+                                        Sign Out
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li
+                                        className="px-4 py-2 mb-2 rounded-lg text-sm bg-[#fef8e7] border border-primary text-primary hover:bg-gray-100 cursor-pointer"
                                         onClick={() => {
                                             setIsDropdownOpen(false);
                                             router.push("/register");
@@ -137,13 +144,23 @@ export function NavbarComponent() {
                                     >
                                         បង្កើតគណនី
                                     </li>
-                                )}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            </div>
+                                    <li
+                                        className="px-4 rounded-lg py-2 text-sm bg-[##fff1f1] border border-secondary text-secondary hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => {
+                                            setIsDropdownOpen(false);
+                                            router.push("/login");
+                                        }}
+                                    >
+                                        ចូលគណនី
+                                    </li>
+                                </>
 
+
+                            )}
+                        </ul>
+                    </div>
+                )}
+            </div>
             {/* Sidebar with Backdrop */}
             {isSidebarOpen && (
                 <div

@@ -1,66 +1,48 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {useAppDispatch} from "@/redux/hooks";
-import {setAccessToken} from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { setAccessToken } from "@/redux/features/auth/authSlice";
 
 export function GoogleSignInButton() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { data: session, status } = useSession();
   const dispatch = useAppDispatch();
-  const isMounted = useRef(true);
-  const isProcessing = useRef(false);
-
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (status === "authenticated" && session?.user && !isProcessing.current) {
-      isProcessing.current = true;
-      handlePostGoogleLogin(session.user)
-          .finally(() => {
-            if (isMounted.current) {
-              isProcessing.current = false;
-            }
-          });
-    }
-  }, [session, status]);
 
   const handleSignIn = async () => {
-    if (isProcessing.current) return;
-
     setError(null);
     setIsLoading(true);
+
     try {
+      // Step 1: Sign in with Google
       const result = await signIn("google", { redirect: false });
+
       if (result?.error) {
         setError(result.error === "AccessDenied"
             ? "Access denied. Please try another account."
             : "Sign in failed. Please try again.");
+        return;
       }
-    } catch (error) {
-      setError("An unexpected error occurred.");
-      console.error("Google sign-in error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  const handlePostGoogleLogin = async (user: any) => {
-    if (!isMounted.current) return;
+      // Step 2: If Google sign-in was successful, fetch the user session
+      const sessionResponse = await fetch('/api/auth/session');
+      if (!sessionResponse.ok) {
+        throw new Error("Failed to fetch user session");
+      }
 
-    setIsLoading(true);
-    try {
-      const { email, name } = user;
+      const session = await sessionResponse.json();
+
+      if (!session?.user) {
+        throw new Error("User data not found in session");
+      }
+
+      // Step 3: Post the Google login to your backend
+      const { email, name } = session.user;
       const userData = { email, fullName: name };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/google`, {
@@ -86,15 +68,12 @@ export function GoogleSignInButton() {
 
       setTimeout(() => router.push("/home"), 1000);
     } catch (error) {
-      if (!isMounted.current) return;
       console.error("Google login error:", error);
+      setError(error instanceof Error ? error.message : "An unexpected error occurred");
     } finally {
-      if (isMounted.current) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
   };
-
 
   return (
       <div>

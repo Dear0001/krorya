@@ -8,14 +8,9 @@ import React from "react";
 const ProfileUi = () => {
     const { data: userProfile } = useGetUserProfileQuery();
 
-    // Check if the user profile data is loaded and if there's a profile image
-    const photoFileName = userProfile?.payload?.profileImage;
-    // Use the getImageUrl function to construct the full image URL
-    const imageUrl = getImageUrl(photoFileName);
 
     return (
-        <div className={"mx-auto p-5 bg-[#FFFFFF] w-full rounded-lg"}>
-            <ToastContainer/>
+        <main className={"mx-auto p-5 bg-[#FFFFFF] w-full rounded-lg"}>
             <div className={"flex gap-5 flex-col"}>
                 <section className={"flex justify-between"}>
                     {/* Profile Image - Always Rounded */}
@@ -24,7 +19,9 @@ const ProfileUi = () => {
                             className="w-[140px] h-[140px] rounded-full object-cover border-2 border-gray-300"
                             style={{
                                 backgroundImage: `url(${
-                                    imageUrl ? imageUrl : "/man.png"
+                                    userProfile?.payload?.profileImage === "default.jpg" || !userProfile?.payload?.profileImage
+                                        ? "/man.png"
+                                        : getImageUrl(userProfile?.payload?.profileImage)
                                 })`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
@@ -32,7 +29,7 @@ const ProfileUi = () => {
                         ></div>
 
                         <div>
-                            <h1 className={"text-h3 font-bold py-3"}>{userProfile?.payload?.fullName ? `${userProfile?.payload?.fullName}` : "Admin"}</h1>
+                            <h1 className={"text-h3 font-bold py-3"}>{userProfile?.payload?.fullName ? `${userProfile?.payload?.fullName}` : "មិនមានឈ្មោះ"}</h1>
                             {/* Special Styling or Badge for Admin */}
                             {userProfile?.payload?.role === "ROLE_ADMIN" && (
                                 <span className="mt-1 px-5 py-1 text-2xl text-white bg-red-500 rounded-full font-bold">
@@ -51,7 +48,7 @@ const ProfileUi = () => {
                     </div>
                 </section>
             </div>
-        </div>
+        </main>
     );
 };
 

@@ -10,6 +10,7 @@ import {useAppDispatch} from "@/redux/hooks";
 import {setAccessToken} from "@/redux/features/auth/authSlice";
 import {GoogleSignInButton} from "@/components/SignUpWithGoogle";
 import {FacebookSignInButton} from "@/components/SignUpWithFacebook";
+import style from "@/app/style/auth.module.css";
 
 type ValueTypes = { email: string; password: string };
 
@@ -38,12 +39,13 @@ const Login = () => {
 
             if (response.ok) {
                 toast.success("ការចូលគណនីបានជោគជ័យ!");
-                if(data?.payload?.role === "ROLE_USER") {
+                dispatch(setAccessToken(data?.payload?.access_token));
+                if(data?.user?.role === "ROLE_USER") {
                     router.push("/home");
                 } else {
-                    dispatch(setAccessToken(data?.payload?.access_token));
                     router.push("/dashboard");
                 }
+
             } else if (response.status === 404 && data.detail === "You have been banned") {
                 toast.error(data.detail || "គណនីរបស់អ្នកត្រូវបានហាម");
             } else {
@@ -57,7 +59,7 @@ const Login = () => {
     };
 
     return (
-        <div className="w-11/12 z-40 h-fit flex justify-center items-center">
+        <main className="w-11/12 z-40 h-fit flex justify-center items-center">
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
@@ -70,9 +72,10 @@ const Login = () => {
                 pauseOnHover
                 theme="light"
             />
-            <div className="mx-auto flex flex-col-reverse sm:flex-row gap-10 max-w-[1000px] lg:w-full lg:px-16 md:px-14 md:py-16 w-full rounded-3xl bg-white p-4 space-y-8">
+            {/**/}
+            <section className={style.container}>
                 <div className="flex flex-col items-center py-4 md:w-1/2 lg:w-1/2">
-                    <h1 className="font-moulpali text-center font-bold text-2xl md:text-[30px] sm:text-3xl text-secondary mb-8">
+                    <h1 className={style.header}>
                         ក្រយាសូមស្វាគមន៍!
                     </h1>
                     <Image src="/assets/images/signin-icon.svg" alt="kback" width={100} height={45} />
@@ -82,7 +85,7 @@ const Login = () => {
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center gap-3 w-full mt-4">
                         <div className="relative w-full">
                             <input
-                                className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                                className={style.input}
                                 type="email"
                                 placeholder="john@gmail.com"
                                 {...register("email", {
@@ -100,7 +103,7 @@ const Login = () => {
                                     minLength: { value: 6, message: "ពាក្យសម្ងាត់ត្រូវតែមានចាប់យកប្រាក់ 6 តួអក្សរឬច្រើនជាង" },
                                 })}
                                 placeholder="បញ្ចូលពាក្យសម្ងាត់"
-                                className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                                className={style.input}
                             />
                             <Image
                                 onClick={() => setShowPassword((prev) => !prev)}
@@ -153,8 +156,8 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 };
 

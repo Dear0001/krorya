@@ -9,6 +9,7 @@ import { usePostEmailMutation, usePostVerifyEmailMutation, usePostRegisterMutati
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {checkEmailExist} from "@/lib/constants";
+import style from "@/app/style/auth.module.css";
 
 type EmailFormData = {
     email: string;
@@ -102,7 +103,6 @@ const SignUpPage = React.memo(() => {
 
     // Format time to mm:ss and convert to Khmer numerals
     const formatTimeWithKhmerNumerals = (seconds: number) => {
-        // First format to mm:ss (Roman numerals)
         const formatToRoman = (sec: number) => {
             const mins = Math.floor(sec / 60);
             const secs = sec % 60;
@@ -146,7 +146,7 @@ const SignUpPage = React.memo(() => {
     // handle resend OTP request when timer expires
     const handleResendOtp = async () => {
         try {
-            const response = await postEmail({ email }).unwrap();
+            await postEmail({ email }).unwrap();
             setTimeLeft(180);
             setCanResend(false);
             setOtp({ 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" });
@@ -166,9 +166,7 @@ const SignUpPage = React.memo(() => {
     } = useForm<EmailFormData>();
 
     const {
-        register: registerOtp,
         handleSubmit: handleSubmitOtp,
-        formState: { errors: otpErrors },
         reset: resetOtpForm,
     } = useForm<OtpFormData>();
 
@@ -189,7 +187,7 @@ const SignUpPage = React.memo(() => {
             }
 
             // If email doesn't exist, proceed with sending OTP
-            const response = await postEmail({ email: data.email }).unwrap();
+            await postEmail({ email: data.email }).unwrap();
             setEmail(data.email);
             resetEmailForm();
             setStep("otp");
@@ -210,7 +208,7 @@ const SignUpPage = React.memo(() => {
 
     const onSubmitOtp: SubmitHandler<OtpFormData> = async (data) => {
         try {
-            const response = await postVerifyEmail({ email, otp: data.otp }).unwrap();
+            await postVerifyEmail({ email, otp: data.otp }).unwrap();
             resetOtpForm();
             setStep("password");
             toast.success("Email verified successfully!");
@@ -250,7 +248,7 @@ const SignUpPage = React.memo(() => {
 
 
     return (
-        <div className="w-11/12 z-40 h-fit flex justify-center items-center">
+        <main className="w-11/12 z-40 h-fit flex justify-center items-center">
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
@@ -263,9 +261,9 @@ const SignUpPage = React.memo(() => {
                 pauseOnHover
                 theme="light"
             />
-            <div className="mx-auto flex h-5/6 py-4 flex-col-reverse sm:flex-row md:flex-col md:items-center md:h-1/2 lg:flex-row gap-10 max-w-[1000px] lg:w-full lg:px-16 md:px-14 md:py-16 w-full rounded-3xl bg-white p-4 space-y-8">
+            <section className={style.container}>
                 <div className="flex flex-col items-center justify-center gap-2 md:w-full lg:w-1/2">
-                    <h1 className="font-moulpali text-center font-bold text-[13px] md:text-3xl lg:text-[30px] sm:text-[9px] text-secondary">
+                    <h1 className={style.header}>
                         ក្រយាសូមស្វាគមន៍!
                     </h1>
                     <Image
@@ -295,7 +293,7 @@ const SignUpPage = React.memo(() => {
                                     })}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="បញ្ចូលអុីម៉ែល"
-                                    className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                                    className={style.input}
                                 />
                                 {emailChecking && (
                                     <div className="absolute right-3 top-3">
@@ -408,7 +406,7 @@ const SignUpPage = React.memo(() => {
                                             },
                                         })}
                                         placeholder="បញ្ចូលពាក្យសម្ងាត់ថ្មី"
-                                        className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                                        className={style.input}
                                     />
                                     {passwordErrors.newPassword && (
                                         <div className="h-2 text-xs pl-4 text-red-500">
@@ -425,7 +423,7 @@ const SignUpPage = React.memo(() => {
                                                 value === watch("newPassword") || "ពាក្យសម្ងាត់មិនដូចគ្នា",
                                         })}
                                         placeholder="បញ្ជាក់ពាក្យសម្ងាត់ថ្មី"
-                                        className="w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none"
+                                        className={style.input}
                                     />
                                     {passwordErrors.confirmPassword && (
                                         <div className="h-2 text-xs pl-4 text-red-500">
@@ -477,8 +475,8 @@ const SignUpPage = React.memo(() => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 });
 

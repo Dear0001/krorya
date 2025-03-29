@@ -11,7 +11,7 @@ export const getImageUrl = (photoFileName?: string): string =>
         ? `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/fileView/${photoFileName}`
         : "/assets/image_login.png";
 
-// check email exist or not with http://localhost:8080/api/v1/auth/check-email-exist?email=dalenpheass%40gmail.com
+// check email exist or not with
 export const checkEmailExistUrl = (email: string): string =>
     `${process.env.NEXT_PUBLIC_SPRING_API_URL}/api/v1/auth/check-email-exist?email=${email}`;
 

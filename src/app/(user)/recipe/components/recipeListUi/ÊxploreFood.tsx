@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import React, {useState} from "react";
 import {useGetAllCategoriesQuery} from "@/redux/services/category";
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import {ToastContainer} from "react-toastify";
@@ -36,7 +36,18 @@ const ExploreFoodPage = () => {
 
     return (
         <div className="flex flex-col">
-            <ToastContainer />
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             {/* Category Section */}
             <div className="bg-white md:p-6 mb-5 flex flex-col gap-5 p-2 rounded-lg">
                 <ul className="grid gap-2 list-none">

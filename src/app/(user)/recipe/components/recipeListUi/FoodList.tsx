@@ -9,6 +9,7 @@ import NotFound from "./NotFound";
 import { FoodRecipe } from "@/lib/definition";
 import { INITIAL_FETCH_COUNT } from "@/lib/constants";
 import RecipeCard from "@/components/card/RecipeCard";
+import style from "@/app/style/grid.module.css";
 
 type FoodListProps = {
     activeCategoryId: string;
@@ -70,7 +71,7 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
     // Show skeleton if data is still loading
     if (isSearching || allFoodIsFetching || categoryFoodIsFetching) {
         return (
-            <div className="grid grid-cols-2 place-items-center mt-7 m:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className={style.responsive}>
                 {Array.from({ length: 15 }).map((_, index) => (
                     <LoadingFoodCard key={index} />
                 ))}
@@ -82,14 +83,14 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
     return (
         <>
             {foodData.length === 0 ? (
-                <div className={"h-screen grid place-content-center"}>
+                <div className={"grid place-content-center"}>
                     <NotFound props="មិនមានម្ហូបដែលស្វែងរកទេ" />
                 </div>
             ) : (
-                <div className={"h-screen"}>
+                <div>
                     <div className="w-full">
                         {/* Responsive Grid Layout */}
-                        <div className="grid grid-cols-2 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <div className={style.responsive}>
                             {foodData.slice(0, visibleCount).map((food) => (
                                 <RecipeCard key={food.id} food={food} />
                             ))}
@@ -99,7 +100,7 @@ const FoodListContent: React.FC<FoodListProps> = ({ activeCategoryId, query }) =
                     {foodData.length > visibleCount && (
                         <div className="text-center mt-10">
                             <button
-                                className="px-3 py-2 w-full md:w-28 rounded-lg border border-[#d7ad45] bg-white text-[#d7ad45] font-kantumruy text-sm leading-6"
+                                className={style.btns}
                                 onClick={loadMore}
                             >
                                 បន្ថែម

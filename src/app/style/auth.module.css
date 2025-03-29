@@ -1,0 +1,11 @@
+.container {
+    @apply mx-auto flex flex-col-reverse sm:flex-row gap-10 max-w-[1000px] lg:w-full lg:px-16 md:px-14 md:py-16 w-full rounded-3xl bg-white p-4 space-y-8;
+}
+
+.input {
+    @apply w-full px-4 py-3 border rounded-3xl bg-background-1 shadow-inner outline-none;
+}
+
+.header {
+    @apply font-moulpali text-center font-bold text-[13px] md:text-3xl lg:text-[30px] sm:text-[9px] text-secondary;
+}

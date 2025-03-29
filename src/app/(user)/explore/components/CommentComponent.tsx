@@ -71,14 +71,25 @@ export const CommentComponent: React.FC<{ commentData: CommentDataType }> = ({ c
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <main className="w-full p-4 bg-white rounded-lg shadow-md mb-4">
                 <article className="flex items-center space-x-4">
                     <div
                         className="w-10 h-10 sm:w-14 sm:h-14 border rounded-full bg-cover bg-center flex-shrink-0"
                         style={{
                             backgroundImage: `url(${
-                                commentData.commentator.profileImage === "default.jpg"
+                                commentData.commentator.profileImage === "default.jpg" 
                                     ? "/man.png"
                                     : getImageUrl(commentData.commentator.profileImage)
                             })`,

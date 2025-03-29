@@ -286,7 +286,7 @@ export default function FoodDetailPage() {
                                 commentData={{
                                     commentator: {
                                         username: comment.user.fullName,
-                                        profileImage: comment.user.profileImage || "man.png"
+                                        profileImage: comment.user.profileImage === "default.jpg" ? "/man.png" : comment.user.profileImage
                                     },
                                     comment: comment.commentText,
                                     feedbackDate: comment.createdAt,

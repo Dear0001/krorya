@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { DOTS, usePagination } from "@/app/(admin)/user/components/UsePagination";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import {convertRomanToKhmerWithIndex} from "@/lib/constants";
 
 type PaginationProps = {
     onPageChange: (page: number) => void;
@@ -11,6 +12,7 @@ type PaginationProps = {
     pageSize: number;
     className?: string;
 };
+
 
 const Pagination = ({
                         onPageChange,
@@ -44,10 +46,14 @@ const Pagination = ({
 
     let lastPage = paginationRange[paginationRange.length - 1];
 
+    const start = convertRomanToKhmerWithIndex((currentPage - 1) * pageSize + 1);
+    const end = convertRomanToKhmerWithIndex(Math.min(currentPage * pageSize, totalCount));
+    const total = convertRomanToKhmerWithIndex(totalCount);
+
     return (
         <div className="pagination-wrapper flex items-center justify-between border-t-2 mt-4">
-            <div className="results-info text-sm mt-4">
-                Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, totalCount)} of {totalCount} results
+            <div className="results-info  text-sm mt-4">
+                បង្ហាញលអ្នកប្រើប្រាស់ពី <span className={"text-primary text-h4"}>{start} { " "}</span> ដល់ <span className={"text-primary text-h4"}>{end}</span> នៃអ្នកប្រើប្រាស់<span className={"text-primary text-h3"}> {total}</span>
             </div>
             <ul
                 className={classnames(
@@ -89,7 +95,7 @@ const Pagination = ({
                             className={classnames(
                                 "pagination-item rounded-none border-r border-gray-300 w-10 h-10 flex items-center justify-center text-primary",
                                 {
-                                    "bg-primary bg-opacity-60 text-primary":
+                                    "bg-primary bg-opacity-60 text-white font-bold":
                                         pageNumber === currentPage,
                                     border: pageNumber === currentPage,
                                     "border-primary text-primary": pageNumber === currentPage,

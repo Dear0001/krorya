@@ -150,10 +150,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
     }
 
     return (
-        <div className="max-h-[700px] no-scrollbar overflow-y-auto sm:max-h-[500px] md:max-h-[600px] lg:max-h-[700px]">
+        <main className="max-h-[700px] no-scrollbar overflow-y-auto sm:max-h-[500px] md:max-h-[600px] lg:max-h-[700px]">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Recipe Name */}
-                <div className={"mb-5"}>
+                <section className={"mb-5"}>
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         Recipe Name
                     </label>
@@ -163,10 +163,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         placeholder="Enter recipe name"
                     />
                     <p className="text-red-500">{errors.name?.message}</p>
-                </div>
+                </section>
 
                 {/* Image Upload */}
-                <div className="flex flex-col items-center justify-center w-full">
+                <section className="flex flex-col items-center justify-center w-full">
                     <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white">
                         {selectedImage ? (
                             <Image src={selectedImage} alt="Preview" width={250} height={250} className="rounded-lg" />
@@ -177,10 +177,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         )}
                         <input id="dropzone-file" type="file" className="hidden" onChange={handleImageUpload} />
                     </label>
-                </div>
+                </section>
 
                 {/* Description */}
-                <div className={"mb-5"}>
+                <section className={"mb-5"}>
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         Description
                     </label>
@@ -190,10 +190,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         placeholder="Enter description"
                     />
                     <p className="text-red-500">{errors.description?.message}</p>
-                </div>
+                </section>
 
                 {/* Duration Slider */}
-                <div className="mb-5">
+                <section className="mb-5">
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         រយៈពេលធ្វើរូបមន្ត
                     </label>
@@ -212,10 +212,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     <p className="text-center mt-2 text-lg font-semibold text-primary">
                         {duration} នាទី
                     </p>
-                </div>
+                </section>
 
                 {/* Level Selection */}
-                <div className="mb-5">
+                <section className="mb-5">
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         កម្រិត
                     </label>
@@ -231,10 +231,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                             </button>
                         ))}
                     </div>
-                </div>
+                </section>
 
                 {/* Categories Selection */}
-                <div className={"mb-5"}>
+                <section className={"mb-5"}>
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         ប្រភេទ
                     </label>
@@ -255,10 +255,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         ))}
                     </div>
                     {categoryError && <p className="text-red-500">{categoryError}</p>}
-                </div>
+                </section>
 
                 {/* Cuisine Selection */}
-                <div>
+                <section>
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         ឈ្មោះម្ហូប
                     </label>
@@ -279,10 +279,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         ))}
                     </div>
                     {cuisineError && <p className="text-red-500">{cuisineError}</p>}
-                </div>
+                </section>
 
                 {/* Ingredients */}
-                <div className={"mb-5"}>
+                <section className={"mb-5"}>
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         គ្រឿងផ្សំ
                     </label>
@@ -325,10 +325,10 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                             +
                         </button>
                     </div>
-                </div>
+                </section>
 
                 {/* Cooking Steps */}
-                <div className={"mb-5"}>
+                <section className={"mb-5"}>
                     <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
                         ជំហានក្នុងការធ្វើម្ហូប
                     </label>
@@ -358,7 +358,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                             +
                         </button>
                     </div>
-                </div>
+                </section>
 
                 {/* Submit Button */}
                 <button
@@ -371,6 +371,6 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     {isCreatingRecipe ? "កំពុងបង្កើត..." : "បង្កើតរូបមន្ត"}
                 </button>
             </form>
-        </div>
+        </main>
     );
 }
