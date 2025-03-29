@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useGetAllRecipesQuery, useGetRecipeByNameQuery } from "@/redux/services/recipe";
+import {  useGetRecipeByNameQuery } from "@/redux/services/guest";
+import { useGetAllRecipesQuery } from "@/redux/services/recipe";
 import { useGetFoodRecipeByCategoryIdQuery } from "@/redux/services/category";
 import LoadingFoodCard from "./LoadingFoodCard";
 import NotFound from "./NotFound";

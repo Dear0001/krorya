@@ -15,8 +15,14 @@ import { useRouter } from "next/navigation";
 import Skeleton from "@/app/(user)/recipe/components/recipeListUi/Skeleton";
 import {RiCloseLargeLine} from "react-icons/ri";
 import {useGetUserProfileQuery} from "@/redux/services/user";
+import {useSelector} from "react-redux";
+import {selectToken} from "@/redux/features/auth/authSlice";
+import Link from "next/link";
+import NotAuthorize from "@/components/NotAuthorize";
 
 export default function FoodDetailPage() {
+    const token = useSelector(selectToken);
+
     const [isLoading, ] = useState<boolean>(false);
     const [, setIsModalOpen] = useState<boolean>(false);
     const [deleteRecipe] = useDeleteRecipeMutation();
@@ -103,7 +109,9 @@ export default function FoodDetailPage() {
 
 
     return (
-        <main className={"h-screen overflow-auto scrollbar-hide z-10"}>
+        <>
+            {token ? (
+            <main className={"h-screen overflow-auto scrollbar-hide z-10"}>
             <section className={"flex flex-col gap-6 relative"}>
                 <div
                     className="relative lg:mx-20 mx-5 h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] rounded-lg bg-cover bg-center object-cover"
@@ -449,5 +457,12 @@ export default function FoodDetailPage() {
                 />
             </section>
         </main>
+            ) : (
+                // Unauthenticated state
+               <NotAuthorize/>
+            )
+            }
+        </>
+
     );
 }
