@@ -52,6 +52,12 @@ export const CommentComponent: React.FC<{ commentData: CommentDataType }> = ({ c
     const timeAgo = (feedbackDate: string): string => {
         const current = new Date();
         const previous = new Date(feedbackDate);
+
+        // Handle potential invalid dates
+        if (isNaN(previous.getTime())) {
+            return "just now";
+        }
+
         const diff = current.getTime() - previous.getTime();
         const minutes = Math.floor(diff / 60000);
         const hours = Math.floor(minutes / 60);
@@ -59,7 +65,8 @@ export const CommentComponent: React.FC<{ commentData: CommentDataType }> = ({ c
 
         if (days > 0) return `${days} days ago`;
         if (hours > 0) return `${hours} hours ago`;
-        return `${minutes} minutes ago`;
+        if (minutes > 0) return `${minutes} minutes ago`;
+        return "just now";
     };
 
     return (
