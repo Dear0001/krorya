@@ -54,7 +54,7 @@ export function NavbarComponent() {
         }
     };
 
-    const photoFileName = userProfile?.payload?.profileImage === "default.png" ? null : userProfile?.payload?.profileImage;
+    const photoFileName = userProfile?.payload?.profileImage === "default.jpg" ? null : userProfile?.payload?.profileImage;
     const imageUrl = getImageUrl(photoFileName);
 
     return (
