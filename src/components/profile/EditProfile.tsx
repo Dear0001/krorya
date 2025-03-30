@@ -7,6 +7,7 @@ import { useUploadFileMutation } from "@/redux/services/file";
 import * as Yup from "yup";
 import {SUPPORTED_FORMATS, FILE_SIZE, getImageUrl} from "@/lib/constants";
 import {toast, ToastContainer} from "react-toastify";
+import Loading from "@/components/loading/Loading";
 
 type UserProfile = {
     id: string;
@@ -253,7 +254,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                     disabled={isUpdating || isUploading}
                                     className="btn bg-primary py-2.5 rounded-md border-none text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
                                 >
-                                    {isUpdating || isUploading ? "Updating..." : "Update Profile"}
+                                    {isUpdating || isUploading ? <Loading/> : "កែប្រែ"}
                                 </button>
                             </div>
                         </form>

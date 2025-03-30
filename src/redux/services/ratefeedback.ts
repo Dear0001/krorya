@@ -22,13 +22,13 @@ export const RateFeedbackApi = kroryaApi.injectEndpoints({
                     commentText
                 },
             }),
-            invalidatesTags: [{ type: "Feedback", id: "LIST" }],
+            invalidatesTags: [{ type: "feedback", id: "LIST" }],
         }),
 
         // get all rate feedback
         getRateFeedback: builder.query<any, { id: number }>({
             query: ({ id }) => `/api/v1/feedback/guest-user/${id}?itemType=FOOD_RECIPE`,
-            providesTags: [{ type: "Feedback", id: "LIST" }]
+            providesTags: [{ type: "feedback", id: "LIST" }]
         }),
     //     update rate feedback /api/v1/feedback/3
         updateRateFeedback: builder.mutation<any, { id: number, ratingValue: string, commentText: string }>({
@@ -40,7 +40,7 @@ export const RateFeedbackApi = kroryaApi.injectEndpoints({
                     commentText
                 },
             }),
-            invalidatesTags: [{ type: "Feedback", id: "LIST" }],
+            invalidatesTags: [{ type: "feedback", id: "LIST" }],
         }),
 
     //     delete rate feedback /api/v1/feedback/3
@@ -49,7 +49,7 @@ export const RateFeedbackApi = kroryaApi.injectEndpoints({
                 url: `/api/v1/feedback/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: [{ type: "Feedback", id: "LIST" }],
+            invalidatesTags: [{ type: "feedback", id: "LIST" }],
         }),
     }),
 });

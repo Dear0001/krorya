@@ -37,6 +37,6 @@ export function useMenuItems() {
 
     // Filter menu items based on role
     return isAdmin
-        ? allMenuItems.filter(item => item.href !== "/home")
+        ? allMenuItems.filter(item => item.href !== "/home" && item.href !== "/favorite")
         : allMenuItems.filter(item => !item.adminOnly);
 }

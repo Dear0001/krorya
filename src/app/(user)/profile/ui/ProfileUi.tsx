@@ -1,7 +1,6 @@
 "use client"
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import {getImageUrl} from "@/lib/constants";
-import {ToastContainer} from "react-toastify";
 import EditProfile from "@/components/profile/EditProfile";
 import React from "react";
 

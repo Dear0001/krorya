@@ -1,12 +1,11 @@
 import React from "react";
-import { IngredientType } from "@/lib/definition";
+import {IngredientType} from "@/lib/definition";
 
 type IngredientsGroupedByTypeProps = {
     ingredients?: IngredientType[];
 };
 
 const IngredientsGroupedByType: React.FC<IngredientsGroupedByTypeProps> = ({ ingredients = [] }) => {
-    console.log("Ingredients received:", ingredients);
 
     const groupedIngredients = ingredients.reduce((groups, ingredient) => {
         if (!groups[ingredient.ingredientType]) {

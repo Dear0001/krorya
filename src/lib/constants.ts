@@ -1,10 +1,12 @@
 import * as Yup from "yup";
 import { FormData } from "@/lib/definition";
+import {useGetUserProfileQuery} from "@/redux/services/user";
 
 
 export const INITIAL_FETCH_COUNT = 24;
 export const FILE_SIZE = 1024 * 1024 * 2; // 2MB
 export const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+
 // image preview
 export const getImageUrl = (photoFileName?: string): string =>
     photoFileName

@@ -55,8 +55,6 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
         setConfirmType(null);
     };
 
-    console.log("user profiles", users.map((user) => getImageUrl(user.profileImage)));
-
     return (
         <main className="overflow-x-auto w-full">
             <section className="min-w-[600px] md:min-w-0">
@@ -97,7 +95,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                         />
                                     </div>
                                     <div className="flex flex-col items-center">
-                                        <div className="text-sm opacity-50">{user?.fullName || "No Name"}</div>
+                                        <div className="text-sm opacity-50">{user?.fullName || "មិនមានឈ្មោះ"}</div>
                                     </div>
                                 </div>
                             </td>
@@ -136,7 +134,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                         <div className="flex justify-end">
                             <button
                                 onClick={handleCancel}
-                                className="text-2xl text-slate-400 hover:shadow-custome"
+                                className="text-h4 text-slate-400 hover:shadow-custome"
                             >
                                 <RiCloseLargeLine />
                             </button>
@@ -150,7 +148,7 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                     height={35}
                                 />
                                 <h3 className="text-xl font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
-                                    {selectedUser?.fullName || 'មិនមានឈ្មោះ'}
+                                    លុប {selectedUser?.fullName || 'មិនមានឈ្មោះ'}
                                 </h3>
                             </article>
                         <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">

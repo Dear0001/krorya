@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
-import { Bounce, toast } from "react-toastify";
+import {Bounce, toast, ToastContainer} from "react-toastify";
 import { useParams } from "next/navigation";
 import {useGetDetailFoodByIdQuery} from "@/redux/services/guest";
 import {useGetRateFeedbackQuery, usePostRateFeedbackMutation} from "@/redux/services/ratefeedback";
@@ -9,6 +9,7 @@ import {CommentComponent} from "@/app/(user)/explore/components/CommentComponent
 import {convertRomanToKhmer, getImageUrl} from "@/lib/constants";
 import StarRating from "@/app/(user)/explore/components/recipeListUi/StarRating";
 import {useGetUserProfileQuery} from "@/redux/services/user";
+import Loading from "@/components/loading/Loading";
 
 export default function FoodDetailPage() {
     const params = useParams();
@@ -18,21 +19,41 @@ export default function FoodDetailPage() {
     const photoFileName = getImageUrl(users?.payload?.profileImage);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Fetch food data
-    const { data: foodData, isLoading, isError } = useGetDetailFoodByIdQuery(
+    // get food detail by id
+    const {
+        data: foodData,
+        isLoading,
+        isError,
+        refetch: refetchFoodDetails
+    } = useGetDetailFoodByIdQuery(
         { id: Number(foodId) },
         { skip: !foodId }
     );
-
-    // Fetch feedback data
-    const { data: feedbackData } = useGetRateFeedbackQuery(
+    // get feedback by food id
+    const {
+        data: feedbackData,
+        refetch: refetchFeedback
+    } = useGetRateFeedbackQuery(
         { id: Number(foodId) },
-
-        { skip: !foodId }
+        {
+            skip: !foodId,
+            refetchOnMountOrArgChange: true
+        }
     );
 
-    console.log("commentData", feedbackData);
+    const handleCommentUpdated = async () => {
+        await Promise.all([
+            refetchFoodDetails(),
+            refetchFeedback()
+        ]);
+    };
 
+    const handleCommentDeleted = async () => {
+        await Promise.all([
+            refetchFoodDetails(),
+            refetchFeedback()
+        ]);
+    };
     // Post feedback mutation
     const [postFeedback] = usePostRateFeedbackMutation();
 
@@ -54,7 +75,6 @@ export default function FoodDetailPage() {
     const [selectedRate, setSelectedRate] = useState<string>();
     const [num, setNum] = useState(1);
     const [rated, setRated] = useState(false);
-    const [love, setLove] = useState(false);
     const [newFeedback, setNewFeedback] = useState("");
 
     if (isLoading) {
@@ -69,19 +89,11 @@ export default function FoodDetailPage() {
     const handleRateClick = async (index: number) => {
         const ratingValue = ["ONE", "TWO", "THREE", "FOUR", "FIVE"][index - 1];
         setSelectedRate(ratingValue);
-        toast.success("អ្នកបានវាយតម្លៃរួចហើយ", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: "light",
-            transition: Bounce,
-        });
+        toast.success("អ្នកបានវាយតម្លៃរួចហើយ");
         setRated(true);
     };
 
+    // Then modify your handlePostFeedback function:
     const handlePostFeedback = async () => {
         if (!selectedRate) {
             toast.error("សូមជ្រើសរើសពិន្ទុវាយតម្លៃ");
@@ -109,9 +121,15 @@ export default function FoodDetailPage() {
                 commentText: newFeedback
             }).unwrap();
 
+            await Promise.all([
+                refetchFoodDetails(),
+                refetchFeedback()
+            ]);
+
             toast.success("បានប្រគល់មតិរួចរាល់");
             setNewFeedback("");
             setSelectedRate(undefined);
+            setRated(false); // Reset the rated state
         } catch (error) {
             toast.error("កំហុសក្នុងការប្រគល់មតិ");
             console.error("Failed to post feedback:", error);
@@ -122,6 +140,18 @@ export default function FoodDetailPage() {
 
     return (
         <>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <div className="w-full flex flex-col justify-center pt-5 items-center gap-5">
                 {/* Food Detail Section */}
                 <div className="bg-white shadow-sm rounded-lg lg:h-[460px] lg:w-[85%] md:h-96 md:w-full h-1/2 w-[90%] px-1">
@@ -132,8 +162,8 @@ export default function FoodDetailPage() {
                                 alt={foodDetail.foodName}
                                 fill
                                 className="object-cover"
-                                priority={true}  // Add priority for important above-the-fold images
-                                sizes="(max-width: 640px) 100vw, 50vw"  // Optimize image loading
+                                priority={true}
+                                sizes="(max-width: 640px) 100vw, 50vw"
                                 unoptimized={true}
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
@@ -273,7 +303,7 @@ export default function FoodDetailPage() {
                                 className="bg-primary py-2 px-5 rounded-lg text-white"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? "Submitting..." : "ផ្តល់មតិ"}
+                                {isSubmitting ? <Loading/> : "ផ្តល់មតិ"}
                             </button>
                         </div>
                     </div>
@@ -286,12 +316,18 @@ export default function FoodDetailPage() {
                                 commentData={{
                                     commentator: {
                                         username: comment.user.fullName,
-                                        profileImage: comment.user.profileImage === "default.jpg" ? "/man.png" : comment.user.profileImage
+                                        profileImage: comment.user.profileImage === "default.jpg"
+                                            ? "/man.png"
+                                            : comment.user.profileImage,
+                                        userId: comment.user.id
                                     },
+                                    feedbackId: comment.feedbackId,
                                     comment: comment.commentText,
                                     feedbackDate: comment.createdAt,
-                                    reply: null
+                                    ratingValue: comment.ratingValue
                                 }}
+                                onCommentUpdated={handleCommentUpdated}
+                                onCommentDeleted={handleCommentDeleted}
                             />
                         ))}
                     </div>

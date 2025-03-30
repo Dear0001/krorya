@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
 import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
-import {useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
+import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
+import {useGetUserProfileQuery} from "@/redux/services/user";
+import {useAppDispatch} from "@/redux/hooks";
 
 type CardFoodProps = {
     food: FoodRecipe;
@@ -13,19 +14,15 @@ type CardFoodProps = {
 
 export default function FoodCard({ food }: CardFoodProps) {
     const [minus, setMinus] = useState(false);
-
-    const [favorite, setFavorite] = useState(food?.isFavorite || false);
-    // add favorite with RTK Query
+    const [favorite, setFavorite] = useState(food?.isFavorite);
     const [addFavorite] = useAddFavoriteMutation();
-    //remove favorite with RTK Query
     const [removeFavorite] = useRemoveFavoriteMutation();
 
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        setFavorite(food?.isFavorite);
+    }, [food?.isFavorite]);
 
-    // Get food image or default
-    const photoFileName = food?.photo?.length > 0 ? food.photo[0].photo : "/assets/default-food.jpg";
-    const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
-
-    // Handle favorite toggle with API call
     const handleFavorite = async () => {
         try {
             if (favorite) {
@@ -35,10 +32,21 @@ export default function FoodCard({ food }: CardFoodProps) {
                 await addFavorite({ id: food.id }).unwrap();
                 setFavorite(true);
             }
+            // Invalidate the favorite list query
+            dispatch(favoriteApi.util.invalidateTags(['favorite']));
         } catch (error) {
             console.error("Error updating favorite:", error);
         }
     };
+
+    // get user profile
+    const { data: users } = useGetUserProfileQuery();
+    const isAdmin = users?.payload?.role == "ROLE_ADMIN";
+
+
+    // Get food image or default
+    const photoFileName = food?.photo?.length > 0 ? food.photo[0].photo : "/assets/default-food.jpg";
+    const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
 
     // Handle `minus` toggle
     const handleChangeMinus = () => {
@@ -60,22 +68,28 @@ export default function FoodCard({ food }: CardFoodProps) {
                     >
                     </div>
                 </Link>
-                <div className="absolute top-2 right-2 flex space-x-2">
-                    <button
-                        onClick={handleFavorite}
-                        className="bg-white p-1 rounded-full shadow-md hover:bg-gray-100"
-                    >
-                        {favorite ? (
-                            <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
-                                <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
-                            </svg>
-                        ) : (
-                            <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
-                                <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
-                            </svg>
-                        )}
-                    </button>
-                </div>
+                { isAdmin ? (
+                    ""
+                ): (
+                    <>
+                        <div className="absolute top-2 right-2 flex space-x-2">
+                            <button
+                                onClick={handleFavorite}
+                                className="bg-white p-1 rounded-full shadow-md hover:bg-gray-100"
+                            >
+                                {favorite ? (
+                                    <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
+                                        <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
+                                    </svg>
+                                ) : (
+                                    <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
+                                        <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
+                                    </svg>
+                                )}
+                            </button>
+                        </div>
+                    </>
+                )}
             </figure>
 
             {/* Card Body Section */}

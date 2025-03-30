@@ -12,7 +12,7 @@ const RecipeComponent: React.FC = () => {
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
-    const [isLoading, setIsLoading] = useState<boolean>(true); // Minimum loading state
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     // Fetch recipes with pagination
     const { data: recipesData, isLoading: isDataLoading } = useGetAllRecipesQuery({ page, pageSize: 10 });

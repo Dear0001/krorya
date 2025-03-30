@@ -1,9 +1,10 @@
 
 "use client";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getImageUrl, levelBgColors} from "@/lib/constants";
 import {convertRomanToKhmer} from "@/app/(user)/recipe/components/ui/CookingStep";
-import {useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
+import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
+import {useAppDispatch} from "@/redux/hooks";
 
 // Define the props for the component
 type RecipeProps = {
@@ -20,13 +21,16 @@ type RecipeProps = {
 };
 
 const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
-    const [favorite, setFavorite] = useState(recipe?.isFavorite || false);
-    // add favorite with RTK Query
+    const [favorite, setFavorite] = useState(recipe?.isFavorite);
     const [addFavorite] = useAddFavoriteMutation();
-    //remove favorite with RTK Query
     const [removeFavorite] = useRemoveFavoriteMutation();
 
-    // Handle favorite toggle with API call
+
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        setFavorite(recipe?.isFavorite);
+    }, [recipe?.isFavorite]);
+
     const handleFavorite = async () => {
         try {
             if (favorite) {
@@ -36,6 +40,8 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
                 await addFavorite({ id: recipe.id }).unwrap();
                 setFavorite(true);
             }
+            // Invalidate the favorite list query
+            dispatch(favoriteApi.util.invalidateTags(['favorite']));
         } catch (error) {
             console.error("Error updating favorite:", error);
         }

@@ -335,7 +335,9 @@ const SignUpPage = React.memo(() => {
                     {step === "otp" && (
                         <div className="w-full">
                             <p className="text-center mb-4">
-                                យើងបានផ្ញើលេខកូដផ្ទៀងផ្ទាត់ទៅ <strong className={"text-secondary"}>{email}</strong>
+                                {/*យើងបានផ្ញើលេខកូដផ្ទៀងផ្ទាត់ទៅ <strong className={"text-secondary"}>{email}</strong>*/}
+                                សូមវាយបញ្ជូល OTP កូដ
+                                ដែលយើងបានផ្ញើរទៅកាន់អុីម៉ែលរបស់អ្នក
                             </p>
                             <form
                                 onSubmit={handleSubmitOtp(onSubmitOtp)}
@@ -368,7 +370,7 @@ const SignUpPage = React.memo(() => {
                                             ផ្ញើ OTP ម្តងទៀត
                                         </button>
                                     ) : (
-                                        <p>ផ្ញើ OTP ឡើងវិញ <span className={"text-secondary font-bold"}>{formatTimeWithKhmerNumerals(timeLeft)} </span> នារទី</p>
+                                        <p>ពេលវេលានៅសល់ ៖ <span className={"text-secondary font-bold"}>{formatTimeWithKhmerNumerals(timeLeft)} </span> នារទី</p>
                                     )}
                                 </div>
 

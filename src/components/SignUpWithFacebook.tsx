@@ -64,7 +64,11 @@ export function FacebookSignInButton() {
       }
 
       const data = await loginResponse.json();
-
+      if(data?.user?.role === "ROLE_USER") {
+        router.push("/home");
+      } else {
+        router.push("/dashboard");
+      }
       if (!data.accessToken) {
         throw new Error("Access token is missing in API response.");
       }

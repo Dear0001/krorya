@@ -10,6 +10,7 @@ import { usePostRecipeMutation } from "@/redux/services/recipe";
 import { toast } from "react-toastify";
 import { getRecipeSchema } from "@/lib/constants";
 import type { FormData } from "@/lib/definition";
+import Loading from "@/components/loading/Loading";
 
 type UploadFileResponse = {
     message: string;
@@ -368,7 +369,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     }`}
                     disabled={isCreatingRecipe}
                 >
-                    {isCreatingRecipe ? "កំពុងបង្កើត..." : "បង្កើតរូបមន្ត"}
+                    {isCreatingRecipe ? <Loading/> : "បង្កើតរូបមន្ត"}
                 </button>
             </form>
         </main>

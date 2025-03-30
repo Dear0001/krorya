@@ -9,6 +9,7 @@ import {useUpdateRecipeMutation} from "@/redux/services/recipe";
 import {toast, ToastContainer} from "react-toastify";
 import {convertRomanToKhmerWithIndex, getImageUrl, getRecipeSchema} from "@/lib/constants";
 import type {FormData} from "@/lib/definition";
+import Loading from "@/components/loading/Loading";
 
 
 type UploadFileResponse = {
@@ -409,7 +410,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         }`}
                         disabled={isUpdateRecipe}
                     >
-                        {isUpdateRecipe ? "កំពុងែកែប្រែ..." : "កែប្រែរូបមន្ដ"}
+                        {isUpdateRecipe ? <Loading/> : "កែប្រែរូបមន្ដ"}
                     </button>
 
 
