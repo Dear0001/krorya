@@ -76,13 +76,13 @@ export function GoogleSignInButton() {
       }
 
       const data = await response.json();
-      console.log("Google API Response:", data); // Debugging
+      console.log("Google API Response:", data);
 
       if (!data.accessToken) {
         throw new Error("Access token is missing in API response.");
       }
 
-      dispatch(setAccessToken(data.accessToken));
+      dispatch(setAccessToken(data?.user?.access_token));
       toast.success(data.message || "Logged in successfully!");
       if(data?.user?.role === "ROLE_USER") {
         router.push("/home");
