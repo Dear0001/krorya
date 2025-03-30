@@ -96,14 +96,19 @@ export const CommentComponent: React.FC<{
     };
 
     const timeAgo = (feedbackDate: string): string => {
-        const current = new Date();
+        // Parse the date as UTC
         const previous = new Date(feedbackDate);
+
+        // Get current time in UTC
+        const current = new Date();
+        const currentUTC = new Date(current.getTime() + current.getTimezoneOffset() * 60000);
 
         if (isNaN(previous.getTime())) {
             return "មុននេះបន្តិច";
         }
 
-        const diff = current.getTime() - previous.getTime();
+        // Calculate difference in UTC
+        const diff = currentUTC.getTime() - previous.getTime();
         const minutes = Math.floor(diff / 60000);
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
