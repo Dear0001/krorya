@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <main className={`${kantumruyPro.className} h-screen overflow-auto scrollbar-hide`}>
+        <main className={`${kantumruyPro.className} h-screen overflow-auto scrollbar-hide no-scrollbar`}>
             <div className="grid grid-rows-[auto_1fr] grid-cols-12 min-h-screen h-full rounded-lg">
                 <LayoutClient>
                     {children}

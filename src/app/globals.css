@@ -8,6 +8,21 @@
   font-family: "Kantumruy Pro", sans-serif;
 }
 
+/* Hide scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Ensure scrolling is still possible */
+body {
+  overflow: auto;
+}
+
 .filter-secondary {
   filter: brightness(0) saturate(100%) invert(12%) sepia(90%) saturate(2000%) hue-rotate(350deg) brightness(90%) contrast(120%);
 }

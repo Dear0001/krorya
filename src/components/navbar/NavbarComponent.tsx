@@ -8,8 +8,8 @@ import { getImageUrl } from "@/lib/constants";
 import { SidebarComponent } from "@/components/sidebar/SidebarComponent";
 import { FaBars } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {clearAccessToken, selectToken} from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { clearAccessToken, selectToken } from "@/redux/features/auth/authSlice";
 
 export function NavbarComponent() {
     const { data: userProfile } = useGetUserProfileQuery();
@@ -18,6 +18,7 @@ export function NavbarComponent() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const dispatch = useAppDispatch();
     const token = useAppSelector(selectToken);
+    console.log("token", token);
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -90,77 +91,113 @@ export function NavbarComponent() {
                         </div>
                     </div>
                 )}
-            </div>
-            {/* User Avatar with Dropdown */}
-            <div className="relative">
-                <button onClick={toggleDropdown} className="focus:outline-none">
-                    <div
-                        className="w-[50px] h-[50px] rounded-full object-cover border-2"
-                        style={{
-                            backgroundImage: `url(${
-                                userProfile?.payload?.profileImage === "default.jpg" || !imageUrl
-                                    ? "/man.png"
-                                    : imageUrl
-                            })`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                        }}
-                    />
-                </button>
 
-                {/* Dropdown Menu */}
-                {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 rounded-lg w-48 py-2.5 px-3 bg-white border border-gray-200 shadow-lg z-50">
+                {/* User Avatar with Dropdown */}
+                <div className="relative">
+                    {!token ? (
+                        <button
+                            onClick={toggleDropdown}
+                            className="focus:outline-none"
+                        >
+                            <Image
+                                src="/icons/not-account.svg"
+                                alt="user"
+                                width={50}
+                                height={50}
+                            />
+                        </button>
+                    ) : (
+                        <button onClick={toggleDropdown} className="focus:outline-none">
+                            <div
+                                className="w-[50px] h-[50px] rounded-full object-cover border-2"
+                                style={{
+                                    backgroundImage: `url(${
+                                        userProfile?.payload?.profileImage === "default.jpg" || !imageUrl
+                                            ? "/man.png"
+                                            : imageUrl
+                                    })`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            />
+                        </button>
+                    )}
+
+                    {/* Dropdown Menu */}
+                    {isDropdownOpen && (
+                        <div className="absolute w-48 right-0 mt-2 rounded-[20px] py-2.5 px-3 bg-white shadow-card z-50 lg:w-72">
                         <ul className="py-1">
-                            {userProfile ? (
-                                <>
-                                    {/* Profile Option */}
-                                    <li
-                                        className="px-4 py-2 mb-2 rounded-lg text-sm bg-[#fef8e7] border border-primary text-primary hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => {
-                                            setIsDropdownOpen(false);
-                                            router.push("/profile");
-                                        }}
-                                    >
-                                        Profile
-                                    </li>
+                                {token ? (
+                                    <>
+                                        <li className={"flex flex-col gap-3 items-center mb-3"}>
+                                            <div
+                                                className="w-[50px] h-[50px] rounded-full object-cover border-2"
+                                                style={{
+                                                    backgroundImage: `url(${
+                                                        userProfile?.payload?.profileImage === "default.jpg" || !imageUrl
+                                                            ? "/man.png"
+                                                            : imageUrl
+                                                    })`,
+                                                    backgroundSize: "cover",
+                                                    backgroundPosition: "center",
+                                                }}
+                                            />
+                                            <p className={"text-sm text-center lg:text-h5"}>ជាកន្លែងសម្រាប់ដាក់អ៊ីម៉ែលអ្នកប្រើប្រាស់</p>
+                                        </li>
+                                        {/* Profile Option when already login */}
+                                        <li
+                                            className="flex gap-2 px-2 py-2 mb-2 rounded-lg text-sm bg-[#fef8e7] border border-primary text-primary hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => {
+                                                setIsDropdownOpen(false);
+                                                router.push("/profile");
+                                            }}
+                                        >
+                                            <Image src={"/icons/profile.svg"} alt="user" width={19} height={19} />
+                                            គណនីរបស់ខ្ងុំ
+                                        </li>
 
-                                    {/* Sign Out Option */}
-                                    <li
-                                        className="ppx-4 rounded-lg py-2 text-sm bg-[##fff1f1] border border-secondary text-secondary hover:bg-gray-100 cursor-pointer"
-                                        onClick={handleSignOut}
-                                    >
-                                        Sign Out
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    <li
-                                        className="px-4 py-2 mb-2 rounded-lg text-sm bg-[#fef8e7] border border-primary text-primary hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => {
-                                            setIsDropdownOpen(false);
-                                            router.push("/register");
-                                        }}
-                                    >
-                                        បង្កើតគណនី
-                                    </li>
-                                    <li
-                                        className="px-4 rounded-lg py-2 text-sm bg-[##fff1f1] border border-secondary text-secondary hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => {
-                                            setIsDropdownOpen(false);
-                                            router.push("/login");
-                                        }}
-                                    >
-                                        ចូលគណនី
-                                    </li>
-                                </>
+                                        {/* Sign Out Option */}
+                                        <li
+                                            className="flex gap-2 px-2 rounded-lg py-2 text-sm bg-[#fff1f1] border border-secondary text-secondary hover:bg-gray-100 cursor-pointer"
+                                            onClick={handleSignOut}
+                                        >
+                                            <Image src={"/icons/logout.svg"} alt="user" width={19} height={19} />
+                                            ចាកចេញពីគណនី
+                                        </li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li className={"flex flex-col gap-1 items-center mb-3"}>
+                                            <h1 className={"text-secondary text-h5 text-center lg:text-h2"}>លោកអ្នកមិនទាន់គណនីនៅឡើយ</h1>
+                                            <p className={"text-sm text-center lg:text-h5"}>សូមធ្វើការចុះឈ្មោះជាមុនសិន</p>
+                                        </li>
 
-
-                            )}
-                        </ul>
-                    </div>
-                )}
+                                        <li
+                                            className="px-4 py-2 mb-2 rounded-lg text-sm bg-[#fef8e7] border border-primary text-primary hover:bg-primary hover:text-white cursor-pointer"
+                                            onClick={() => {
+                                                setIsDropdownOpen(false);
+                                                router.push("/register");
+                                            }}
+                                        >
+                                            បង្កើតគណនី
+                                        </li>
+                                        <li
+                                            className="px-4 rounded-lg py-2 text-sm bg-[#fff1f1] border border-primary text-primary hover:bg-primary hover:text-white cursor-pointer"
+                                            onClick={() => {
+                                                setIsDropdownOpen(false);
+                                                router.push("/login");
+                                            }}
+                                        >
+                                            ចូលគណនី
+                                        </li>
+                                    </>
+                                )}
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </div>
+
             {/* Sidebar with Backdrop */}
             {isSidebarOpen && (
                 <div

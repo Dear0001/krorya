@@ -10,7 +10,7 @@ function Dashboard() {
     const categories = categoriesData?.payload || [];
 
     return (
-        <main className="w-full min-h-screen bg-white rounded-lg overflow-auto scrollbar-hide px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 lg:py-10">
+        <main className="w-full h-screen bg-white rounded-lg overflow-y-scroll no-scrollbar px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 lg:py-10">
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
