@@ -20,13 +20,16 @@ const RecipeComponent: React.FC = () => {
     useEffect(() => {
         if (recipesData?.payload?.length) {
             setRecipes((prev) => {
-                // Prevent duplicates
+                // If page is 0, replace all recipes (for refresh)
+                if (page === 0) {
+                    return [...recipesData.payload];
+                }
+                // Otherwise append new recipes
                 const existingIds = new Set(prev.map((r) => r.id));
                 const newRecipes = recipesData.payload.filter((r: RecipeType) => !existingIds.has(r.id));
                 return [...prev, ...newRecipes];
             });
 
-            // Stop fetching if fewer items are returned than requested
             setHasMore(recipesData.payload.length === 10);
         } else {
             setHasMore(false);
@@ -90,7 +93,10 @@ const RecipeComponent: React.FC = () => {
                 >
                     {recipes?.map((recipe) => (
                         <div key={recipe.id} className="py-1">
-                            <CardRecipe recipe={recipe} isLoading={isLoading} />
+                            <CardRecipe
+                                recipe={recipe}
+                                isLoading={isLoading}
+                            />
                         </div>
                     ))}
                 </InfiniteScroll>

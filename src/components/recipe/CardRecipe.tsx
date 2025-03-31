@@ -1,4 +1,3 @@
-
 "use client";
 import React, {useEffect, useState} from "react";
 import {getImageUrl, levelBgColors} from "@/lib/constants";
@@ -16,12 +15,13 @@ type RecipeProps = {
         level: string;
         isFavorite: boolean;
         durationInMinutes?: string | number;
-    };
-    isLoading: boolean;
+    },
+    isLoading: boolean,
 };
 
-const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
+const CardRecipe: React.FC<RecipeProps> = ({recipe, isLoading,}) => {
     const [favorite, setFavorite] = useState(recipe?.isFavorite);
+    console.log("recipe", recipe.isFavorite);
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useRemoveFavoriteMutation();
 
@@ -34,10 +34,10 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
     const handleFavorite = async () => {
         try {
             if (favorite) {
-                await removeFavorite({ id: recipe.id }).unwrap();
+                await removeFavorite({id: recipe.id}).unwrap();
                 setFavorite(false);
             } else {
-                await addFavorite({ id: recipe.id }).unwrap();
+                await addFavorite({id: recipe.id}).unwrap();
                 setFavorite(true);
             }
             // Invalidate the favorite list query
@@ -61,11 +61,11 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
         <div
             onClick={() => window.location.href = `/recipe/${recipe.id}`}
             className="recipe-card w-full h-[90px] flex bg-white rounded-lg overflow-hidden shadow-md carousel-item m-0 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-            style={{ margin: 0 }}
+            style={{margin: 0}}
         >
             <div
                 className="w-[90px] h-[90px] bg-cover bg-center rounded-l-lg"
-                style={{ backgroundImage: `url(${imageUrl})` }}
+                style={{backgroundImage: `url(${imageUrl})`}}
             ></div>
 
             <section className="flex flex-grow items-center justify-between p-3">
@@ -101,17 +101,21 @@ const CardRecipe: React.FC<RecipeProps> = ({ recipe }) => {
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            handleFavorite();
+                            handleFavorite().then(r => r);
                         }}
                         className="hover:bg-gray-100"
                     >
                         {favorite ? (
-                            <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
-                                <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
+                            <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45"
+                                 strokeWidth="1.5">
+                                <path
+                                    d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z"/>
                             </svg>
                         ) : (
-                            <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
-                                <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
+                            <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black"
+                                 strokeWidth="1.5">
+                                <path
+                                    d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z"/>
                             </svg>
                         )}
                     </button>
