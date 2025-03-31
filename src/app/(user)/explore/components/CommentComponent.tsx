@@ -36,7 +36,7 @@ export const CommentComponent: React.FC<{
     const [confirmType, setConfirmType] = useState<string | null>(null);
 
     const [updateFeedback, { isLoading }] = useUpdateRateFeedbackMutation();
-    const [deleteFeedback, { isLoading: isDeleting }] = useDeleteRateFeedbackMutation();
+    const [deleteFeedback] = useDeleteRateFeedbackMutation();
     const { data: userProfile } = useGetUserProfileQuery();
 
     const handleEditClick = () => {
@@ -51,9 +51,16 @@ export const CommentComponent: React.FC<{
 
     const handleUpdateSubmit = async () => {
         try {
+            const ratingMap = {
+                "ONE": 1,
+                "TWO": 2,
+                "THREE": 3,
+                "FOUR": 4,
+                "FIVE": 5
+            };
             await updateFeedback({
                 id: commentData.feedbackId,
-                ratingValue: selectedRate,
+                ratingValue: ratingMap[selectedRate as keyof typeof ratingMap].toString(),
                 commentText: editedComment
             }).unwrap();
 
