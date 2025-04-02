@@ -170,6 +170,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
     if (!isFormOpen) return null;
 
+    const level = ["Easy", "Medium", "Hard"];
 
     return (
         <main>
@@ -185,10 +186,10 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                 pauseOnHover
                 theme="light"
             />
-            <div className="max-h-[700px] no-scrollbar mx-2 overflow-y-scroll no-scrollbar">
+            <main className="max-h-[700px] no-scrollbar mx-2 overflow-y-scroll no-scrollbar">
                 <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
-                    <div className={"mb-5"}>
+                    <article className={"mb-5"}>
                         <label className={style.label}>
                             Recipe Name
                         </label>
@@ -198,11 +199,11 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                             placeholder="Enter recipe name"
                         />
                         <p className="text-red-500">{errors.name?.message}</p>
-                    </div>
+                    </article>
 
                     {/* Image Upload */}
                     <label htmlFor="dropzone-file"
-                           className={style.labelFile}>
+                           className={"flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white"}>
                         {selectedImage ? (
                             <div className="relative w-[250px] h-[250px]">
                                 <Image
@@ -226,7 +227,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                     </label>
 
                     {/* Description */}
-                    <div className={"mb-5"}>
+                    <article className={"mb-5"}>
                         <label className={style.label}>
                             Description
                         </label>
@@ -236,10 +237,10 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                             placeholder="Enter description"
                         />
                         <p className="text-red-500">{errors.description?.message}</p>
-                    </div>
+                    </article>
 
                     {/* Duration Slider */}
-                    <div className="mb-5">
+                    <article className="mb-5">
                         <label className={style.label}>
                             រយៈពេលធ្វើរូបមន្ត
                         </label>
@@ -258,15 +259,15 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         <p className="text-center mt-2 text-lg font-semibold text-primary">
                             {watch("durationInMinutes")} នាទី
                         </p>
-                    </div>
+                    </article>
 
                     {/* Level Selection */}
-                    <div className="mb-5">
+                    <article className="mb-5">
                         <label className={style.label}>
                             កម្រិត
                         </label>
                         <div className="flex flex-wrap gap-2">
-                            {(["Easy", "Medium", "Hard"] as const)?.map((lvl) => (
+                            {(level)?.map((lvl) => (
                                 <button
                                     key={lvl}
                                     type="button"
@@ -277,10 +278,10 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 </button>
                             ))}
                         </div>
-                    </div>
+                    </article>
 
                     {/* Categories Selection */}
-                    <div className="mb-5">
+                    <article className="mb-5">
                         <label className={style.label}>
                             ប្រភេទ
                         </label>
@@ -296,10 +297,10 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 </button>
                             ))}
                         </div>
-                    </div>
+                    </article>
 
                     {/* Cuisine Selection */}
-                    <div className="mb-5">
+                    <article className="mb-5">
                         <label className={style.label}>
                             ឈ្មោះម្ហូប
                         </label>
@@ -317,10 +318,10 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 </button>
                             ))}
                         </div>
-                    </div>
+                    </article>
 
                     {/* Ingredients */}
-                    <div className={"mb-5"}>
+                    <article className={"mb-5"}>
                         <label className={style.label}>
                             គ្រឿងផ្សំ
                         </label>
@@ -363,10 +364,10 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 +
                             </button>
                         </div>
-                    </div>
+                    </article>
 
                     {/* Cooking Steps */}
-                    <div className={"mb-5"}>
+                    <article className={"mb-5"}>
                         <label className={style.label}>
                             ជំហានក្នុងការធ្វើម្ហូប
                         </label>
@@ -396,7 +397,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 +
                             </button>
                         </div>
-                    </div>
+                    </article>
 
                     {/* Submit Button */}
                     <button
@@ -412,7 +413,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
 
                 </form>
-            </div>
+            </main>
         </main>
     );
 }

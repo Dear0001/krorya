@@ -156,7 +156,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Recipe Name */}
                 <section className={"mb-5"}>
-                    <label className={style.input}>
+                    <label className={style.label}>
                         Recipe Name
                     </label>
                     <input
@@ -169,7 +169,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Image Upload */}
                 <section className="flex flex-col items-center justify-center w-full">
-                    <label htmlFor="dropzone-file" className={style.labelFile}>
+                    <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white">
                         {selectedImage ? (
                             <Image src={selectedImage} alt="Preview" width={250} height={250} className="rounded-lg" />
                         ) : (
@@ -183,7 +183,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Description */}
                 <section className={"mb-5"}>
-                    <label className={style.input}>
+                    <label className={style.label}>
                         Description
                     </label>
                     <textarea
@@ -196,7 +196,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Duration Slider */}
                 <section className="mb-5">
-                    <label className={style.input}>
+                    <label className={style.label}>
                         រយៈពេលធ្វើរូបមន្ត
                     </label>
                     <div className="relative w-full">
@@ -218,7 +218,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Level Selection */}
                 <section className="mb-5">
-                    <label className={style.input}>
+                    <label className={style.label}>
                         កម្រិត
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -237,7 +237,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Categories Selection */}
                 <section className={"mb-5"}>
-                    <label className={style.input}>
+                    <label className={style.label}>
                         ប្រភេទ
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -261,7 +261,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Cuisine Selection */}
                 <section>
-                    <label className={style.input}>
+                    <label className={style.label}>
                         ឈ្មោះម្ហូប
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -285,7 +285,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Ingredients */}
                 <section className={"mb-5"}>
-                    <label className={style.input}>
+                    <label className={style.label}>
                         គ្រឿងផ្សំ
                     </label>
                     {ingredientFields.map((field, index) => (
@@ -331,7 +331,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
 
                 {/* Cooking Steps */}
                 <section className={"mb-5"}>
-                    <label className={style.input}>
+                    <label className={style.label}>
                         ជំហានក្នុងការធ្វើម្ហូប
                     </label>
                     {cookingStepFields.map((field, index) => (
@@ -365,9 +365,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className={`btn bg-primary py-2.5 rounded-md border-none text-white normal-case w-32 font-normal transition-opacity ${
-                        isCreatingRecipe ? "opacity-50 cursor-not-allowed" : "hover:bg-primary hover:outline-amber-200"
-                    }`}
+                    className="bg-primary py-2 px-5 rounded-lg text-white"
                     disabled={isCreatingRecipe}
                 >
                     {isCreatingRecipe ? <Loading/> : "បង្កើតរូបមន្ត"}
