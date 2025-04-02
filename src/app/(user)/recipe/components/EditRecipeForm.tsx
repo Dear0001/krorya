@@ -10,6 +10,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {convertRomanToKhmerWithIndex, getImageUrl, getRecipeSchema} from "@/lib/constants";
 import type {FormData} from "@/lib/definition";
 import Loading from "@/components/loading/Loading";
+import style from "@/app/style/recipe-form.module.css";
 
 
 type UploadFileResponse = {
@@ -79,10 +80,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             const photoUrl = editRecipeData?.photo?.[0]?.photo || "";
             const fileName = photoUrl.split("/").pop();
             const baseUrl = getImageUrl(fileName);
-
-            // console.log("Photo URL:", photoUrl);
-            // console.log("File Name:", fileName);
-            // console.log("Base URL:", baseUrl);
 
             setValue("photo", [{ photo: photoUrl }]);
             setValue("name", editRecipeData?.name);
@@ -192,12 +189,12 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                 <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))} className="space-y-4">
                     {/* Recipe Name */}
                     <div className={"mb-5"}>
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             Recipe Name
                         </label>
                         <input
                             {...register("name")}
-                            className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
+                            className={style.input}
                             placeholder="Enter recipe name"
                         />
                         <p className="text-red-500">{errors.name?.message}</p>
@@ -205,7 +202,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Image Upload */}
                     <label htmlFor="dropzone-file"
-                           className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white">
+                           className={style.labelFile}>
                         {selectedImage ? (
                             <div className="relative w-[250px] h-[250px]">
                                 <Image
@@ -230,12 +227,12 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Description */}
                     <div className={"mb-5"}>
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             Description
                         </label>
                         <textarea
                             {...register("description")}
-                            className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
+                            className={style.input}
                             placeholder="Enter description"
                         />
                         <p className="text-red-500">{errors.description?.message}</p>
@@ -243,7 +240,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Duration Slider */}
                     <div className="mb-5">
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             រយៈពេលធ្វើរូបមន្ត
                         </label>
                         <div className="relative w-full">
@@ -265,7 +262,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Level Selection */}
                     <div className="mb-5">
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             កម្រិត
                         </label>
                         <div className="flex flex-wrap gap-2">
@@ -284,7 +281,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Categories Selection */}
                     <div className="mb-5">
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             ប្រភេទ
                         </label>
                         <div className="flex flex-wrap gap-2">
@@ -303,7 +300,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Cuisine Selection */}
                     <div className="mb-5">
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             ឈ្មោះម្ហូប
                         </label>
                         <div className="flex flex-wrap gap-2">
@@ -324,19 +321,19 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Ingredients */}
                     <div className={"mb-5"}>
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             គ្រឿងផ្សំ
                         </label>
                         {ingredientFields?.map((field, index) => (
                             <div key={field.id} className="flex gap-2 mb-2 items-center">
                                 <input
                                     {...register(`ingredients.${index}.name`)}
-                                    className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
+                                    className={style.input}
                                     placeholder="ឈ្មោះគ្រឿងផ្សំ"
                                 />
                                 <input
                                     {...register(`ingredients.${index}.quantity`)}
-                                    className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
+                                    className={style.input}
                                     placeholder="បរិមាណ"
                                 />
                                 <div className="relative w-full">
@@ -370,7 +367,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
 
                     {/* Cooking Steps */}
                     <div className={"mb-5"}>
-                        <label className="text-color-2 font-semibold mb-2.5 flex justify-start">
+                        <label className={style.label}>
                             ជំហានក្នុងការធ្វើម្ហូប
                         </label>
                         {cookingStepFields.map((field, index) => (
@@ -378,7 +375,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 <span className="font-bold text-primary">{convertRomanToKhmerWithIndex(index + 1).toString()}.</span>
                                 <input
                                     {...register(`cookingSteps.${index}.description`)}
-                                    className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
+                                    className={style.input}
                                     placeholder="Describe the step"
                                 />
                                 <button
