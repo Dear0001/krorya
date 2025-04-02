@@ -2,6 +2,7 @@ const LoadingButton = () => {
 
     return (
         <>
+            <div className={"items-center"}>
                 <svg
                     className="animate-spin h-5 w-5 text-white"
                     viewBox="0 0 24 24"
@@ -22,6 +23,8 @@ const LoadingButton = () => {
                         d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6H4z"
                     />
                 </svg>
+            </div>
+
         </>
     );
 };

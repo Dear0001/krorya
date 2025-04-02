@@ -405,7 +405,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                     <button
                         type="submit"
                         onClick={() => console.log("Submit button clicked")}
-                        className={`btn bg-primary py-2.5 rounded-md border-none text-white normal-case w-32 font-normal transition-opacity ${
+                        className={`bg-primary py-2 px-5 rounded-lg text-white ${
                             isUpdateRecipe ? "opacity-50 cursor-not-allowed" : "hover:bg-primary hover:outline-amber-200"
                         }`}
                         disabled={isUpdateRecipe}

@@ -252,7 +252,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onSubmit, userData }) => {
                                 <button
                                     type="submit"
                                     disabled={isUpdating || isUploading}
-                                    className="btn bg-primary py-2.5 rounded-md border-none text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
+                                    className="bg-primary py-2 px-5 rounded-lg text-white"
                                 >
                                     {isUpdating || isUploading ? <Loading/> : "កែប្រែ"}
                                 </button>
