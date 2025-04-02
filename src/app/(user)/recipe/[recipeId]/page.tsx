@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useDeleteRecipeMutation, useGetRecipeByIdQuery } from "@/redux/services/recipe";
-import { getImageUrl } from "@/lib/constants";
+import {convertRomanToKhmerWithIndex, getImageUrl} from "@/lib/constants";
 import IngredientsGroupedByType from "@/app/(user)/recipe/components/ui/IngredientsGroupedByType";
 import CookingStep from "../components/ui/CookingStep";
 import EditRecipeForm from "@/app/(user)/recipe/components/EditRecipeForm";
@@ -367,8 +367,8 @@ export default function FoodDetailPage() {
                                         <span className="text-secondary text-lg">រយះពេលចំអិន</span>
                                     </div>
                                     <span className="text-slate-700 text-sm sm:text-base font-semibold">
-                {recipeData?.durationInMinutes} នាទី
-            </span>
+                                        {convertRomanToKhmerWithIndex(recipeData?.durationInMinutes)} នាទី
+                                    </span>
                                 </div>
 
                                 {/* Category */}

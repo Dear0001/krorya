@@ -8,7 +8,7 @@ import { useGetAllCategoriesQuery } from "@/redux/services/category";
 import { useUploadFileMutation } from "@/redux/services/file";
 import { usePostRecipeMutation } from "@/redux/services/recipe";
 import { toast } from "react-toastify";
-import { getRecipeSchema } from "@/lib/constants";
+import {convertRomanToKhmerWithIndex, getRecipeSchema} from "@/lib/constants";
 import type { FormData } from "@/lib/definition";
 import Loading from "@/components/loading/Loading";
 import style from "@/app/style/recipe-form.module.css";
@@ -151,6 +151,8 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
         return null;
     }
 
+    const level = ["Easy", "Medium", "Hard"];
+
     return (
         <main className="max-h-[700px] no-scrollbar overflow-y-auto sm:max-h-[500px] md:max-h-[600px] lg:max-h-[700px]">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -197,7 +199,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                 {/* Duration Slider */}
                 <section className="mb-5">
                     <label className={style.label}>
-                        រយៈពេលធ្វើរូបមន្ត
+                        រយៈពេលធ្វើម្ហូប
                     </label>
                     <div className="relative w-full">
                         <input
@@ -211,8 +213,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                             }}
                         />
                     </div>
-                    <p className="text-center mt-2 text-lg font-semibold text-primary">
-                        {duration} នាទី
+                    <p className="text-center mt-2 text-lg font-semibold text-primary">{convertRomanToKhmerWithIndex(duration)} នាទី
                     </p>
                 </section>
 
@@ -222,7 +223,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                         កម្រិត
                     </label>
                     <div className="flex flex-wrap gap-2">
-                        {(["Easy", "Medium", "Hard"] as const)?.map((lvl) => (
+                        {(level)?.map((lvl) => (
                             <button
                                 key={lvl}
                                 type="button"
@@ -336,7 +337,7 @@ export default function RecipeForm({ onSuccess }: RecipeFormProps) {
                     </label>
                     {cookingStepFields.map((field, index) => (
                         <div key={field.id} className="flex gap-2 items-center mb-2">
-                            <span className="font-bold">{index + 1}.</span>
+                            <span className="font-bold text-primary">{convertRomanToKhmerWithIndex(index + 1).toString()}.</span>
                             <input
                                 {...register(`cookingSteps.${index}.description`)}
                                 className={style.input}

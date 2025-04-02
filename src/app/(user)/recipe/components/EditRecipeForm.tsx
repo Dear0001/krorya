@@ -242,7 +242,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                     {/* Duration Slider */}
                     <article className="mb-5">
                         <label className={style.label}>
-                            រយៈពេលធ្វើរូបមន្ត
+                            រយៈពេលធ្វើម្ហូប
                         </label>
                         <div className="relative w-full">
                             <input
@@ -257,7 +257,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                             />
                         </div>
                         <p className="text-center mt-2 text-lg font-semibold text-primary">
-                            {watch("durationInMinutes")} នាទី
+                            {convertRomanToKhmerWithIndex(watch("durationInMinutes"))} នាទី
                         </p>
                     </article>
 
