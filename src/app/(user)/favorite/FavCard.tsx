@@ -8,29 +8,27 @@ import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import {useAppDispatch} from "@/redux/hooks";
 
-type CardFoodProps = {
-    food: FoodRecipe;
+type CardRecipePopularProps = {
+    recipe: FoodRecipe;
 };
 
-export default function CardFood({ food }: CardFoodProps) {
-    const [minus, setMinus] = useState(false);
-
-    const [favorite, setFavorite] = useState(food?.isFavorite);
+export default function FavCard({ recipe }: CardRecipePopularProps) {
+    const [favorite, setFavorite] = useState(recipe?.isFavorite);
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useRemoveFavoriteMutation();
 
     const dispatch = useAppDispatch();
     useEffect(() => {
-        setFavorite(food?.isFavorite);
-    }, [food?.isFavorite]);
+        setFavorite(recipe?.isFavorite);
+    }, [recipe?.isFavorite]);
 
     const handleFavorite = async () => {
         try {
             if (favorite) {
-                await removeFavorite({ id: food.id }).unwrap();
+                await removeFavorite({ id: recipe.id }).unwrap();
                 setFavorite(false);
             } else {
-                await addFavorite({ id: food.id }).unwrap();
+                await addFavorite({ id: recipe.id }).unwrap();
                 setFavorite(true);
             }
             // Invalidate the favorite list query
@@ -39,35 +37,29 @@ export default function CardFood({ food }: CardFoodProps) {
             console.error("Error updating favorite:", error);
         }
     };
+
     // get user profile
     const { data: users } = useGetUserProfileQuery();
     const isAdmin = users?.payload?.role == "ROLE_ADMIN";
 
-
-    // Get food image or default
-    const photoFileName = food?.photo?.length > 0 ? food.photo[0].photo : "/assets/default-food.jpg";
+    const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
     const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
-
-    // Handle `minus` toggle
-    const handleChangeMinus = () => {
-        setMinus((prev) => !prev);
-    };
-
     const bgColor = levelBgColors;
-    // Get the corresponding background color class
-    const levelClass = bgColor[food?.level] || "bg-gray-100 text-gray-800";
+    const levelClass = bgColor[recipe?.level] || "bg-gray-100 text-gray-800";
+    const averageRating = recipe.averageRating || 0;
+    const fillPercentage = (averageRating / 5) * 100;
 
     return (
-        <div className="card p-2 shadow-card rounded-[20px] mx-0 w-full sm:w-48 md:w-43 lg:w-[13.5rem] hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
-            {/* Image Section */}
-            <figure className="relative w-full h-40">
-                <Link href={`/recipe/${food.id}`}>
+        <div className="card shadow-card p-2 rounded-[20px] overflow-hidden w-full hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
+            <div className="w-full h-32 sm:h-40 relative">
+                <Link href={`/recipe/${recipe.id}`}>
                     <div
-                        className="w-full h-full bg-cover bg-center rounded-[18px]"
+                        className="w-full h-full bg-cover bg-center rounded-[17px]"
                         style={{ backgroundImage: `url(${imageUrl})` }}
                     >
                     </div>
                 </Link>
+
                 { isAdmin ? (
                     ""
                 ): (
@@ -90,29 +82,48 @@ export default function CardFood({ food }: CardFoodProps) {
                         </div>
                     </>
                 )}
-            </figure>
 
-            {/* Card Body Section */}
+            </div>
+
             <div className="card-body p-2 bg-white">
-                <div className="card-title text-slate-700 text-lg sm:text-xl truncate">{food?.name}</div>
-                <div className="flex items-center gap-2">
-                    <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 13 13"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M6.5 0C5.64641 0 4.80117 0.168127 4.01256 0.494783C3.22394 0.821439 2.50739 1.30023 1.90381 1.90381C0.684819 3.12279 0 4.77609 0 6.5C0 8.22391 0.684819 9.87721 1.90381 11.0962C2.50739 11.6998 3.22394 12.1786 4.01256 12.5052C4.80117 12.8319 5.64641 13 6.5 13C8.22391 13 9.87721 12.3152 11.0962 11.0962C12.3152 9.87721 13 8.22391 13 6.5C13 5.64641 12.8319 4.80117 12.5052 4.01256C12.1786 3.22394 11.6998 2.50739 11.0962 1.90381C10.4926 1.30023 9.77606 0.821439 8.98744 0.494783C8.19883 0.168127 7.35359 0 6.5 0ZM9.23 9.23L5.85 7.15V3.25H6.825V6.63L9.75 8.385L9.23 9.23Z"
-                            fill="#FFD233"
-                        />
-                    </svg>
-                    <span className="text-xs">{convertRomanToKhmer(food?.durationInMinutes.toString())} នាទី</span>
+                <div className="card-title text-slate-700 text-[14px] sm:text-[16px] py-1 truncate">
+                    {recipe?.name || "មិនមានទេ"}
                 </div>
+
+                <div className="flex items-center gap-1 mt-1">
+                    <div className="relative w-4 h-4">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#FFD233"
+                            strokeWidth="1.5"
+                            className="absolute top-0 left-0"
+                        >
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="#FFD233"
+                            stroke="#FFD233"
+                            strokeWidth="1.5"
+                            className="absolute top-0 left-0"
+                            style={{ clipPath: `inset(0 ${100 - fillPercentage}% 0 0)` }}
+                        >
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                    </div>
+                    <span className="text-xs text-gray-600 ml-1">
+                        ({convertRomanToKhmer(averageRating?.toFixed(1) || "0")})
+                    </span>
+                </div>
+
                 <div className="card-actions flex flex-row items-center justify-end">
                     <div className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] ${levelClass}`}>
-                        {food?.level}
+                        {recipe?.level}
                     </div>
                 </div>
             </div>

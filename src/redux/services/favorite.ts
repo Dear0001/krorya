@@ -6,7 +6,7 @@ export const favoriteApi = kroryaApi.injectEndpoints({
         //get favorite list /api/v1/favorite/all
         getFavoriteList: builder.query({
             query: () => `/api/v1/favorite/all`,
-            providesTags: [{ type: "favorite", id: "LIST" }],
+            providesTags: [{ type: "recipe", id: "LIST" }],
         }),
 
         // post favorite /api/v1/favorite/add-favorite?foodId=100&itemType=FOOD_RECIPE
@@ -14,7 +14,7 @@ export const favoriteApi = kroryaApi.injectEndpoints({
             query: ({id}) => ({
                 url: `/api/v1/favorite/add-favorite?foodId=${id}&itemType=FOOD_RECIPE`,
                 method: "POST",
-                invalidatesTags: [{ type: "favorite", id: "LIST" }],
+                invalidatesTags: [{ type: "recipe", id: "LIST" }],
             }),
         }),
 
@@ -23,7 +23,7 @@ export const favoriteApi = kroryaApi.injectEndpoints({
             query: ({id}) => ({
                 url: `/api/v1/favorite/remove-favorite?foodId=${id}&itemType=FOOD_RECIPE`,
                 method: "DELETE",
-                invalidatesTags: [{ type: "favorite", id: "LIST" }],
+                invalidatesTags: [{ type: "recipe", id: "LIST" }],
             }),
         }),
     }),

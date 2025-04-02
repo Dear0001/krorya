@@ -41,7 +41,7 @@ const CardRecipe: React.FC<RecipeProps> = ({recipe, isLoading,}) => {
                 setFavorite(true);
             }
             // Invalidate the favorite list query
-            dispatch(favoriteApi.util.invalidateTags(['favorite']));
+            dispatch(favoriteApi.util.invalidateTags(['recipe']));
         } catch (error) {
             console.error("Error updating favorite:", error);
         }

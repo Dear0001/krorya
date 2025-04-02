@@ -2,7 +2,6 @@
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { useState } from "react";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import { selectToken } from "@/redux/features/auth/authSlice";
 import { usePostResetPasswordMutation } from "@/redux/services/auth";

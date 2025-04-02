@@ -8,8 +8,9 @@ import { getImageUrl } from "@/lib/constants";
 import { SidebarComponent } from "@/components/sidebar/SidebarComponent";
 import { FaBars } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { clearAccessToken, selectToken } from "@/redux/features/auth/authSlice";
+import {useSelector} from "react-redux";
 
 export function NavbarComponent() {
     const { data: userProfile } = useGetUserProfileQuery();
@@ -17,8 +18,7 @@ export function NavbarComponent() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const dispatch = useAppDispatch();
-    const token = useAppSelector(selectToken);
-    console.log("token", token);
+    const token = useSelector(selectToken);
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);

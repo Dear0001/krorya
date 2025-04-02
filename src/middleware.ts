@@ -46,7 +46,7 @@ export function middleware(request: NextRequest) {
 
     // 3. If has session and is on login page, redirect to home
     if (session && currentPath === "/login") {
-        return NextResponse.redirect(new URL("/home", request.url));
+        return NextResponse.redirect(new URL("/", request.url));
     }
 
     // 4. Allow access to public routes regardless of session

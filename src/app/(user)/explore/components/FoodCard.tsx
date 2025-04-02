@@ -33,7 +33,7 @@ export default function FoodCard({ food }: CardFoodProps) {
                 setFavorite(true);
             }
             // Invalidate the favorite list query
-            dispatch(favoriteApi.util.invalidateTags(['favorite']));
+            dispatch(favoriteApi.util.invalidateTags(['recipe']));
         } catch (error) {
             console.error("Error updating favorite:", error);
         }

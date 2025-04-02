@@ -1,13 +1,12 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { selectToken } from "@/redux/features/auth/authSlice";
 import { useGetFavoriteListQuery } from "@/redux/services/favorite";
 import LoadingFoodCard from "@/app/(user)/recipe/components/recipeListUi/LoadingFoodCard";
-import CardRecipePopular from "@/components/card/CardRecipePopular";
 import React from "react";
 import NotAuthorize from "@/components/NotAuthorize";
+import FavCard from "@/app/(user)/favorite/FavCard";
 
 export default function FavoriteLayout() {
     const token = useSelector(selectToken);
@@ -47,7 +46,7 @@ export default function FavoriteLayout() {
                             <div className="w-full bg-white overflow-y-auto h-full overflow-hidden p-4 hide-scrollbar">
                                 <div className="grid grid-cols-2 place-items-center mt-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                                     {recipes.map((recipe:any) => (
-                                        <CardRecipePopular
+                                        <FavCard
                                             key={recipe.id}
                                             recipe={recipe}
                                         />

@@ -12,7 +12,7 @@ type CardRecipePopularProps = {
     recipe: FoodRecipe;
 };
 
-export default function FavCard({ recipe }: CardRecipePopularProps) {
+export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     const [favorite, setFavorite] = useState(recipe?.isFavorite);
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useRemoveFavoriteMutation();
@@ -32,22 +32,63 @@ export default function FavCard({ recipe }: CardRecipePopularProps) {
                 setFavorite(true);
             }
             // Invalidate the favorite list query
-            dispatch(favoriteApi.util.invalidateTags(['favorite']));
+            dispatch(favoriteApi.util.invalidateTags(['recipe']));
         } catch (error) {
             console.error("Error updating favorite:", error);
         }
     };
 
-    // get user profile
     const { data: users } = useGetUserProfileQuery();
     const isAdmin = users?.payload?.role == "ROLE_ADMIN";
-
 
     const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
     const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
     const bgColor = levelBgColors;
     const levelClass = bgColor[recipe?.level] || "bg-gray-100 text-gray-800";
     const averageRating = recipe.averageRating || 0;
+    const fillPercentage = (averageRating / 5) * 100;
+
+    // Function to render stars based on rating
+    const renderStars = () => {
+        // If we have multiple full stars (rating >= 1.0), show them
+        if (averageRating >= 1.0) {
+            const fullStars = Math.floor(averageRating);
+            const hasHalfStar = averageRating % 1 >= 0.5;
+
+            return (
+                <div className="flex items-center">
+                    {[...Array(fullStars)].map((_, i) => (
+                        <svg key={`full-${i}`} width="16" height="16" viewBox="0 0 24 24" fill="#FFD233" stroke="#FFD233" strokeWidth="1.5">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                    ))}
+                    {hasHalfStar && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFD233" strokeWidth="1.5">
+                            <defs>
+                                <linearGradient id="half-star" x1="0" x2="100%" y1="0" y2="0">
+                                    <stop offset="50%" stopColor="#FFD233" />
+                                    <stop offset="50%" stopColor="transparent" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#half-star)" />
+                        </svg>
+                    )}
+                </div>
+            );
+        }
+
+        // For ratings less than 1.0, show a single partially filled star
+        return (
+            <div className="relative w-4 h-4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFD233" strokeWidth="1.5" className="absolute top-0 left-0">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD233" stroke="#FFD233" strokeWidth="1.5" className="absolute top-0 left-0" style={{ clipPath: `inset(0 ${100 - fillPercentage}% 0 0)` }}>
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+            </div>
+        );
+    };
 
     return (
         <div className="card shadow-card p-2 rounded-[20px] overflow-hidden w-full hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
@@ -59,30 +100,6 @@ export default function FavCard({ recipe }: CardRecipePopularProps) {
                     >
                     </div>
                 </Link>
-
-                { isAdmin ? (
-                    ""
-                ): (
-                    <>
-                        <div className="absolute top-2 right-2 flex space-x-2">
-                            <button
-                                onClick={handleFavorite}
-                                className="bg-white p-1 rounded-full shadow-md hover:bg-gray-100"
-                            >
-                                {favorite ? (
-                                    <svg width="16" height="16" viewBox="0 0 18 16" fill="#D7AD45" stroke="#D7AD45" strokeWidth="1.5">
-                                        <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
-                                    </svg>
-                                ) : (
-                                    <svg width="16" height="16" viewBox="0 0 18 16" fill="white" stroke="black" strokeWidth="1.5">
-                                        <path d="M8.45135 2.57069L9 3.15934L9.54865 2.57068C11.3843 0.601168 13.2916 0.439002 14.6985 1.10313C16.1598 1.79292 17.25 3.44662 17.25 5.43913C17.25 7.47271 16.4446 9.03777 15.2916 10.3785C14.3397 11.4854 13.1884 12.4021 12.06 13.3006C11.7913 13.5145 11.524 13.7273 11.261 13.9414C10.7867 14.3275 10.3684 14.6623 9.96682 14.9047C9.56435 15.1475 9.25342 15.25 9 15.25C8.74657 15.25 8.43565 15.1475 8.03319 14.9047C7.63158 14.6623 7.21329 14.3275 6.73906 13.9414C6.47602 13.7273 6.20868 13.5144 5.94004 13.3006C4.81163 12.4021 3.66029 11.4854 2.7084 10.3785C1.5554 9.03777 0.75 7.47271 0.75 5.43913C0.75 3.44662 1.84018 1.79292 3.30146 1.10313C4.70838 0.439003 6.61569 0.601167 8.45135 2.57069Z" />
-                                    </svg>
-                                )}
-                            </button>
-                        </div>
-                    </>
-                )}
-
             </div>
 
             <div className="card-body p-2 bg-white">
@@ -91,26 +108,31 @@ export default function FavCard({ recipe }: CardRecipePopularProps) {
                 </div>
 
                 <div className="flex items-center gap-1 mt-1">
-                    <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#FFD233"
-                        strokeWidth="1.5"
-                    >
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        <defs>
-                            <linearGradient id="grad">
-                                <stop offset={`${(averageRating / 5) * 100}%`} stopColor="#FFD233" />
-                                <stop offset={`${(averageRating / 5) * 100}%`} stopColor="transparent" />
-                            </linearGradient>
-                        </defs>
-                        <path
-                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                            fill="url(#grad)"
-                        />
-                    </svg>
+                    <div className="relative w-4 h-4">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#FFD233"
+                            strokeWidth="1.5"
+                            className="absolute top-0 left-0"
+                        >
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="#FFD233"
+                            stroke="#FFD233"
+                            strokeWidth="1.5"
+                            className="absolute top-0 left-0"
+                            style={{ clipPath: `inset(0 ${100 - fillPercentage}% 0 0)` }}
+                        >
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                    </div>
                     <span className="text-xs text-gray-600 ml-1">
                         ({convertRomanToKhmer(averageRating?.toFixed(1) || "0")})
                     </span>

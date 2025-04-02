@@ -32,7 +32,7 @@ export const userApi = kroryaApi.injectEndpoints({
             invalidatesTags: [{ type: "user", id: "LIST" }],
         }),
 
-        //     get user progile
+        //     get user profile
         getUserProfile: builder.query<any, void>({
             query: () =>
                 `/api/v1/user/profile`,

@@ -63,7 +63,6 @@ export const kroryaApi = createApi({
         "category",
         "food",
         "user",
-        "favorite",
         "guest",
         "feedback"
     ],

@@ -11,6 +11,13 @@ const RecipeComponent = () => {
     const { data, isLoading } = useGetRecipePopularQuery();
     const recipes = data?.payload?.popularRecipes || [];
 
+    // Sort recipes by averageRating in descending order
+    const sortedRecipes = [...recipes].sort((a, b) => {
+        const ratingA = a.averageRating || 0;
+        const ratingB = b.averageRating || 0;
+        return ratingB - ratingA;
+    });
+
     return (
         <main className="w-full my-5 px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
@@ -27,8 +34,8 @@ const RecipeComponent = () => {
                     </div>
                 ))}
 
-                {/* Display recipes when loaded */}
-                {recipes.map((recipe) => (
+                {/* Display SORTED recipes when loaded */}
+                {sortedRecipes.map((recipe) => (
                     <div key={recipe.id} className="w-[150px] sm:w-[200px] lg:w-[200px] flex-shrink-0 pb-5">
                         <CardRecipePopular recipe={recipe} />
                     </div>
