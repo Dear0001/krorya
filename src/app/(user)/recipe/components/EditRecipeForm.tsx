@@ -195,7 +195,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         </label>
                         <input
                             {...register("name")}
-                            className={style.input}
+                            className={`${style.input} focus:outline-primary`}
                             placeholder="Enter recipe name"
                         />
                         <p className="text-red-500">{errors.name?.message}</p>
@@ -233,7 +233,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                         </label>
                         <textarea
                             {...register("description")}
-                            className={style.input}
+                            className={`${style.input} focus:outline-primary`}
                             placeholder="Enter description"
                         />
                         <p className="text-red-500">{errors.description?.message}</p>
@@ -329,12 +329,12 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                             <div key={field.id} className="flex gap-2 mb-2 items-center">
                                 <input
                                     {...register(`ingredients.${index}.name`)}
-                                    className={style.input}
+                                    className={`${style.input} focus:outline-primary`}
                                     placeholder="ឈ្មោះគ្រឿងផ្សំ"
                                 />
                                 <input
                                     {...register(`ingredients.${index}.quantity`)}
-                                    className={style.input}
+                                    className={`${style.input} focus:outline-primary`}
                                     placeholder="បរិមាណ"
                                 />
                                 <div className="relative w-full">
@@ -376,7 +376,7 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                                 <span className="font-bold text-primary">{convertRomanToKhmerWithIndex(index + 1).toString()}.</span>
                                 <input
                                     {...register(`cookingSteps.${index}.description`)}
-                                    className={style.input}
+                                    className={`${style.input} focus:outline-primary`}
                                     placeholder="Describe the step"
                                 />
                                 <button

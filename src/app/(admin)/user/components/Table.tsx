@@ -129,8 +129,8 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
 
             {/* Confirmation Popup */}
             {showConfirmation && selectedUser && (
-                <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white w-[310px] p-5 rounded-lg shadow-lg">
+                <section className="fixed inset-0 flex items-center text-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white w-[420px] p-5 rounded-lg shadow-lg">
                         <div className="flex justify-end">
                             <button
                                 onClick={handleCancel}
@@ -140,17 +140,9 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                             </button>
                         </div>
 
-                        <article className="flex gap-2 items-center justify-start text-center">
-                                <Image
-                                    src="/icons/flower.png"
-                                    alt="border"
-                                    width={35}
-                                    height={35}
-                                />
-                                <h3 className="text-xl font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
-                                    លុប {selectedUser?.fullName || 'មិនមានឈ្មោះ'}
-                                </h3>
-                            </article>
+                            <h3 className="text-h1 font-semibold leading-5 font-moulpali text-secondary lg:text-[25px] mt-2 mb-5">
+                                ហាមឃាត់អ្នកប្រើប្រាស់
+                            </h3>
                         <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
                             <Image
                                 src="/icons/Kbach.svg"
@@ -159,24 +151,31 @@ export default function Table({ users: initialUsers = [] }: { users: User[] }) {
                                 height={13}
                             />
                         </p>
-                        <h2 className="text-lg font-kantumruy py-4">
-                            {confirmType === 'suspend'
-                                ? 'តើអ្នកចង់ផ្អាកដំណើរការអ្នកប្រើប្រាស់នេះមែនទេ?'
-                                : 'តើអ្នកចង់អនុម័តអ្នកប្រើប្រាស់នេះមែនទេ?'}
+                        <h2 className="text-lg md:text-xl font-kantumruy py-4 text-gray-800 leading-relaxed">
+                            {confirmType === 'suspend' ? (
+                                <span>
+                                    តើអ្នកចង់ផ្អាកដំណើរការអ្នកប្រើប្រាស់{' '}
+                                    <span className="text-primary font-semibold">
+                                        {selectedUser?.fullName || 'មិនមានឈ្មោះ'}
+                                    </span>{' '}នេះមែនទេ?
+                                </span>
+                            ) : (
+                                'តើអ្នកចង់អនុម័តអ្នកប្រើប្រាស់នេះមែនទេ?'
+                            )}
                         </h2>
-                        <div className="flex justify-end gap-4">
+                        <div className="flex flex-col justify-center gap-4">
+                            <button
+                                onClick={handleConfirm}
+                                className="px-4 py-2 bg-secondary text-white rounded-lg"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'កំពុងដំណើរការ...' : 'បញ្ជាក់'}
+                            </button>
                             <button
                                 onClick={handleCancel}
                                 className="px-4 rounded-lg py-2 text-primary border border-amber-300 hover:bg-primary hover:text-white"
                             >
                                 ទេ
-                            </button>
-                            <button
-                                onClick={handleConfirm}
-                                className="px-4 py-2 bg-primary text-white rounded-lg"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'កំពុងដំណើរការ...' : 'បញ្ជាក់'}
                             </button>
                         </div>
                     </div>

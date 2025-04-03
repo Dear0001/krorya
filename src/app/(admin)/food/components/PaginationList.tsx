@@ -78,7 +78,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({
 
             <Modal
                 isOpen={isModalOpen}
-                title={`New ${title}`}
+                title={`${title}`}
                 onClose={() => setIsModalOpen(false)}
                 onSubmit={handleCreate}
             />

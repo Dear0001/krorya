@@ -10,6 +10,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {GoEyeClosed} from "react-icons/go";
 import {FaRegEye} from "react-icons/fa";
 import NotAuthorize from "@/components/NotAuthorize";
+import Loading from "@/components/loading/Loading";
 
 type FormValues = {
     email: string;
@@ -94,7 +95,7 @@ export default function SettingsPage() {
                                             required: "អ៊ីមែលត្រូវបានទាមទារ",
                                         })}
                                         placeholder="បញ្ចូលអ៊ីមែល"
-                                        className="w-full px-4 py-3 rounded-lg border "
+                                        className="w-full px-4 py-3 rounded-lg border focus:outline-primary "
                                     />
                                     {errors.email && (
                                         <p className="text-red-500 text-xs ml-4 mt-1">
@@ -116,7 +117,7 @@ export default function SettingsPage() {
                                                 },
                                             })}
                                             placeholder="បញ្ចូលពាក្យសម្ងាត់ថ្មី"
-                                            className="w-full px-4 py-3 rounded-lg border "
+                                            className="w-full px-4 py-3 rounded-lg border focus:outline-primary "
                                         />
                                         <button
                                             type="button"
@@ -148,7 +149,7 @@ export default function SettingsPage() {
                                                     value === watch("newPassword") || "ពាក្យសម្ងាត់មិនដូចគ្នា",
                                             })}
                                             placeholder="បញ្ជាក់ពាក្យសម្ងាត់ថ្មី"
-                                            className="w-full px-4 py-3 rounded-lg border "
+                                            className="w-full px-4 py-3 rounded-lg border focus:outline-primary "
                                         />
                                         <button
                                             type="button"
@@ -175,7 +176,7 @@ export default function SettingsPage() {
                                     disabled={isLoading}
                                     className="w-fit self-end text-sm text-white px-4 py-3 border-black rounded-md bg-primary hover:bg-opacity-70 mt-4"
                                 >
-                                    {isLoading ? "កំពុងដំណើរការ..." : "ផ្លាស់ប្តូរពាក្យសម្ងាត់"}
+                                    {isLoading ? <Loading/> : "ផ្លាស់ប្តូរពាក្យសម្ងាត់"}
                                 </button>
                             </form>
                         </div>

@@ -29,6 +29,12 @@ export function useMenuItems() {
     useEffect(() => {
         if (!userProfile) return;
 
+        // Redirect admin from /home to /dashboard
+        if (isAdmin && pathname === "/home") {
+            router.push("/dashboard");
+            return;
+        }
+
         const currentRoute = allMenuItems.find(item => item.href === pathname);
         if (currentRoute?.adminOnly && !isAdmin) {
             router.push("/not-authorized");

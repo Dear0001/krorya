@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { FormData } from "@/lib/definition";
-import {useGetUserProfileQuery} from "@/redux/services/user";
 
 
 export const INITIAL_FETCH_COUNT = 24;
@@ -103,17 +102,10 @@ export const getRecipeSchema = (): Yup.ObjectSchema<FormData> => {
             .required(),
     });
 };
-
+// lib/constants.ts
 export const categoryIconMap: { [key: string]: string } = {
     "Breakfast": "nham.svg",
     "Lunch": "lunch.svg",
     "Dinner": "dinner.svg",
     "Snack": "snack.svg",
-};
-
-export const categoryIconMapActive: { [key: string]: string } = {
-    "Breakfast": "nham-gold.svg",
-    "Lunch": "lunch-gold.svg",
-    "Dinner": "dinner-gold.svg",
-    "Snack": "snack-gold.svg",
 };

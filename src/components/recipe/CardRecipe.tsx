@@ -87,7 +87,7 @@ const CardRecipe: React.FC<RecipeProps> = ({recipe, isLoading,}) => {
                             />
                         </svg>
                         <span className="text-xs">
-                    {typeof recipe.durationInMinutes === "number"
+                        {typeof recipe.durationInMinutes === "number"
                         ? `${convertRomanToKhmer(recipe.durationInMinutes.toString())} នាទី`
                         : recipe.durationInMinutes || "N/A"}
                 </span>

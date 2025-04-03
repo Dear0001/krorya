@@ -34,10 +34,10 @@ const TotalDataComponent = () => {
 
     if (isLoading || isDataLoading) {
         return (
-            <main className="my-5 w-full px-4 sm:px-5 h-auto bg-white rounded-[15px]">
+            <main className="mb-5 mt-15 w-full px-4 sm:px-5 h-auto bg-white rounded-[15px]">
                 <div className="flex gap-3 pb-5 justify-start items-center text-center">
                     <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt="Dashboard Icon" />
-                    <h1 className="py-5 text-lg sm:text-xl md:text-2xl lg:text-h1">តារាងសង្ខេបទិន្នន័យសរុប</h1>
+                    <h1 className="gradient-text py-5 text-[30px] sm:text-xl font-medium md:text-2xl lg:text-[35px]">របាយការណ៌អំពីមុខម្ហូប និង អ្នកប្រើប្រាស់</h1>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-5">
                     {Array.from({ length: 4 }).map((_, index) => (
@@ -55,10 +55,10 @@ const TotalDataComponent = () => {
     }
 
     return (
-        <main className="my-5 w-full px-4 sm:px-5 h-auto bg-white rounded-[15px]">
-            <div className="flex gap-3 pb-5 justify-start items-center text-center">
+        <main className="mb-5 mt-15 w-full px-4 sm:px-5 h-auto bg-white rounded-[15px]">
+            <div className="flex gap-3 pb-5 justify-start items-center text-center lg:mb-10">
                 <Image height={33} width={33} src={"/assets/dashboard_icon.svg"} alt="Dashboard Icon" />
-                <h1 className="py-5 text-lg sm:text-xl md:text-2xl lg:text-h1">តារាងសង្ខេបទិន្នន័យសរុប</h1>
+                <h1 className="gradient-text py-5 text-[30px] sm:text-xl font-medium md:text-2xl lg:text-[35px]">របាយការណ៌អំពីមុខម្ហូប និង អ្នកប្រើប្រាស់</h1>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-5">
                 {dashboardItems?.map((item) => (

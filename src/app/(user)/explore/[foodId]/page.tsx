@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import {useGetDetailFoodByIdQuery} from "@/redux/services/guest";
 import {useGetRateFeedbackQuery, usePostRateFeedbackMutation} from "@/redux/services/ratefeedback";
 import {CommentComponent} from "@/app/(user)/explore/components/CommentComponent";
-import {convertRomanToKhmer, getImageUrl} from "@/lib/constants";
+import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
 import StarRating from "@/app/(user)/explore/components/recipeListUi/StarRating";
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import Loading from "@/components/loading/Loading";
@@ -62,7 +62,8 @@ export default function FoodDetailPage() {
         foodImage: foodData.payload.photo[0]?.photo || '',
         foodName: foodData.payload.name,
         foodDescription: foodData.payload.description,
-        foodPrice: 10000,
+        durationInMinutes: foodData.payload.durationInMinutes,
+        foodLevel: foodData.payload.level,
         sellerInfo: {
             username: foodData.payload.user?.fullName || 'Unknown',
             userId: foodData.payload.user?.id || 0
@@ -76,6 +77,14 @@ export default function FoodDetailPage() {
     const [num, setNum] = useState(1);
     const [rated, setRated] = useState(false);
     const [newFeedback, setNewFeedback] = useState("");
+
+
+    // Background color mapping for levels
+    const bgColor = levelBgColors;
+
+    console.log("test", foodData.payload.level)
+    // // Get the corresponding background color class
+    const levelClass = bgColor[ foodData.payload.level] || "bg-gray-100 text-gray-800";
 
     if (isLoading) {
         return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;
@@ -178,9 +187,21 @@ export default function FoodDetailPage() {
                                     <h2 className="text-2xl text-black font-kantumruy font-medium">
                                         {foodDetail.foodName}
                                     </h2>
-                                    <h2 className="text-2xl text-secondary font-kantumruy font-medium">
-                                        {convertRomanToKhmer((num * foodDetail.foodPrice).toString())} រៀល
-                                    </h2>
+                                    <div className="flex items-center gap-2 text-h3">
+                                        <svg
+                                            width="13"
+                                            height="13"
+                                            viewBox="0 0 13 13"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M6.5 0C5.64641 0 4.80117 0.168127 4.01256 0.494783C3.22394 0.821439 2.50739 1.30023 1.90381 1.90381C0.684819 3.12279 0 4.77609 0 6.5C0 8.22391 0.684819 9.87721 1.90381 11.0962C2.50739 11.6998 3.22394 12.1786 4.01256 12.5052C4.80117 12.8319 5.64641 13 6.5 13C8.22391 13 9.87721 12.3152 11.0962 11.0962C12.3152 9.87721 13 8.22391 13 6.5C13 5.64641 12.8319 4.80117 12.5052 4.01256C12.1786 3.22394 11.6998 2.50739 11.0962 1.90381C10.4926 1.30023 9.77606 0.821439 8.98744 0.494783C8.19883 0.168127 7.35359 0 6.5 0ZM9.23 9.23L5.85 7.15V3.25H6.825V6.63L9.75 8.385L9.23 9.23Z"
+                                                fill="#FFD233"
+                                            />
+                                        </svg>
+                                        <span>{convertRomanToKhmer((num * foodDetail.durationInMinutes).toString())} នាទី</span>
+                                    </div>
                                 </div>
 
                                 <div className="flex flex-col gap-7 pt-5">
@@ -223,9 +244,16 @@ export default function FoodDetailPage() {
                                     <p className="text-black ps-8">{foodDetail.foodDescription}</p>
                                 </div>
                             </div>
+                            {/*level*/}
+                            <section className={"flex flex-col justify-center items-end gap-2"}>
+                                <div className={`text-center rounded-[8px] text-[13px] py-[2px] w-[70px] ${levelClass}`}>
+                                    <span className={"text-xs"}> {foodDetail.foodLevel}</span>
+                                </div>
+                            </section>
 
                         </div>
                     </div>
+
                 </div>
 
                 {/*card food related*/}

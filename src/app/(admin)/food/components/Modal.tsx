@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import style from "@/app/style/recipe-form.module.css"
 
 interface ModalProps {
     isOpen: boolean;
@@ -35,22 +35,22 @@ const Modal: React.FC<ModalProps> = ({ isOpen, title, onClose, onSubmit }) => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full text-color-2 leading-6 bg-transparent flex items-start gap-2.5 pt-3.5 pb-3.5 px-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300"
-                    placeholder={`Enter ${title} name`}
+                    className={`${style.input} focus:outline-primary`}
+                    placeholder={`បញ្ជូល ${title}`}
                 />
                 <div className="mt-6 text-center text-sm text-slate-600 flex justify-between">
                     <button
                         onClick={onClose}
                         className="btn border-primary py-2.5 rounded-md border bg-white hover:text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
                     >
-                        Cancel
+                        ថយក្រោយ
                     </button>
                     <button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                         className="btn bg-primary py-2.5 rounded-md border-none text-white hover:bg-primary hover:outline-amber-200 normal-case w-32 font-normal"
                     >
-                        {isSubmitting ? "Creating..." : `Create ${title}`}
+                        {isSubmitting ? "កំពុងបង្កើត..." : `បង្កើត${title}`}
                     </button>
                 </div>
             </div>

@@ -211,21 +211,15 @@ export default function FoodDetailPage() {
                                             <div className="modal-box bg-white">
                                                 <form method="dialog" className="flex justify-end">
                                                     <button
-                                                        className="text-2xl text-slate-400 hover:shadow-custome"
+                                                        className="text-1xl text-slate-400 hover:shadow-custome"
                                                     >
                                                         <RiCloseLargeLine />
                                                     </button>
                                                 </form>
 
-                                                <article className="flex gap-2 items-center justify-start text-center pb-2">
-                                                    <Image
-                                                        src="/icons/flower.png"
-                                                        alt="border"
-                                                        width={35}
-                                                        height={35}
-                                                    />
-                                                    <h3 className="text-xl pr-2 font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
-                                                        {recipeData?.name || 'មិនមានឈ្មោះ'}
+                                                <article className="flex item-center text-center justify-center pb-2">
+                                                    <h3 className="flex text-h1 pr-2 font-semibold leading-5 font-moulpali text-secondary lg:text-[25px] mt-2">
+                                                        លុបរូបមន្ដ
                                                     </h3>
                                                 </article>
                                                 <p className="mt-2 text-sm leading-4 text-slate-600 flex justify-center">
@@ -236,9 +230,12 @@ export default function FoodDetailPage() {
                                                         height={13}
                                                     />
                                                 </p>
-                                                <p className="pt-5 text-lg font-kantumruy mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
+                                                <h3 className="text-xl pr-2 text-center font-semibold leading-5 font-moulpali text-secondary lg:text-xl mt-2">
+                                                    {recipeData?.name || 'មិនមានឈ្មោះ'}
+                                                </h3>
+                                                <p className="pt-5 text-center text-lg font-kantumruy mb-4">តើអ្នកចង់លុបរូបមន្តនេះទេ?</p>
                                                 <div className="modal-action">
-                                                    <form method="dialog" className={"flex justify-end gap-5"}>
+                                                    <form method="dialog" className={"flex justify-center gap-10"}>
                                                         <button className="px-4 rounded-lg py-2 text-primary border border-amber-300 hover:bg-primary hover:text-white">
                                                             ថយក្រោយ
                                                         </button>
