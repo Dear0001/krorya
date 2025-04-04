@@ -132,3 +132,6 @@ export type UserProfileState = {
     emailVerified: boolean;
     deleted: boolean;
 }
+
+// First, define a type for the possible levels
+export type DifficultyLevel = "Easy" | "Medium" | "Hard";

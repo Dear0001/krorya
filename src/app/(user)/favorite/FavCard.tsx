@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
-import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
+import {convertRomanToKhmer, getImageUrl} from "@/lib/constants";
 import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import {useAppDispatch} from "@/redux/hooks";
@@ -44,10 +44,29 @@ export default function FavCard({ recipe }: CardRecipePopularProps) {
 
     const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
     const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
-    const bgColor = levelBgColors;
-    const levelClass = bgColor[recipe?.level] || "bg-gray-100 text-gray-800";
     const averageRating = recipe.averageRating || 0;
     const fillPercentage = (averageRating / 5) * 100;
+
+    type DifficultyLevel = "Easy" | "Medium" | "Hard";
+
+    const levelStyles: Record<DifficultyLevel, { bg: string; text: string }> = {
+        Easy: {
+            bg: "bg-[#fff9eb]",
+            text: "text-primary",
+        },
+        Medium: {
+            bg: "bg-[#f5f3ff]",
+            text: "text-[#713aed]",
+        },
+        Hard: {
+            bg: "bg-[#fef2f3]",
+            text: "text-[#ff2323]",
+        },
+    };
+
+    // In your component, ensure the level is typed
+    const level = (recipe?.level as DifficultyLevel) || "Easy";
+    const { bg: levelBg, text: levelText } = levelStyles[level];
 
     return (
         <div className="card shadow-card p-2 rounded-[20px] overflow-hidden w-full hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
@@ -122,8 +141,10 @@ export default function FavCard({ recipe }: CardRecipePopularProps) {
                 </div>
 
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] ${levelClass}`}>
-                        {recipe?.level}
+                    <div
+                        className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] font-medium ${levelBg} ${levelText}`}
+                    >
+                        {level}
                     </div>
                 </div>
             </div>

@@ -1,9 +1,10 @@
 "use client";
 import React, {useEffect, useState} from "react";
-import {getImageUrl, levelBgColors} from "@/lib/constants";
+import {getImageUrl, levelStyles} from "@/lib/constants";
 import {convertRomanToKhmer} from "@/app/(user)/recipe/components/ui/CookingStep";
 import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 import {useAppDispatch} from "@/redux/hooks";
+import {DifficultyLevel} from "@/lib/definition";
 
 // Define the props for the component
 type RecipeProps = {
@@ -50,11 +51,27 @@ const CardRecipe: React.FC<RecipeProps> = ({recipe, isLoading,}) => {
     // Use the getImageUrl function to construct the full image URL
     const imageUrl = getImageUrl(photoFileName);
 
-    // Background color mapping for levels
-    const bgColor = levelBgColors;
 
-    // Get the corresponding background color class
-    const levelClass = bgColor[recipe.level] || "bg-gray-100 text-gray-800";
+    type DifficultyLevel = "Easy" | "Medium" | "Hard";
+
+    const levelStyles: Record<DifficultyLevel, { bg: string; text: string }> = {
+        Easy: {
+            bg: "bg-[#fff9eb]",
+            text: "text-primary",
+        },
+        Medium: {
+            bg: "bg-[#f5f3ff]",
+            text: "text-[#713aed]",
+        },
+        Hard: {
+            bg: "bg-[#fef2f3]",
+            text: "text-[#ff2323]",
+        },
+    };
+
+    // In your component, ensure the level is typed
+    const level = (recipe?.level as DifficultyLevel) || "Easy";
+    const { bg: levelBg, text: levelText } = levelStyles[level];
 
     return (
         <div
@@ -91,8 +108,8 @@ const CardRecipe: React.FC<RecipeProps> = ({recipe, isLoading,}) => {
                         : recipe.durationInMinutes || "N/A"}
                 </span>
                     </div>
-                    <div className={`text-center rounded-[8px] text-[13px] py-[2px] w-[70px] ${levelClass}`}>
-                        <span className={"text-xs"}> {recipe.level}</span>
+                    <div className={`text-center rounded-[8px] text-[13px] py-[2px] w-[70px] ${levelBg} ${levelText}`}>
+                        <span className={"text-xs"}> {level}</span>
                     </div>
                 </div>
 

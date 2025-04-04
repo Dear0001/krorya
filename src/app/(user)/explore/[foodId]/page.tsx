@@ -1,12 +1,12 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Image from "next/image";
-import {Bounce, toast, ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import { useParams } from "next/navigation";
 import {useGetDetailFoodByIdQuery} from "@/redux/services/guest";
 import {useGetRateFeedbackQuery, usePostRateFeedbackMutation} from "@/redux/services/ratefeedback";
 import {CommentComponent} from "@/app/(user)/explore/components/CommentComponent";
-import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
+import {convertRomanToKhmer, getImageUrl, } from "@/lib/constants";
 import StarRating from "@/app/(user)/explore/components/recipeListUi/StarRating";
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import Loading from "@/components/loading/Loading";
@@ -74,17 +74,37 @@ export default function FoodDetailPage() {
 
     // Local state
     const [selectedRate, setSelectedRate] = useState<string>();
-    const [num, setNum] = useState(1);
+    const [num] = useState(1);
     const [rated, setRated] = useState(false);
     const [newFeedback, setNewFeedback] = useState("");
 
 
     // Background color mapping for levels
-    const bgColor = levelBgColors;
+    // const bgColor = levelBgColors;
+    //
+    // console.log("test", foodData?.payload.level);
+    // // // Get the corresponding background color class
+    // const levelClass = bgColor[ foodData?.payload?.level || "Easy"] || "bg-gray-100 text-gray-800";
+    type DifficultyLevel = "Easy" | "Medium" | "Hard";
 
-    console.log("test", foodData?.payload.level);
-    // // Get the corresponding background color class
-    const levelClass = bgColor[ foodData?.payload?.level || "Easy"] || "bg-gray-100 text-gray-800";
+    const levelStyles: Record<DifficultyLevel, { bg: string; text: string }> = {
+        Easy: {
+            bg: "bg-[#fff9eb]",
+            text: "text-primary",
+        },
+        Medium: {
+            bg: "bg-[#f5f3ff]",
+            text: "text-[#713aed]",
+        },
+        Hard: {
+            bg: "bg-[#fef2f3]",
+            text: "text-[#ff2323]",
+        },
+    };
+
+    // In your component, ensure the level is typed
+    const level = (foodData?.payload?.level as DifficultyLevel) || "Easy";
+    const { bg: levelBg, text: levelText } = levelStyles[level];
 
     if (isLoading) {
         return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;
@@ -245,12 +265,13 @@ export default function FoodDetailPage() {
                                 </div>
                             </div>
                             {/*level*/}
-                            <section className={"flex flex-col justify-center items-end gap-2"}>
-                                <div className={`text-center rounded-[8px] text-[13px] py-[2px] w-[70px] ${levelClass}`}>
-                                    <span className={"text-xs"}> {foodDetail.foodLevel}</span>
+                            <div className="card-actions flex flex-row items-center justify-end">
+                                <div
+                                    className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] font-medium ${levelBg} ${levelText}`}
+                                >
+                                    {level}
                                 </div>
-                            </section>
-
+                            </div>
                         </div>
                     </div>
 

@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import { FoodRecipe } from "@/lib/definition";
-import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
+import {convertRomanToKhmer, getImageUrl} from "@/lib/constants";
 import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
 import {useGetUserProfileQuery} from "@/redux/services/user";
 import {useAppDispatch} from "@/redux/hooks";
@@ -53,9 +53,26 @@ export default function CardFood({ food }: CardFoodProps) {
         setMinus((prev) => !prev);
     };
 
-    const bgColor = levelBgColors;
-    // Get the corresponding background color class
-    const levelClass = bgColor[food?.level] || "bg-gray-100 text-gray-800";
+    type DifficultyLevel = "Easy" | "Medium" | "Hard";
+
+    const levelStyles: Record<DifficultyLevel, { bg: string; text: string }> = {
+        Easy: {
+            bg: "bg-[#fff9eb]",
+            text: "text-primary",
+        },
+        Medium: {
+            bg: "bg-[#f5f3ff]",
+            text: "text-[#713aed]",
+        },
+        Hard: {
+            bg: "bg-[#fef2f3]",
+            text: "text-[#ff2323]",
+        },
+    };
+
+    // In your component, ensure the level is typed
+    const level = (food?.level as DifficultyLevel) || "Easy";
+    const { bg: levelBg, text: levelText } = levelStyles[level];
 
     return (
         <div className="card p-2 shadow-card rounded-[20px] mx-0 w-full sm:w-48 md:w-43 lg:w-[13.5rem] hover:shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
@@ -111,8 +128,10 @@ export default function CardFood({ food }: CardFoodProps) {
                     <span className="text-xs">{convertRomanToKhmer(food?.durationInMinutes.toString())} នាទី</span>
                 </div>
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] ${levelClass}`}>
-                        {food?.level}
+                    <div
+                        className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] font-medium ${levelBg} ${levelText}`}
+                    >
+                        {level}
                     </div>
                 </div>
             </div>

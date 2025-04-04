@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { FormData } from "@/lib/definition";
+import {DifficultyLevel, FormData} from "@/lib/definition";
 
 
 export const INITIAL_FETCH_COUNT = 24;
@@ -35,12 +35,21 @@ export const checkEmailExist = async (email: string): Promise<boolean> => {
     }
 };
 
-//  Background color mapping for levels
-export const levelBgColors: { [key: string]: string } = {
-        Easy: "bg-[#FFEBBB] text-[12px] font-medium text-[#AE7C00]",
-        Medium: "bg-[#ddd6fe] text-[12px] font-medium text-[#8b5cf6]",
-        Hard: "bg-[#f4d4d4] text-[12px] font-medium text-[#cf6464]",
-    };
+// Then update your levelStyles definition
+export const levelStyles: Record<DifficultyLevel, { bg: string; text: string }> = {
+    Easy: {
+        bg: "bg-[#fff9eb]",
+        text: "text-[#fff00b]",
+    },
+    Medium: {
+        bg: "bg-[#f5f3ff]",
+        text: "text-[#713aed]",
+    },
+    Hard: {
+        bg: "bg-[#fef2f3]",
+        text: "text-[#ff2323]",
+    },
+};
 
 // convert number to khmer
 export const convertRomanToKhmerWithIndex = (num: number) => {

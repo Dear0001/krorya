@@ -2,10 +2,8 @@
 
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
-import { FoodRecipe } from "@/lib/definition";
-import {convertRomanToKhmer, getImageUrl, levelBgColors} from "@/lib/constants";
-import {favoriteApi, useAddFavoriteMutation, useRemoveFavoriteMutation} from "@/redux/services/favorite";
-import {useGetUserProfileQuery} from "@/redux/services/user";
+import { FoodRecipe} from "@/lib/definition";
+import {convertRomanToKhmer, getImageUrl} from "@/lib/constants";
 import {useAppDispatch} from "@/redux/hooks";
 
 type CardRecipePopularProps = {
@@ -13,40 +11,36 @@ type CardRecipePopularProps = {
 };
 
 export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
-    const [favorite, setFavorite] = useState(recipe?.isFavorite);
-    const [addFavorite] = useAddFavoriteMutation();
-    const [removeFavorite] = useRemoveFavoriteMutation();
-
-    const dispatch = useAppDispatch();
+    const [, setFavorite] = useState(recipe?.isFavorite);
+    useAppDispatch();
     useEffect(() => {
         setFavorite(recipe?.isFavorite);
     }, [recipe?.isFavorite]);
-
-    const handleFavorite = async () => {
-        try {
-            if (favorite) {
-                await removeFavorite({ id: recipe.id }).unwrap();
-                setFavorite(false);
-            } else {
-                await addFavorite({ id: recipe.id }).unwrap();
-                setFavorite(true);
-            }
-            // Invalidate the favorite list query
-            dispatch(favoriteApi.util.invalidateTags(['recipe']));
-        } catch (error) {
-            console.error("Error updating favorite:", error);
-        }
-    };
-
-    const { data: users } = useGetUserProfileQuery();
-    const isAdmin = users?.payload?.role == "ROLE_ADMIN";
-
     const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
     const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
-    const bgColor = levelBgColors;
-    const levelClass = bgColor[recipe?.level] || "bg-gray-100 text-gray-800";
     const averageRating = recipe.averageRating || 0;
     const fillPercentage = (averageRating / 5) * 100;
+
+    type DifficultyLevel = "Easy" | "Medium" | "Hard";
+
+    const levelStyles: Record<DifficultyLevel, { bg: string; text: string }> = {
+        Easy: {
+            bg: "bg-[#fff9eb]",
+            text: "text-primary",
+        },
+        Medium: {
+            bg: "bg-[#f5f3ff]",
+            text: "text-[#713aed]",
+        },
+        Hard: {
+            bg: "bg-[#fef2f3]",
+            text: "text-[#ff2323]",
+        },
+    };
+
+    // In your component, ensure the level is typed
+    const level = (recipe?.level as DifficultyLevel) || "Easy";
+    const { bg: levelBg, text: levelText } = levelStyles[level];
 
     // Function to render stars based on rating
     const renderStars = () => {
@@ -139,8 +133,10 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
                 </div>
 
                 <div className="card-actions flex flex-row items-center justify-end">
-                    <div className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] ${levelClass}`}>
-                        {recipe?.level}
+                    <div
+                        className={`badge rounded-[8px] border-none py-[1px] px-2 text-[13px] font-medium ${levelBg} ${levelText}`}
+                    >
+                        {level}
                     </div>
                 </div>
             </div>
