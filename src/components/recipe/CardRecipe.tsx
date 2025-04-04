@@ -21,7 +21,6 @@ type RecipeProps = {
 
 const CardRecipe: React.FC<RecipeProps> = ({recipe, isLoading,}) => {
     const [favorite, setFavorite] = useState(recipe?.isFavorite);
-    console.log("recipe", recipe.isFavorite);
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useRemoveFavoriteMutation();
 

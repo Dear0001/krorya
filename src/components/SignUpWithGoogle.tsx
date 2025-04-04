@@ -76,7 +76,6 @@ export function GoogleSignInButton() {
       }
 
       const data = await response.json();
-      console.log("Google API Response:", data);
 
       if (!data.accessToken) {
         throw new Error("Access token is missing in API response.");

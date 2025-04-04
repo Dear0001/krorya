@@ -82,9 +82,9 @@ export default function FoodDetailPage() {
     // Background color mapping for levels
     const bgColor = levelBgColors;
 
-    console.log("test", foodData.payload.level)
+    console.log("test", foodData?.payload.level);
     // // Get the corresponding background color class
-    const levelClass = bgColor[ foodData.payload.level] || "bg-gray-100 text-gray-800";
+    const levelClass = bgColor[ foodData?.payload?.level || "Easy"] || "bg-gray-100 text-gray-800";
 
     if (isLoading) {
         return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;

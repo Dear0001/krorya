@@ -106,16 +106,16 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
             // Display preview
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
-            console.log("Selected Image::", imageUrl);
+            // console.log("Selected Image::", imageUrl);
 
             // Upload to API
             const formData = new FormData();
-            formData.append("files", file);
+            // formData.append("files", file);
 
 
             const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
             const uploadedFileName = response.payload?.[0] || "";
-            console.log("Uploaded file name::", uploadedFileName);
+            // console.log("Uploaded file name::", uploadedFileName);
             // slit
             const fileName = uploadedFileName.split("/").pop();
 
@@ -125,7 +125,6 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
                 console.error("File upload failed: No file name returned");
             }
         } catch (error) {
-            console.error("Error uploading file:", error);
             toast.error("Image upload failed. Please try again.");
         }
     };
