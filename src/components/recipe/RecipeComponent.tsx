@@ -7,6 +7,7 @@ import { useGetAllRecipesQuery } from "@/redux/services/recipe";
 import InfiniteScroll from "react-infinite-scroll-component";
 import CardRecipeSkeleton from "@/components/recipe/CardRecipeSkeleton";
 import { RecipeType } from "@/lib/definition";
+import NotFound from "@/app/(user)/recipe/components/recipeListUi/NotFound";
 
 const RecipeComponent: React.FC = () => {
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
@@ -16,6 +17,7 @@ const RecipeComponent: React.FC = () => {
 
     // Fetch recipes with pagination
     const { data: recipesData, isLoading: isDataLoading } = useGetAllRecipesQuery({ page, pageSize: 10 });
+    console.log("sdsa",isDataLoading)
 
     useEffect(() => {
         if (recipesData?.payload?.length) {
@@ -52,7 +54,7 @@ const RecipeComponent: React.FC = () => {
     };
 
     // Show skeleton while loading
-    if (isLoading || isDataLoading) {
+    if (isDataLoading) {
         return (
             <main className="w-full my-5  h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
                 <div className="flex gap-3 justify-start items-center text-center">
@@ -70,7 +72,26 @@ const RecipeComponent: React.FC = () => {
         );
     }
 
-    // ✅ Show recipes when loaded
+    // Show NotFound component when there are no recipes
+    if (!isDataLoading && recipes.length === 0) {
+        return (
+            <div className="w-full my-5 h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
+                <div className="flex flex-col h-full">
+                    {/* Header remains at the top */}
+                    <div className="flex gap-3 justify-start items-center text-center">
+                        <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
+                        <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                    </div>
+
+                    {/* Centered content area */}
+                    <div className="flex-1 flex items-center justify-center">
+                        <NotFound props="មិនមានម្ហូបទេ" />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <main className="w-full my-5  h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
