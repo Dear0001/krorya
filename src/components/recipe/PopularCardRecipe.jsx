@@ -22,12 +22,12 @@ const RecipeComponent = () => {
     // Show NotFound component when there are no recipes
     if (recipes.length === 0) {
         return (
-            <div className=" bg-white w-full lg:py-24 md:py-28 sm:py-20 py-20 md:p-6 my-5 flex flex-col gap-5 p-2 rounded-lg">
+            <div className=" w-full h-[488px] my-5 px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
                 <div className="flex flex-col h-full">
                     {/* Header remains at the top */}
                     <div className="flex gap-3 justify-start items-center text-center">
                         <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                        <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">រូបមន្តអាហារ ពេញនិយម</h1>
+                        <h1 className="mt-2 text-[22px] font-moulpali md:text-h4 sm:text-h4 lg:text-h5 xl:text-h5">ម្ហូបពេញនិយម</h1>
                     </div>
 
                     {/* Centered content area */}
@@ -43,7 +43,7 @@ const RecipeComponent = () => {
         <main className="w-full my-5 px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
                 <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                <h1 className="py-5 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">រូបមន្តអាហារ ពេញនិយម</h1>
+                <h1 className="mt-2 text-[22px] font-moulpali md:text-h4 sm:text-h4 lg:text-h5 xl:text-h5">ម្ហូបពេញនិយម</h1>
             </div>
 
             {/* Horizontal Scrolling Container */}

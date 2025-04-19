@@ -59,7 +59,7 @@ const RecipeComponent: React.FC = () => {
             <main className="w-full my-5  h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
                 <div className="flex gap-3 justify-start items-center text-center">
                     <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                    <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                    <h1 className="mt-2 text-[22px] font-moulpali md:text-h4 sm:text-h4 lg:text-h5 xl:text-h5">ម្រូបមន្តមុខម្ហូប</h1>
                 </div>
 
                 {/* Skeleton Loading State */}
@@ -80,7 +80,7 @@ const RecipeComponent: React.FC = () => {
                     {/* Header remains at the top */}
                     <div className="flex gap-3 justify-start items-center text-center">
                         <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                        <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                        <h1 className="mt-2 text-[22px] font-moulpali md:text-h4 sm:text-h4 lg:text-h5 xl:text-h5">ម្រូបមន្តមុខម្ហូប</h1>
                     </div>
 
                     {/* Centered content area */}
@@ -96,7 +96,7 @@ const RecipeComponent: React.FC = () => {
         <main className="w-full my-5  h-[630px] px-5 pt-5 bg-white rounded-tl-[15px] rounded-lg rounded-tr-[15px]">
             <div className="flex gap-3 justify-start items-center text-center">
                 <Image width={33} height={33} src="/assets/dashboard_icon.svg" alt="dashboard_icon" />
-                <h1 className="mt-2 text-[22px] md:text-h2 sm:text-h3 lg:text-h1 xl:text-h1">សង្ខេបរូបមន្តអាហារ</h1>
+                <h1 className="mt-2 text-[22px] font-moulpali md:text-h4 sm:text-h4 lg:text-h5 xl:text-h5">សង្ខេបរូបមន្តអាហារ</h1>
             </div>
 
             {/* Infinite Scrolling Container */}
