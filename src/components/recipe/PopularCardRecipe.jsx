@@ -57,7 +57,7 @@ const RecipeComponent = () => {
 
                 {/* Display SORTED recipes when loaded */}
                 {sortedRecipes?.map((recipe) => (
-                    <div key={recipe.id} className="w-[150px] sm:w-[200px] lg:w-[200px] flex-shrink-0 pb-5">
+                    <div key={recipe.id} className="w-[150px] sm:w-[200px] lg:w-[200px] flex-shrink-0 py-5">
                         <CardRecipePopular recipe={recipe} />
                     </div>
                 ))}

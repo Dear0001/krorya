@@ -16,6 +16,7 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
     useEffect(() => {
         setFavorite(recipe?.isFavorite);
     }, [recipe?.isFavorite]);
+
     const photoFileName = recipe?.photo?.length > 0 ? recipe.photo[0].photo : "/assets/default-food.jpg";
     const imageUrl = getImageUrl(photoFileName) || "/assets/default-food.jpg";
     const averageRating = recipe.averageRating || 0;
@@ -128,7 +129,12 @@ export default function CardRecipePopular({ recipe }: CardRecipePopularProps) {
                         </svg>
                     </div>
                     <span className="text-xs text-gray-600 ml-1">
-                        ({convertRomanToKhmer(averageRating?.toFixed(1) || "0")})
+                        <span className={"font-bold"}>
+                            {convertRomanToKhmer(averageRating?.toFixed(1) || "0")}
+                            {" "}
+                        </span>
+
+                        ({convertRomanToKhmer(recipe?.totalRaters?.toString() || "0")})
                     </span>
                 </div>
 
