@@ -34,7 +34,7 @@ export function SidebarComponent({ isOpen, onClose }: { isOpen: boolean; onClose
                 lg:translate-x-0 lg:relative`}
             >
                 <div className="flex justify-center pb-4 pt-6">
-                    <Image width={200} height={71} src="/assets/logo.svg" alt="logo-krorya" />
+                    <Image width={200} height={71} src="/assets/icon.jpg" alt="logo-krorya" />
                 </div>
                 <div>
                     <ul>

@@ -34,10 +34,20 @@ export const CommentComponent: React.FC<{
     const [selectedRate, setSelectedRate] = useState(commentData.ratingValue || "FIVE");
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [confirmType, setConfirmType] = useState<string | null>(null);
+    const [showFullComment, setShowFullComment] = useState(false);
+    const maxCommentLength = 100; // Characters to show before truncation
 
     const [updateFeedback, { isLoading }] = useUpdateRateFeedbackMutation();
     const [deleteFeedback] = useDeleteRateFeedbackMutation();
     const { data: userProfile } = useGetUserProfileQuery();
+
+    // Check if comment needs truncation
+    const needsTruncation = commentData.comment.length > maxCommentLength;
+    const displayedComment = showFullComment
+        ? commentData.comment
+        : needsTruncation
+            ? `${commentData.comment.substring(0, maxCommentLength)}...`
+            : commentData.comment;
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -103,10 +113,7 @@ export const CommentComponent: React.FC<{
     };
 
     const timeAgo = (feedbackDate: string): string => {
-        // Parse the date as UTC
         const previous = new Date(feedbackDate);
-
-        // Get current time in UTC
         const current = new Date();
         const currentUTC = new Date(current.getTime() + current.getTimezoneOffset() * 60000);
 
@@ -114,7 +121,6 @@ export const CommentComponent: React.FC<{
             return "មុននេះបន្តិច";
         }
 
-        // Calculate difference in UTC
         const diff = currentUTC.getTime() - previous.getTime();
         const minutes = Math.floor(diff / 60000);
         const hours = Math.floor(minutes / 60);
@@ -153,10 +159,8 @@ export const CommentComponent: React.FC<{
                             </p>
                         </div>
 
-                        {/*edit comment and stars rating place*/}
                         {isEditing ? (
                             <>
-                                {/*edit stars*/}
                                 <div className="flex gap-1 my-2">
                                     {[1, 2, 3, 4, 5].map((index) => (
                                         <label key={`edit-star-${index}`}>
@@ -180,7 +184,6 @@ export const CommentComponent: React.FC<{
                                         </label>
                                     ))}
                                 </div>
-                                {/*edit comment*/}
                                 <input
                                     type="text"
                                     className="focus:border-b-2 focus:outline-none border-b-2 w-full pb-4 focus:pb-0 active:border-none bg-white text-color-2"
@@ -205,7 +208,17 @@ export const CommentComponent: React.FC<{
                             </>
                         ) : (
                             <>
-                                <p className="w-full text-color-2 mt-1">{commentData.comment}</p>
+                                <p className="w-full text-color-2 mt-1">
+                                    {displayedComment}
+                                    {needsTruncation && !showFullComment && (
+                                        <button
+                                            onClick={() => setShowFullComment(true)}
+                                            className="text-primary ml-1 hover:underline"
+                                        >
+                                            ជាច្រើនទៀត
+                                        </button>
+                                    )}
+                                </p>
                                 {isOwner && (
                                     <div className="flex gap-3 justify-end items-center mt-2">
                                         <FaRegEdit className="w-4 h-4 cursor-pointer text-gray-400" onClick={handleEditClick} />
@@ -221,7 +234,6 @@ export const CommentComponent: React.FC<{
                 </article>
             </main>
 
-            {/* Confirmation Popup */}
             {showConfirmation && (
                 <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white w-[310px] p-5 rounded-lg shadow-lg">
@@ -267,6 +279,7 @@ export const CommentComponent: React.FC<{
                     </div>
                 </section>
             )}
+            <ToastContainer />
         </>
     );
 };
