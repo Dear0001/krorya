@@ -134,7 +134,20 @@ const Login = () => {
 
                     <div className="flex flex-col gap-4 w-full">
                         <GoogleSignInButton />
-                        <FacebookSignInButton />
+                        {/*<span  className={"opacity-50 pointer-events-none"}>*/}
+                        {/*    <FacebookSignInButton />*/}
+                        {/*</span>*/}
+                        <div className="relative w-full group cursor-not-allowed">
+                          <span className="opacity-50 pointer-events-none">
+                            <FacebookSignInButton />
+                          </span>
+
+                            {/* Tooltip */}
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-2 py-1 rounded text-xs text-white bg-gray-800 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Developing
+                            </div>
+                        </div>
+
                     </div>
 
                     <div className="mt-4">
