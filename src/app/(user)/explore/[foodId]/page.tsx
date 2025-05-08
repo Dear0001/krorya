@@ -42,17 +42,26 @@ export default function FoodDetailPage() {
     );
 
     const handleCommentUpdated = async () => {
-        await Promise.all([
-            refetchFoodDetails(),
-            refetchFeedback()
-        ]);
+        try {
+            // Immediately refetch both food details and feedback
+            await Promise.all([
+                refetchFoodDetails(),
+                refetchFeedback()
+            ]);
+        } catch (error) {
+            console.error("Error refetching after update:", error);
+        }
     };
 
     const handleCommentDeleted = async () => {
-        await Promise.all([
-            refetchFoodDetails(),
-            refetchFeedback()
-        ]);
+        try {
+            await Promise.all([
+                refetchFoodDetails(),
+                refetchFeedback()
+            ]);
+        } catch (error) {
+            console.error("Error refetching after delete:", error);
+        }
     };
     // Post feedback mutation
     const [postFeedback] = usePostRateFeedbackMutation();
@@ -150,6 +159,7 @@ export default function FoodDetailPage() {
                 commentText: newFeedback
             }).unwrap();
 
+            // Immediately refetch data after successful post
             await Promise.all([
                 refetchFoodDetails(),
                 refetchFeedback()
@@ -158,7 +168,7 @@ export default function FoodDetailPage() {
             toast.success("បានប្រគល់មតិរួចរាល់");
             setNewFeedback("");
             setSelectedRate(undefined);
-            setRated(false); // Reset the rated state
+            setRated(false);
         } catch (error) {
             toast.error("កំហុសក្នុងការប្រគល់មតិ");
             console.error("Failed to post feedback:", error);
@@ -275,24 +285,6 @@ export default function FoodDetailPage() {
                         </div>
                     </div>
 
-                </div>
-
-                {/*card food related*/}
-                <div className="bg-white rounded-md p-4 w-[90%] md:w-full lg:w-[85%]">
-                    <div className="flex p-4">
-                        <Image
-                            width={20}
-                            height={20}
-                            src="/icons/flower2.svg"
-                            alt="flower"
-                        />
-                        <p className="text-[18px] pl-2 text-black font-medium ">
-                            ម្ហូបទាំងអស់របស់
-                            <span className="text-secondary font-medium ps-4">
-                                Recommendation
-                              </span>
-                        </p>
-                    </div>
                 </div>
 
                 {/* Feedback Section */}

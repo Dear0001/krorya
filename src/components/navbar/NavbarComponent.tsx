@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGetUserProfileQuery } from "@/redux/services/user";
 import { toast, ToastContainer } from "react-toastify";
@@ -63,7 +63,18 @@ export function NavbarComponent() {
 
     return (
         <main className="w-full h-20 relative bg-white flex items-center px-4 z-40">
-            <ToastContainer />
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             {/* Sidebar Toggle Button for Mobile */}
             <button onClick={toggleSidebar} className="lg:hidden p-2">
                 <FaBars className="w-6 h-6" />
@@ -83,14 +94,6 @@ export function NavbarComponent() {
 
             {/* Right Section */}
             <div className="ml-auto flex items-center space-x-4 relative">
-                {/* Notification Icon */}
-                {userProfile && (
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 rounded-full flex items-center justify-center">
-                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#F7F9FB] rounded-full relative">
-                            <Image src="/icons/notification.svg" alt="notification" fill />
-                        </div>
-                    </div>
-                )}
 
                 {/* User Avatar with Dropdown */}
                 <div className="relative">

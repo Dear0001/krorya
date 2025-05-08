@@ -1,3 +1,4 @@
+"use client";
 import React, {useEffect, useState} from "react";
 import {useForm, useFieldArray} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -98,36 +99,82 @@ export default function RecipeForm({ onSuccess, editRecipeData }: RecipeFormProp
         }
     }, [editRecipeData, setValue]);
 
+    // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = event.target.files?.[0];
+    //     if (!file) return;
+    //
+    //     try {
+    //         // Display preview
+    //         const imageUrl = URL.createObjectURL(file);
+    //         setSelectedImage(imageUrl);
+    //         // console.log("Selected Image::", imageUrl);
+    //
+    //         // Upload to API
+    //         const formData = new FormData();
+    //         // formData.append("files", file);
+    //
+    //
+    //         const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
+    //         const uploadedFileName = response.payload?.[0] || "";
+    //         // console.log("Uploaded file name::", uploadedFileName);
+    //         // slit
+    //         const fileName = uploadedFileName.split("/").pop();
+    //
+    //         if (fileName) {
+    //             setValue("photo.0.photo", fileName);
+    //         } else {
+    //             console.error("File upload failed: No file name returned");
+    //         }
+    //     } catch (error) {
+    //         toast.error("Image upload failed. Please try again.");
+    //     }
+    // };
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
+
+        // Validate file type
+        if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+            toast.error("Only JPG, JPEG, and PNG files are allowed");
+            return;
+        }
+
+        // Validate file size (2MB limit)
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error("File size must be less than 2MB");
+            return;
+        }
 
         try {
             // Display preview
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
-            // console.log("Selected Image::", imageUrl);
 
             // Upload to API
             const formData = new FormData();
-            // formData.append("files", file);
+            formData.append("files", file);  // Make sure this matches your API expectation
+            console.log("Uploading file:", file);
+            console.log("FormData contents:", [...formData.entries()]);
+            const response = await uploadFile(formData).unwrap();
 
+            // Handle response based on your API structure
+            const uploadedFileUrl = response.payload?.[0] || "";
 
-            const response = await uploadFile(formData).unwrap() as unknown as UploadFileResponse;
-            const uploadedFileName = response.payload?.[0] || "";
-            // console.log("Uploaded file name::", uploadedFileName);
-            // slit
-            const fileName = uploadedFileName.split("/").pop();
-
-            if (fileName) {
+            if (uploadedFileUrl) {
+                // Extract just the filename if needed
+                const fileName = uploadedFileUrl.split('/').pop() || uploadedFileUrl;
                 setValue("photo.0.photo", fileName);
+                toast.success("Image uploaded successfully!");
             } else {
-                console.error("File upload failed: No file name returned");
+                throw new Error("No file URL returned from server");
             }
         } catch (error) {
+            console.error("Upload error:", error);
             toast.error("Image upload failed. Please try again.");
+            setSelectedImage(null);
         }
     };
+
 
     const onSubmit = async (data: FormData, event?: React.BaseSyntheticEvent) => {
         event?.preventDefault();

@@ -59,6 +59,7 @@ export const CommentComponent: React.FC<{
         setIsEditing(false);
     };
 
+// handler update feedback
     const handleUpdateSubmit = async () => {
         try {
             const ratingMap = {
@@ -74,11 +75,16 @@ export const CommentComponent: React.FC<{
                 commentText: editedComment
             }).unwrap();
 
-            toast.success("បានកែមតិរួចរាល់");
+            toast.success("បានកែមតិរួចរាល់", {
+                position: "top-center",
+            });
             setIsEditing(false);
+            // Call the update callback immediately
             onCommentUpdated?.();
         } catch (error) {
-            toast.error("កំហុសក្នុងការកែមតិ");
+            toast.error("កំហុសក្នុងការកែមតិ", {
+                position: "top-center",
+            });
             console.error("Update error:", error);
         }
     };
@@ -98,15 +104,24 @@ export const CommentComponent: React.FC<{
         setConfirmType(null);
     };
 
+
     const handleConfirm = async () => {
         if (confirmType === 'delete') {
             try {
+                // Perform the actual deletion first
                 await deleteFeedback({ id: commentData.feedbackId }).unwrap();
-                toast.success("បានលុបមតិរួចរាល់");
-                setShowConfirmation(false);
+
+                // Only after successful deletion, notify parent component
                 onCommentDeleted?.();
+
+                toast.success("បានលុបមតិរួចរាល់", {
+                    position: "top-center",
+                });
+                setShowConfirmation(false);
             } catch (error) {
-                toast.error("កំហុសក្នុងការលុបមតិ");
+                toast.error("កំហុសក្នុងការលុបមតិ", {
+                    position: "top-center",
+                });
                 console.error("Delete error:", error);
             }
         }
